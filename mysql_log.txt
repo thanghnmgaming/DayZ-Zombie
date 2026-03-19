@@ -1,0 +1,185 @@
+[23:28:13] [DEBUG] mysql_tquery - connection: 1, query: "CREATE TABLE IF NOT EXISTS `users` (`Username` varchar(24) NOT N", callback: "(null)", format: "(null)"
+[23:28:13] [DEBUG] CMySQLQuery::CMySQLQuery() - constructor called
+[23:28:13] [DEBUG] mysql_tquery - scheduling query "CREATE TABLE IF NOT EXISTS `users` (`Username` varchar(24) NOT NULL,`Password` varchar(128) NOT NULL,`Headshots` int(11) NOT NULL,`Murders` int(11) NOT NULL,`BanditsKilled` int(11) NOT NULL,`ZombiesKilled` int(11) NOT NULL, `Backpack` int(11) NOT NULL,`BackpackSlots` int(11) NOT NULL,`BackpackSlotsUsed` int(11) NOT NULL,`pAdminLevel` int(11) NOT NULL,`pPremium` int(11) NOT NULL,`pX` float NOT NULL,`pY` float NOT NULL,`pZ` float NOT NULL,`pWeap1` int(11) NOT NULL,`pAmmo1` int(11) NOT NULL,`pWeap2` int(11) NO"..
+[23:28:13] [DEBUG] mysql_tquery - connection: 1, query: "CREATE TABLE IF NOT EXISTS `statsglobal` (`gStatsID` int(11) NOT", callback: "(null)", format: "(null)"
+[23:28:13] [DEBUG] CMySQLQuery::CMySQLQuery() - constructor called
+[23:28:13] [DEBUG] mysql_tquery - scheduling query "CREATE TABLE IF NOT EXISTS `statsglobal` (`gStatsID` int(11) NOT NULL,`gZombiesKilled` int(11) NOT NULL,`gBanditsKilled` int(11) NOT NULL,`gSurvivorsKilled` int(11) NOT NULL,`gHerosKilled` int(11) NOT NULL,`gDeaths` int(11) NOT NULL,`gBulletsFired` int(11) NOT NULL,`gHoursPlayed` int(11) NOT NULL,`gAccounts` int(11) NOT NULL)"..
+[23:28:13] [DEBUG] mysql_tquery - connection: 1, query: "CREATE TABLE IF NOT EXISTS `samp_ban` (`BanID` int(6) NOT NULL,`", callback: "(null)", format: "(null)"
+[23:28:13] [DEBUG] CMySQLQuery::CMySQLQuery() - constructor called
+[23:28:13] [DEBUG] mysql_tquery - scheduling query "CREATE TABLE IF NOT EXISTS `samp_ban` (`BanID` int(6) NOT NULL,`user_banned` varchar(24) NOT NULL,`user_banned_ip` varchar(15) NOT NULL,`user_banner` varchar(24) NOT NULL,`ban_reason` varchar(40) NOT NULL,`ban_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,`ban_time` int(10) NOT NULL)"..
+[23:28:13] [DEBUG] CMySQLQuery::Execute[()] - starting query execution
+[23:28:13] [DEBUG] CMySQLQuery::Execute[()] - query was successful
+[23:28:13] [DEBUG] CMySQLQuery::Execute[()] - no callback specified, skipping result saving
+[23:28:13] [DEBUG] CMySQLQuery::Execute[()] - data being passed to ProcessCallbacks()
+[23:28:13] [DEBUG] CMySQLQuery::Execute[()] - starting query execution
+[23:28:13] [DEBUG] CMySQLQuery::Execute[()] - query was successful
+[23:28:13] [DEBUG] CMySQLQuery::Execute[()] - no callback specified, skipping result saving
+[23:28:13] [DEBUG] CMySQLQuery::Execute[()] - data being passed to ProcessCallbacks()
+[23:28:13] [DEBUG] CMySQLQuery::Execute[()] - starting query execution
+[23:28:13] [DEBUG] CMySQLQuery::~CMySQLQuery() - deconstructor called
+[23:28:13] [DEBUG] CMySQLQuery::~CMySQLQuery() - deconstructor called
+[23:28:13] [DEBUG] CMySQLQuery::Execute[()] - query was successful
+[23:28:13] [DEBUG] CMySQLQuery::Execute[()] - no callback specified, skipping result saving
+[23:28:13] [DEBUG] CMySQLQuery::Execute[()] - data being passed to ProcessCallbacks()
+[23:28:13] [DEBUG] CMySQLQuery::~CMySQLQuery() - deconstructor called
+[23:28:56] [DEBUG] mysql_tquery - connection: 1, query: "SELECT user_banner, ban_reason, TIMESTAMPDIFF(MINUTE, NOW(), DAT", callback: "jban_OnQueryFinish", format: "i"
+[23:28:56] [DEBUG] CMySQLQuery::CMySQLQuery() - constructor called
+[23:28:56] [DEBUG] mysql_tquery - scheduling query "SELECT user_banner, ban_reason, TIMESTAMPDIFF(MINUTE, NOW(), DATE_ADD(ban_timestamp, INTERVAL ban_time MINUTE)) FROM `samp_ban` WHERE ( `user_banned` = 'thang_minh' OR user_banned_ip = '192.168.183.1' ) AND (NOW() <= DATE_ADD(ban_timestamp, INTERVAL ban_time MINUTE) OR ban_time = 0)"..
+[23:28:56] [DEBUG] CMySQLQuery::Execute[jban_OnQueryFinish(i)] - starting query execution
+[23:28:56] [DEBUG] CMySQLQuery::Execute[jban_OnQueryFinish(i)] - query was successful
+[23:28:56] [DEBUG] CMySQLResult::CMySQLResult() - constructor called
+[23:28:56] [DEBUG] CMySQLQuery::Execute[jban_OnQueryFinish(i)] - data being passed to ProcessCallbacks()
+[23:28:56] [DEBUG] Calling callback "jban_OnQueryFinish"..
+[23:28:56] [DEBUG] cache_get_data - connection: 1
+[23:28:56] [DEBUG] mysql_tquery - connection: 1, query: "SELECT * FROM `users` WHERE `Username` = 'thang_minh'", callback: "WhenAccountCheck", format: "i"
+[23:28:56] [DEBUG] CMySQLQuery::CMySQLQuery() - constructor called
+[23:28:56] [DEBUG] mysql_tquery - scheduling query "SELECT * FROM `users` WHERE `Username` = 'thang_minh'"..
+[23:28:56] [DEBUG] CMySQLResult::~CMySQLResult() - deconstructor called
+[23:28:56] [DEBUG] CMySQLQuery::~CMySQLQuery() - deconstructor called
+[23:28:56] [DEBUG] CMySQLQuery::Execute[WhenAccountCheck(i)] - starting query execution
+[23:28:56] [DEBUG] CMySQLQuery::Execute[WhenAccountCheck(i)] - query was successful
+[23:28:56] [DEBUG] CMySQLResult::CMySQLResult() - constructor called
+[23:28:56] [DEBUG] CMySQLQuery::Execute[WhenAccountCheck(i)] - data being passed to ProcessCallbacks()
+[23:28:56] [DEBUG] Calling callback "WhenAccountCheck"..
+[23:28:56] [DEBUG] cache_get_data - connection: 1
+[23:28:56] [DEBUG] CMySQLResult::~CMySQLResult() - deconstructor called
+[23:28:56] [DEBUG] CMySQLQuery::~CMySQLQuery() - deconstructor called
+[23:29:49] [DEBUG] mysql_tquery - connection: 1, query: "SELECT user_banner, ban_reason, TIMESTAMPDIFF(MINUTE, NOW(), DAT", callback: "jban_OnQueryFinish", format: "i"
+[23:29:49] [DEBUG] CMySQLQuery::CMySQLQuery() - constructor called
+[23:29:49] [DEBUG] mysql_tquery - scheduling query "SELECT user_banner, ban_reason, TIMESTAMPDIFF(MINUTE, NOW(), DATE_ADD(ban_timestamp, INTERVAL ban_time MINUTE)) FROM `samp_ban` WHERE ( `user_banned` = 'thang_minh' OR user_banned_ip = '192.168.183.1' ) AND (NOW() <= DATE_ADD(ban_timestamp, INTERVAL ban_time MINUTE) OR ban_time = 0)"..
+[23:29:49] [DEBUG] CMySQLQuery::Execute[jban_OnQueryFinish(i)] - starting query execution
+[23:29:49] [DEBUG] CMySQLQuery::Execute[jban_OnQueryFinish(i)] - query was successful
+[23:29:49] [DEBUG] CMySQLResult::CMySQLResult() - constructor called
+[23:29:49] [DEBUG] CMySQLQuery::Execute[jban_OnQueryFinish(i)] - data being passed to ProcessCallbacks()
+[23:29:49] [DEBUG] Calling callback "jban_OnQueryFinish"..
+[23:29:49] [DEBUG] cache_get_data - connection: 1
+[23:29:49] [DEBUG] mysql_tquery - connection: 1, query: "SELECT * FROM `users` WHERE `Username` = 'thang_minh'", callback: "WhenAccountCheck", format: "i"
+[23:29:49] [DEBUG] CMySQLQuery::CMySQLQuery() - constructor called
+[23:29:49] [DEBUG] mysql_tquery - scheduling query "SELECT * FROM `users` WHERE `Username` = 'thang_minh'"..
+[23:29:49] [DEBUG] CMySQLResult::~CMySQLResult() - deconstructor called
+[23:29:49] [DEBUG] CMySQLQuery::~CMySQLQuery() - deconstructor called
+[23:29:49] [DEBUG] CMySQLQuery::Execute[WhenAccountCheck(i)] - starting query execution
+[23:29:49] [DEBUG] CMySQLQuery::Execute[WhenAccountCheck(i)] - query was successful
+[23:29:49] [DEBUG] CMySQLResult::CMySQLResult() - constructor called
+[23:29:49] [DEBUG] CMySQLQuery::Execute[WhenAccountCheck(i)] - data being passed to ProcessCallbacks()
+[23:29:49] [DEBUG] Calling callback "WhenAccountCheck"..
+[23:29:49] [DEBUG] cache_get_data - connection: 1
+[23:29:49] [DEBUG] CMySQLResult::~CMySQLResult() - deconstructor called
+[23:29:49] [DEBUG] CMySQLQuery::~CMySQLQuery() - deconstructor called
+[23:29:59] [DEBUG] mysql_escape_string - source: "00000000", connection: 1, max_len: 64
+[23:29:59] [DEBUG] mysql_tquery - connection: 1, query: "INSERT INTO `users` (Username,Password,IP) VALUES ('thang_minh',", callback: "(null)", format: "(null)"
+[23:29:59] [DEBUG] CMySQLQuery::CMySQLQuery() - constructor called
+[23:29:59] [DEBUG] mysql_tquery - scheduling query "INSERT INTO `users` (Username,Password,IP) VALUES ('thang_minh', sha1('00000000'),'192.168.183.1')"..
+[23:29:59] [DEBUG] CMySQLQuery::Execute[()] - starting query execution
+[23:29:59] [DEBUG] CMySQLQuery::Execute[()] - query was successful
+[23:29:59] [DEBUG] CMySQLQuery::Execute[()] - no callback specified, skipping result saving
+[23:29:59] [DEBUG] CMySQLQuery::Execute[()] - data being passed to ProcessCallbacks()
+[23:29:59] [DEBUG] CMySQLQuery::~CMySQLQuery() - deconstructor called
+[23:30:11] [DEBUG] mysql_escape_string - source: "00000000", connection: 1, max_len: 64
+[23:30:11] [DEBUG] mysql_tquery - connection: 1, query: "SELECT * FROM `users` WHERE `Username`= 'thang_minh' AND `Passwo", callback: "WhenPlayerLogin", format: "i"
+[23:30:11] [DEBUG] CMySQLQuery::CMySQLQuery() - constructor called
+[23:30:11] [DEBUG] mysql_tquery - scheduling query "SELECT * FROM `users` WHERE `Username`= 'thang_minh' AND `Password` = SHA1('00000000')"..
+[23:30:11] [DEBUG] CMySQLQuery::Execute[WhenPlayerLogin(i)] - starting query execution
+[23:30:11] [DEBUG] CMySQLQuery::Execute[WhenPlayerLogin(i)] - query was successful
+[23:30:11] [DEBUG] CMySQLResult::CMySQLResult() - constructor called
+[23:30:11] [DEBUG] CMySQLQuery::Execute[WhenPlayerLogin(i)] - data being passed to ProcessCallbacks()
+[23:30:11] [DEBUG] Calling callback "WhenPlayerLogin"..
+[23:30:11] [DEBUG] cache_get_data - connection: 1
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "Password", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "Password", data: "70352f41061eda4ff3c322094af068ba70c3b38b"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "Headshots", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "Headshots", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "Murders", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "Murders", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "BanditsKilled", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "BanditsKilled", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "ZombiesKilled", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "ZombiesKilled", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "Backpack", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "Backpack", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "BackpackSlots", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "BackpackSlots", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "BackpackSlotsUsed", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "BackpackSlotsUsed", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pAdminLevel", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pAdminLevel", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pPremium", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pPremium", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pX", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pX", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pY", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pY", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pZ", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pZ", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pWeap1", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pWeap1", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pAmmo1", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pAmmo1", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pWeap2", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pWeap2", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pAmmo2", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pAmmo2", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pWeap3", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pWeap3", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pAmmo3", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pAmmo3", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pWeap4", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pWeap4", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pAmmo4", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pAmmo4", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pWeap5", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pWeap5", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pAmmo5", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pAmmo5", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pWeap6", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pWeap6", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pAmmo6", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pAmmo6", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pWeap7", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pWeap7", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pAmmo7", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pAmmo7", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pWeap8", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pWeap8", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pAmmo8", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pAmmo8", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pWeap9", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pWeap9", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pAmmo9", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pAmmo9", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pHour", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pHour", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pMin", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pMin", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pSec", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pSec", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pBlood", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pBlood", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pThrist", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pThrist", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pHunger", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pHunger", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "Humanity", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "Humanity", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pFirstSpawn", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pFirstSpawn", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pAliveTime", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pAliveTime", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pIsMapOpened", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pIsMapOpened", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pSkin", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pSkin", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "Helper", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "Helper", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "IsPlayerBleeding", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "IsPlayerBleeding", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "IsPlayerLegBroken", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "IsPlayerLegBroken", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "pAmbientEnable", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "pAmbientEnable", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "DefaultGender", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "DefaultGender", data: "0"
+[23:30:11] [DEBUG] cache_get_field_content - row: 0, field_name: "ID", connection: 1, max_len: 128
+[23:30:11] [DEBUG] CMySQLResult::GetRowDataByName - row: '0', field: "ID", data: "0"
+[23:30:11] [DEBUG] CMySQLResult::~CMySQLResult() - deconstructor called
+[23:30:11] [DEBUG] CMySQLQuery::~CMySQLQuery() - deconstructor called

@@ -1,0 +1,691 @@
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[23:23:04] filterscripts = ""  (string)
+[23:23:04] 
+[23:23:04] Server Plugins
+[23:23:04] --------------
+[23:23:04]  Loading plugin: fcnpc.dll
+[23:23:04] 
+[23:23:04] -------------------------------------------------
+[23:23:04]      FCNPC - Fully Controllable NPC v2.0.0
+[23:23:04]             Windows SA-MP 0.3.7 R2
+[23:23:04]            Jan  2 2019 at 23:09:26
+[23:23:04] 
+[23:23:04]   Author:       OrMisicL (2013 - 2015)
+[23:23:04]   Continued by: ziggi    (2016 - present)
+[23:23:04] 
+[23:23:04]   See full credits in the README.md file
+[23:23:04] -------------------------------------------------
+[23:23:04] 
+[23:23:04] Loading...
+[23:23:04] 
+[23:23:04] -------------------------------------------------
+[23:23:04]    ColAndreasv1.4.0
+[23:23:04] 
+[23:23:04]    Created By:
+[23:23:04]      [uL]Chris42O
+[23:23:04]      [uL]Slice
+[23:23:04]      [uL]Pottus
+[23:23:04] -------------------------------------------------
+[23:23:04] 
+[23:23:04] Loading...
+[23:23:04] ColAndreas v1.4.0 Loaded.
+[23:23:04]   Loaded.
+[23:23:04]  Loading plugin: mysql.dll
+[23:23:04]   Failed.
+[23:23:04]  Loading plugin: sscanf.dll
+[23:23:04] 
+
+[23:23:04]  ===============================
+
+[23:23:04]       sscanf plugin loaded.     
+
+[23:23:04]          Version:  2.8.2        
+
+[23:23:04]    (c) 2012 Alex "Y_Less" Cole  
+
+[23:23:04]  ===============================
+
+[23:23:04]   Loaded.
+[23:23:04]  Loading plugin: streamer.dll
+[23:23:04] 
+
+*** Streamer Plugin v2.9.2 by Incognito loaded ***
+
+[23:23:04]   Loaded.
+[23:23:04]  Loading plugin: mapandreas.dll
+[23:23:04]   Loaded.
+[23:23:04]  Loading plugin: whirlpool.dll
+[23:23:04]  
+[23:23:04]  ==================
+[23:23:04]  
+[23:23:04]   Whirlpool loaded
+[23:23:04]  
+[23:23:04]  ==================
+[23:23:04]  
+[23:23:04]   Loaded.
+[23:23:04]  Loaded 5 plugins.
+
+[23:23:04] 
+[23:23:04] Filterscripts
+[23:23:04] ---------------
+[23:23:04]   Loaded 0 filterscripts.
+
+[23:23:04] No collision data found.
+[23:23:04] Script[gamemodes/dayz.amx]: Run time error 19: "File or function is not found"
+[23:23:04] Number of vehicle models: 0
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[23:23:27] filterscripts = ""  (string)
+[23:23:27] 
+[23:23:27] Server Plugins
+[23:23:27] --------------
+[23:23:27]  Loading plugin: fcnpc.dll
+[23:23:27] 
+[23:23:27] -------------------------------------------------
+[23:23:27]      FCNPC - Fully Controllable NPC v2.0.0
+[23:23:27]             Windows SA-MP 0.3.7 R2
+[23:23:27]            Jan  2 2019 at 23:09:26
+[23:23:27] 
+[23:23:27]   Author:       OrMisicL (2013 - 2015)
+[23:23:27]   Continued by: ziggi    (2016 - present)
+[23:23:27] 
+[23:23:27]   See full credits in the README.md file
+[23:23:27] -------------------------------------------------
+[23:23:27] 
+[23:23:27] Loading...
+[23:23:27] 
+[23:23:27] -------------------------------------------------
+[23:23:27]    ColAndreasv1.4.0
+[23:23:27] 
+[23:23:27]    Created By:
+[23:23:27]      [uL]Chris42O
+[23:23:27]      [uL]Slice
+[23:23:27]      [uL]Pottus
+[23:23:27] -------------------------------------------------
+[23:23:27] 
+[23:23:27] Loading...
+[23:23:27] ColAndreas v1.4.0 Loaded.
+[23:23:27]   Loaded.
+[23:23:27]  Loading plugin: mysql.dll
+[23:23:27]   Failed.
+[23:23:27]  Loading plugin: sscanf.dll
+[23:23:27] 
+
+[23:23:27]  ===============================
+
+[23:23:27]       sscanf plugin loaded.     
+
+[23:23:27]          Version:  2.8.2        
+
+[23:23:27]    (c) 2012 Alex "Y_Less" Cole  
+
+[23:23:27]  ===============================
+
+[23:23:27]   Loaded.
+[23:23:27]  Loading plugin: streamer.dll
+[23:23:27] 
+
+*** Streamer Plugin v2.9.2 by Incognito loaded ***
+
+[23:23:27]   Loaded.
+[23:23:27]  Loading plugin: mapandreas.dll
+[23:23:27]   Loaded.
+[23:23:27]  Loading plugin: whirlpool.dll
+[23:23:27]  
+[23:23:27]  ==================
+[23:23:27]  
+[23:23:27]   Whirlpool loaded
+[23:23:27]  
+[23:23:27]  ==================
+[23:23:27]  
+[23:23:27]   Loaded.
+[23:23:27]  Loaded 5 plugins.
+
+[23:23:27] 
+[23:23:27] Filterscripts
+[23:23:27] ---------------
+[23:23:27]   Loaded 0 filterscripts.
+
+[23:23:27] No collision data found.
+[23:23:27] Script[gamemodes/dayz.amx]: Run time error 19: "File or function is not found"
+[23:23:27] Number of vehicle models: 0
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[23:28:13] filterscripts = ""  (string)
+[23:28:13] 
+[23:28:13] Server Plugins
+[23:28:13] --------------
+[23:28:13]  Loading plugin: fcnpc.dll
+[23:28:13] 
+[23:28:13] -------------------------------------------------
+[23:28:13]      FCNPC - Fully Controllable NPC v2.0.0
+[23:28:13]             Windows SA-MP 0.3.7 R2
+[23:28:13]            Jan  2 2019 at 23:09:26
+[23:28:13] 
+[23:28:13]   Author:       OrMisicL (2013 - 2015)
+[23:28:13]   Continued by: ziggi    (2016 - present)
+[23:28:13] 
+[23:28:13]   See full credits in the README.md file
+[23:28:13] -------------------------------------------------
+[23:28:13] 
+[23:28:13] Loading...
+[23:28:13] 
+[23:28:13] -------------------------------------------------
+[23:28:13]    ColAndreasv1.4.0
+[23:28:13] 
+[23:28:13]    Created By:
+[23:28:13]      [uL]Chris42O
+[23:28:13]      [uL]Slice
+[23:28:13]      [uL]Pottus
+[23:28:13] -------------------------------------------------
+[23:28:13] 
+[23:28:13] Loading...
+[23:28:13] ColAndreas v1.4.0 Loaded.
+[23:28:13]   Loaded.
+[23:28:13]  Loading plugin: mysql.dll
+[23:28:13]  >> plugin.mysql: R33 successfully loaded.
+[23:28:13]   Loaded.
+[23:28:13]  Loading plugin: sscanf.dll
+[23:28:13] 
+
+[23:28:13]  ===============================
+
+[23:28:13]       sscanf plugin loaded.     
+
+[23:28:13]          Version:  2.8.2        
+
+[23:28:13]    (c) 2012 Alex "Y_Less" Cole  
+
+[23:28:13]  ===============================
+
+[23:28:13]   Loaded.
+[23:28:13]  Loading plugin: streamer.dll
+[23:28:13] 
+
+*** Streamer Plugin v2.9.2 by Incognito loaded ***
+
+[23:28:13]   Loaded.
+[23:28:13]  Loading plugin: mapandreas.dll
+[23:28:13]   Loaded.
+[23:28:13]  Loading plugin: whirlpool.dll
+[23:28:13]  
+[23:28:13]  ==================
+[23:28:13]  
+[23:28:13]   Whirlpool loaded
+[23:28:13]  
+[23:28:13]  ==================
+[23:28:13]  
+[23:28:13]   Loaded.
+[23:28:13]  Loaded 6 plugins.
+
+[23:28:13] 
+[23:28:13] Filterscripts
+[23:28:13] ---------------
+[23:28:13]   Loaded 0 filterscripts.
+
+[23:28:13] No collision data found.
+[23:28:13]  
+[23:28:13]  
+[23:28:13]  
+[23:28:13]  ======================================= 
+[23:28:13]  |                                     | 
+[23:28:13]  |        YSI version 4.00.0001        | 
+[23:28:13]  |        By Alex "Y_Less" Cole        | 
+[23:28:13]  |                                     | 
+[23:28:13]  ======================================= 
+[23:28:13]  
+[23:28:13] [DayZ MySQL]: Connection to database (gta) was established!
+[23:28:13] MapAndreas: plugin could not init!
+[23:28:13] MapAndreas: check files and make sure you have enough memory!
+[23:28:13] Server password has been removed.
+[23:28:13] +---------------------------------+
+[23:28:13] +---------------------------------+
+[23:28:13] +---------------------------------+
+[23:28:13] DayZSA v15.0 Sucessfully Loaded!
+[23:28:13] +---------------------------------+
+[23:28:13] +---------------------------------+
+[23:28:13] +---------------------------------+
+[23:28:13] Loaded 1636 Looting areas!
+[23:28:13] Loaded 182 military Looting areas!
+[23:28:13] Loaded 986 farm Looting areas!
+[23:28:13] Loaded 434 market Looting areas!
+[23:28:13] Loaded 13 Hospitals!!
+[23:28:13] Loaded 3 Military Crates!!
+[23:28:13] 
+----------------------------------
+[23:28:13] Pro Gaming Arena - GTA SA: DayZ Survival [ZOMBIE AI] v15.0 Loaded
+[23:28:13] ----------------------------------
+
+[23:28:13] Number of vehicle models: 22
+[23:28:13] [npc:join] Zombie[1000] has joined the server (499:127.0.0.1)
+[23:28:13] [npc:join] Zombie[999] has joined the server (498:127.0.0.1)
+[23:28:13] [npc:join] Zombie[998] has joined the server (497:127.0.0.1)
+[23:28:13] [npc:join] Zombie[997] has joined the server (496:127.0.0.1)
+[23:28:13] [npc:join] Zombie[996] has joined the server (495:127.0.0.1)
+[23:28:13] [npc:join] Zombie[995] has joined the server (494:127.0.0.1)
+[23:28:13] [npc:join] Zombie[994] has joined the server (493:127.0.0.1)
+[23:28:13] [npc:join] Zombie[993] has joined the server (492:127.0.0.1)
+[23:28:13] [npc:join] Zombie[992] has joined the server (491:127.0.0.1)
+[23:28:13] [npc:join] Zombie[991] has joined the server (490:127.0.0.1)
+[23:28:14] [npc:join] Zombie[990] has joined the server (489:127.0.0.1)
+[23:28:14] [npc:join] Zombie[989] has joined the server (488:127.0.0.1)
+[23:28:14] [npc:join] Zombie[988] has joined the server (487:127.0.0.1)
+[23:28:14] [npc:join] Zombie[987] has joined the server (486:127.0.0.1)
+[23:28:14] [npc:join] Zombie[986] has joined the server (485:127.0.0.1)
+[23:28:14] [npc:join] Zombie[985] has joined the server (484:127.0.0.1)
+[23:28:14] [npc:join] Zombie[984] has joined the server (483:127.0.0.1)
+[23:28:14] [npc:join] Zombie[983] has joined the server (482:127.0.0.1)
+[23:28:14] [npc:join] Zombie[982] has joined the server (481:127.0.0.1)
+[23:28:14] [npc:join] Zombie[981] has joined the server (480:127.0.0.1)
+[23:28:14] [npc:join] Zombie[980] has joined the server (479:127.0.0.1)
+[23:28:14] [npc:join] Zombie[979] has joined the server (478:127.0.0.1)
+[23:28:14] [npc:join] Zombie[978] has joined the server (477:127.0.0.1)
+[23:28:14] [npc:join] Zombie[977] has joined the server (476:127.0.0.1)
+[23:28:14] [npc:join] Zombie[976] has joined the server (475:127.0.0.1)
+[23:28:14] [npc:join] Zombie[975] has joined the server (474:127.0.0.1)
+[23:28:14] [npc:join] Zombie[974] has joined the server (473:127.0.0.1)
+[23:28:15] [npc:join] Zombie[973] has joined the server (472:127.0.0.1)
+[23:28:15] [npc:join] Zombie[972] has joined the server (471:127.0.0.1)
+[23:28:15] [npc:join] Zombie[971] has joined the server (470:127.0.0.1)
+[23:28:15] [npc:join] Zombie[970] has joined the server (469:127.0.0.1)
+[23:28:15] [npc:join] Zombie[969] has joined the server (468:127.0.0.1)
+[23:28:15] [npc:join] Zombie[968] has joined the server (467:127.0.0.1)
+[23:28:15] [npc:join] Zombie[967] has joined the server (466:127.0.0.1)
+[23:28:15] [npc:join] Zombie[966] has joined the server (465:127.0.0.1)
+[23:28:15] [npc:join] Zombie[965] has joined the server (464:127.0.0.1)
+[23:28:15] [npc:join] Zombie[964] has joined the server (463:127.0.0.1)
+[23:28:15] [npc:join] Zombie[963] has joined the server (462:127.0.0.1)
+[23:28:15] [npc:join] Zombie[962] has joined the server (461:127.0.0.1)
+[23:28:15] [npc:join] Zombie[961] has joined the server (460:127.0.0.1)
+[23:28:15] [npc:join] Zombie[960] has joined the server (459:127.0.0.1)
+[23:28:15] [npc:join] Zombie[959] has joined the server (458:127.0.0.1)
+[23:28:15] [npc:join] Zombie[958] has joined the server (457:127.0.0.1)
+[23:28:16] [npc:join] Zombie[957] has joined the server (456:127.0.0.1)
+[23:28:16] [npc:join] Zombie[956] has joined the server (455:127.0.0.1)
+[23:28:16] [npc:join] Zombie[955] has joined the server (454:127.0.0.1)
+[23:28:16] [npc:join] Zombie[954] has joined the server (453:127.0.0.1)
+[23:28:16] [npc:join] Zombie[953] has joined the server (452:127.0.0.1)
+[23:28:16] [npc:join] Zombie[952] has joined the server (451:127.0.0.1)
+[23:28:16] [npc:join] Zombie[951] has joined the server (450:127.0.0.1)
+[23:28:16] [npc:join] Zombie[950] has joined the server (449:127.0.0.1)
+[23:28:16] [npc:join] Zombie[949] has joined the server (448:127.0.0.1)
+[23:28:16] [npc:join] Zombie[948] has joined the server (447:127.0.0.1)
+[23:28:16] [npc:join] Zombie[947] has joined the server (446:127.0.0.1)
+[23:28:16] [npc:join] Zombie[946] has joined the server (445:127.0.0.1)
+[23:28:16] [npc:join] Zombie[945] has joined the server (444:127.0.0.1)
+[23:28:16] [npc:join] Zombie[944] has joined the server (443:127.0.0.1)
+[23:28:16] [npc:join] Zombie[943] has joined the server (442:127.0.0.1)
+[23:28:16] [npc:join] Zombie[942] has joined the server (441:127.0.0.1)
+[23:28:16] [npc:join] Zombie[941] has joined the server (440:127.0.0.1)
+[23:28:16] [npc:join] Zombie[940] has joined the server (439:127.0.0.1)
+[23:28:17] [npc:join] Zombie[939] has joined the server (438:127.0.0.1)
+[23:28:17] [npc:join] Zombie[938] has joined the server (437:127.0.0.1)
+[23:28:17] [npc:join] Zombie[937] has joined the server (436:127.0.0.1)
+[23:28:17] [npc:join] Zombie[936] has joined the server (435:127.0.0.1)
+[23:28:17] [npc:join] Zombie[935] has joined the server (434:127.0.0.1)
+[23:28:17] [npc:join] Zombie[934] has joined the server (433:127.0.0.1)
+[23:28:17] [npc:join] Zombie[933] has joined the server (432:127.0.0.1)
+[23:28:17] [npc:join] Zombie[932] has joined the server (431:127.0.0.1)
+[23:28:17] [npc:join] Zombie[931] has joined the server (430:127.0.0.1)
+[23:28:17] [npc:join] Zombie[930] has joined the server (429:127.0.0.1)
+[23:28:17] [npc:join] Zombie[929] has joined the server (428:127.0.0.1)
+[23:28:17] [npc:join] Zombie[928] has joined the server (427:127.0.0.1)
+[23:28:17] [npc:join] Zombie[927] has joined the server (426:127.0.0.1)
+[23:28:17] [npc:join] Zombie[926] has joined the server (425:127.0.0.1)
+[23:28:17] [npc:join] Zombie[925] has joined the server (424:127.0.0.1)
+[23:28:17] [npc:join] Zombie[924] has joined the server (423:127.0.0.1)
+[23:28:17] [npc:join] Zombie[923] has joined the server (422:127.0.0.1)
+[23:28:18] [npc:join] Zombie[922] has joined the server (421:127.0.0.1)
+[23:28:18] [npc:join] Zombie[921] has joined the server (420:127.0.0.1)
+[23:28:18] [npc:join] Zombie[920] has joined the server (419:127.0.0.1)
+[23:28:18] [npc:join] Zombie[919] has joined the server (418:127.0.0.1)
+[23:28:18] [npc:join] Zombie[918] has joined the server (417:127.0.0.1)
+[23:28:18] [npc:join] Zombie[917] has joined the server (416:127.0.0.1)
+[23:28:18] [npc:join] Zombie[916] has joined the server (415:127.0.0.1)
+[23:28:18] [npc:join] Zombie[915] has joined the server (414:127.0.0.1)
+[23:28:18] [npc:join] Zombie[914] has joined the server (413:127.0.0.1)
+[23:28:18] [npc:join] Zombie[913] has joined the server (412:127.0.0.1)
+[23:28:18] [npc:join] Zombie[912] has joined the server (411:127.0.0.1)
+[23:28:18] [npc:join] Zombie[911] has joined the server (410:127.0.0.1)
+[23:28:18] [npc:join] Zombie[910] has joined the server (409:127.0.0.1)
+[23:28:18] [npc:join] Zombie[909] has joined the server (408:127.0.0.1)
+[23:28:18] [npc:join] Zombie[908] has joined the server (407:127.0.0.1)
+[23:28:18] [npc:join] Zombie[907] has joined the server (406:127.0.0.1)
+[23:28:18] [npc:join] Zombie[906] has joined the server (405:127.0.0.1)
+[23:28:19] [npc:join] Zombie[905] has joined the server (404:127.0.0.1)
+[23:28:19] [npc:join] Zombie[904] has joined the server (403:127.0.0.1)
+[23:28:19] [npc:join] Zombie[903] has joined the server (402:127.0.0.1)
+[23:28:19] [npc:join] Zombie[902] has joined the server (401:127.0.0.1)
+[23:28:19] [npc:join] Zombie[901] has joined the server (400:127.0.0.1)
+[23:28:19] [npc:join] Zombie[900] has joined the server (399:127.0.0.1)
+[23:28:19] [npc:join] Zombie[899] has joined the server (398:127.0.0.1)
+[23:28:19] [npc:join] Zombie[898] has joined the server (397:127.0.0.1)
+[23:28:19] [npc:join] Zombie[897] has joined the server (396:127.0.0.1)
+[23:28:19] [npc:join] Zombie[896] has joined the server (395:127.0.0.1)
+[23:28:19] [npc:join] Zombie[895] has joined the server (394:127.0.0.1)
+[23:28:19] [npc:join] Zombie[894] has joined the server (393:127.0.0.1)
+[23:28:19] [npc:join] Zombie[893] has joined the server (392:127.0.0.1)
+[23:28:19] [npc:join] Zombie[892] has joined the server (391:127.0.0.1)
+[23:28:19] [npc:join] Zombie[891] has joined the server (390:127.0.0.1)
+[23:28:19] [npc:join] Zombie[890] has joined the server (389:127.0.0.1)
+[23:28:20] [npc:join] Zombie[889] has joined the server (388:127.0.0.1)
+[23:28:20] [npc:join] Zombie[888] has joined the server (387:127.0.0.1)
+[23:28:20] [npc:join] Zombie[887] has joined the server (386:127.0.0.1)
+[23:28:20] [npc:join] Zombie[886] has joined the server (385:127.0.0.1)
+[23:28:20] [npc:join] Zombie[885] has joined the server (384:127.0.0.1)
+[23:28:20] [npc:join] Zombie[884] has joined the server (383:127.0.0.1)
+[23:28:20] [npc:join] Zombie[883] has joined the server (382:127.0.0.1)
+[23:28:20] [npc:join] Zombie[882] has joined the server (381:127.0.0.1)
+[23:28:20] [npc:join] Zombie[881] has joined the server (380:127.0.0.1)
+[23:28:20] [npc:join] Zombie[880] has joined the server (379:127.0.0.1)
+[23:28:20] [npc:join] Zombie[879] has joined the server (378:127.0.0.1)
+[23:28:20] [npc:join] Zombie[878] has joined the server (377:127.0.0.1)
+[23:28:20] [npc:join] Zombie[877] has joined the server (376:127.0.0.1)
+[23:28:20] [npc:join] Zombie[876] has joined the server (375:127.0.0.1)
+[23:28:20] [npc:join] Zombie[875] has joined the server (374:127.0.0.1)
+[23:28:20] [npc:join] Zombie[874] has joined the server (373:127.0.0.1)
+[23:28:20] [npc:join] Zombie[873] has joined the server (372:127.0.0.1)
+[23:28:21] [npc:join] Zombie[872] has joined the server (371:127.0.0.1)
+[23:28:21] [npc:join] Zombie[871] has joined the server (370:127.0.0.1)
+[23:28:21] [npc:join] Zombie[870] has joined the server (369:127.0.0.1)
+[23:28:21] [npc:join] Zombie[869] has joined the server (368:127.0.0.1)
+[23:28:21] [npc:join] Zombie[868] has joined the server (367:127.0.0.1)
+[23:28:21] [npc:join] Zombie[867] has joined the server (366:127.0.0.1)
+[23:28:21] [npc:join] Zombie[866] has joined the server (365:127.0.0.1)
+[23:28:21] [npc:join] Zombie[865] has joined the server (364:127.0.0.1)
+[23:28:21] [npc:join] Zombie[864] has joined the server (363:127.0.0.1)
+[23:28:21] [npc:join] Zombie[863] has joined the server (362:127.0.0.1)
+[23:28:21] [npc:join] Zombie[862] has joined the server (361:127.0.0.1)
+[23:28:21] [npc:join] Zombie[861] has joined the server (360:127.0.0.1)
+[23:28:21] [npc:join] Zombie[860] has joined the server (359:127.0.0.1)
+[23:28:21] [npc:join] Zombie[859] has joined the server (358:127.0.0.1)
+[23:28:21] [npc:join] Zombie[858] has joined the server (357:127.0.0.1)
+[23:28:21] [npc:join] Zombie[857] has joined the server (356:127.0.0.1)
+[23:28:21] [npc:join] Zombie[856] has joined the server (355:127.0.0.1)
+[23:28:22] [npc:join] Zombie[855] has joined the server (354:127.0.0.1)
+[23:28:22] [npc:join] Zombie[854] has joined the server (353:127.0.0.1)
+[23:28:22] [npc:join] Zombie[853] has joined the server (352:127.0.0.1)
+[23:28:22] [npc:join] Zombie[852] has joined the server (351:127.0.0.1)
+[23:28:22] [npc:join] Zombie[851] has joined the server (350:127.0.0.1)
+[23:28:22] [npc:join] Zombie[850] has joined the server (349:127.0.0.1)
+[23:28:22] [npc:join] Zombie[849] has joined the server (348:127.0.0.1)
+[23:28:22] [npc:join] Zombie[848] has joined the server (347:127.0.0.1)
+[23:28:22] [npc:join] Zombie[847] has joined the server (346:127.0.0.1)
+[23:28:22] [npc:join] Zombie[846] has joined the server (345:127.0.0.1)
+[23:28:22] [npc:join] Zombie[845] has joined the server (344:127.0.0.1)
+[23:28:22] [npc:join] Zombie[844] has joined the server (343:127.0.0.1)
+[23:28:22] [npc:join] Zombie[843] has joined the server (342:127.0.0.1)
+[23:28:22] [npc:join] Zombie[842] has joined the server (341:127.0.0.1)
+[23:28:22] [npc:join] Zombie[841] has joined the server (340:127.0.0.1)
+[23:28:22] [npc:join] Zombie[840] has joined the server (339:127.0.0.1)
+[23:28:22] [npc:join] Zombie[839] has joined the server (338:127.0.0.1)
+[23:28:23] [npc:join] Zombie[838] has joined the server (337:127.0.0.1)
+[23:28:23] [npc:join] Zombie[837] has joined the server (336:127.0.0.1)
+[23:28:23] [npc:join] Zombie[836] has joined the server (335:127.0.0.1)
+[23:28:23] [npc:join] Zombie[835] has joined the server (334:127.0.0.1)
+[23:28:23] [npc:join] Zombie[834] has joined the server (333:127.0.0.1)
+[23:28:23] [npc:join] Zombie[833] has joined the server (332:127.0.0.1)
+[23:28:23] [npc:join] Zombie[832] has joined the server (331:127.0.0.1)
+[23:28:23] [npc:join] Zombie[831] has joined the server (330:127.0.0.1)
+[23:28:23] [npc:join] Zombie[830] has joined the server (329:127.0.0.1)
+[23:28:23] [npc:join] Zombie[829] has joined the server (328:127.0.0.1)
+[23:28:23] [npc:join] Zombie[828] has joined the server (327:127.0.0.1)
+[23:28:23] [npc:join] Zombie[827] has joined the server (326:127.0.0.1)
+[23:28:23] [npc:join] Zombie[826] has joined the server (325:127.0.0.1)
+[23:28:23] [npc:join] Zombie[825] has joined the server (324:127.0.0.1)
+[23:28:23] [npc:join] Zombie[824] has joined the server (323:127.0.0.1)
+[23:28:23] [npc:join] Zombie[823] has joined the server (322:127.0.0.1)
+[23:28:23] [npc:join] Zombie[822] has joined the server (321:127.0.0.1)
+[23:28:24] [npc:join] Zombie[821] has joined the server (320:127.0.0.1)
+[23:28:24] [npc:join] Zombie[820] has joined the server (319:127.0.0.1)
+[23:28:24] [npc:join] Zombie[819] has joined the server (318:127.0.0.1)
+[23:28:24] [npc:join] Zombie[818] has joined the server (317:127.0.0.1)
+[23:28:24] [npc:join] Zombie[817] has joined the server (316:127.0.0.1)
+[23:28:24] [npc:join] Zombie[816] has joined the server (315:127.0.0.1)
+[23:28:24] [npc:join] Zombie[815] has joined the server (314:127.0.0.1)
+[23:28:24] [npc:join] Zombie[814] has joined the server (313:127.0.0.1)
+[23:28:24] [npc:join] Zombie[813] has joined the server (312:127.0.0.1)
+[23:28:24] [npc:join] Zombie[812] has joined the server (311:127.0.0.1)
+[23:28:24] [npc:join] Zombie[811] has joined the server (310:127.0.0.1)
+[23:28:24] [npc:join] Zombie[810] has joined the server (309:127.0.0.1)
+[23:28:24] [npc:join] Zombie[809] has joined the server (308:127.0.0.1)
+[23:28:24] [npc:join] Zombie[808] has joined the server (307:127.0.0.1)
+[23:28:24] [npc:join] Zombie[807] has joined the server (306:127.0.0.1)
+[23:28:24] [npc:join] Zombie[806] has joined the server (305:127.0.0.1)
+[23:28:25] [npc:join] Zombie[805] has joined the server (304:127.0.0.1)
+[23:28:25] [npc:join] Zombie[804] has joined the server (303:127.0.0.1)
+[23:28:25] [npc:join] Zombie[803] has joined the server (302:127.0.0.1)
+[23:28:25] [npc:join] Zombie[802] has joined the server (301:127.0.0.1)
+[23:28:25] [npc:join] Zombie[801] has joined the server (300:127.0.0.1)
+[23:28:25] [npc:join] Zombie[800] has joined the server (299:127.0.0.1)
+[23:28:25] [npc:join] Zombie[799] has joined the server (298:127.0.0.1)
+[23:28:25] [npc:join] Zombie[798] has joined the server (297:127.0.0.1)
+[23:28:25] [npc:join] Zombie[797] has joined the server (296:127.0.0.1)
+[23:28:25] [npc:join] Zombie[796] has joined the server (295:127.0.0.1)
+[23:28:25] [npc:join] Zombie[795] has joined the server (294:127.0.0.1)
+[23:28:25] [npc:join] Zombie[794] has joined the server (293:127.0.0.1)
+[23:28:25] [npc:join] Zombie[793] has joined the server (292:127.0.0.1)
+[23:28:25] [npc:join] Zombie[792] has joined the server (291:127.0.0.1)
+[23:28:25] [npc:join] Zombie[791] has joined the server (290:127.0.0.1)
+[23:28:25] [npc:join] Zombie[790] has joined the server (289:127.0.0.1)
+[23:28:26] [npc:join] Zombie[789] has joined the server (288:127.0.0.1)
+[23:28:26] [npc:join] Zombie[788] has joined the server (287:127.0.0.1)
+[23:28:26] [npc:join] Zombie[787] has joined the server (286:127.0.0.1)
+[23:28:26] [npc:join] Zombie[786] has joined the server (285:127.0.0.1)
+[23:28:26] [npc:join] Zombie[785] has joined the server (284:127.0.0.1)
+[23:28:26] [npc:join] Zombie[784] has joined the server (283:127.0.0.1)
+[23:28:26] [npc:join] Zombie[783] has joined the server (282:127.0.0.1)
+[23:28:26] [npc:join] Zombie[782] has joined the server (281:127.0.0.1)
+[23:28:26] [npc:join] Zombie[781] has joined the server (280:127.0.0.1)
+[23:28:26] [npc:join] Zombie[780] has joined the server (279:127.0.0.1)
+[23:28:26] [npc:join] Zombie[779] has joined the server (278:127.0.0.1)
+[23:28:26] [npc:join] Zombie[778] has joined the server (277:127.0.0.1)
+[23:28:26] [npc:join] Zombie[777] has joined the server (276:127.0.0.1)
+[23:28:26] [npc:join] Zombie[776] has joined the server (275:127.0.0.1)
+[23:28:26] [npc:join] Zombie[775] has joined the server (274:127.0.0.1)
+[23:28:26] [npc:join] Zombie[774] has joined the server (273:127.0.0.1)
+[23:28:27] [npc:join] Zombie[773] has joined the server (272:127.0.0.1)
+[23:28:27] [npc:join] Zombie[772] has joined the server (271:127.0.0.1)
+[23:28:27] [npc:join] Zombie[771] has joined the server (270:127.0.0.1)
+[23:28:27] [npc:join] Zombie[770] has joined the server (269:127.0.0.1)
+[23:28:27] [npc:join] Zombie[769] has joined the server (268:127.0.0.1)
+[23:28:27] [npc:join] Zombie[768] has joined the server (267:127.0.0.1)
+[23:28:27] [npc:join] Zombie[767] has joined the server (266:127.0.0.1)
+[23:28:27] [npc:join] Zombie[766] has joined the server (265:127.0.0.1)
+[23:28:27] [npc:join] Zombie[765] has joined the server (264:127.0.0.1)
+[23:28:27] [npc:join] Zombie[764] has joined the server (263:127.0.0.1)
+[23:28:27] [npc:join] Zombie[763] has joined the server (262:127.0.0.1)
+[23:28:27] [npc:join] Zombie[762] has joined the server (261:127.0.0.1)
+[23:28:27] [npc:join] Zombie[761] has joined the server (260:127.0.0.1)
+[23:28:27] [npc:join] Zombie[760] has joined the server (259:127.0.0.1)
+[23:28:27] [npc:join] Zombie[759] has joined the server (258:127.0.0.1)
+[23:28:27] [npc:join] Zombie[758] has joined the server (257:127.0.0.1)
+[23:28:28] [npc:join] Zombie[757] has joined the server (256:127.0.0.1)
+[23:28:28] [npc:join] Zombie[756] has joined the server (255:127.0.0.1)
+[23:28:28] [npc:join] Zombie[755] has joined the server (254:127.0.0.1)
+[23:28:28] [npc:join] Zombie[754] has joined the server (253:127.0.0.1)
+[23:28:28] [npc:join] Zombie[753] has joined the server (252:127.0.0.1)
+[23:28:28] [npc:join] Zombie[752] has joined the server (251:127.0.0.1)
+[23:28:28] [npc:join] Zombie[751] has joined the server (250:127.0.0.1)
+[23:28:28] [npc:join] Zombie[750] has joined the server (249:127.0.0.1)
+[23:28:28] [npc:join] Zombie[749] has joined the server (248:127.0.0.1)
+[23:28:28] [npc:join] Zombie[748] has joined the server (247:127.0.0.1)
+[23:28:28] [npc:join] Zombie[747] has joined the server (246:127.0.0.1)
+[23:28:28] [npc:join] Zombie[746] has joined the server (245:127.0.0.1)
+[23:28:28] [npc:join] Zombie[745] has joined the server (244:127.0.0.1)
+[23:28:28] [npc:join] Zombie[744] has joined the server (243:127.0.0.1)
+[23:28:28] [npc:join] Zombie[743] has joined the server (242:127.0.0.1)
+[23:28:28] [npc:join] Zombie[742] has joined the server (241:127.0.0.1)
+[23:28:29] [npc:join] Zombie[741] has joined the server (240:127.0.0.1)
+[23:28:29] [npc:join] Zombie[740] has joined the server (239:127.0.0.1)
+[23:28:29] [npc:join] Zombie[739] has joined the server (238:127.0.0.1)
+[23:28:29] [npc:join] Zombie[738] has joined the server (237:127.0.0.1)
+[23:28:29] [npc:join] Zombie[737] has joined the server (236:127.0.0.1)
+[23:28:29] [npc:join] Zombie[736] has joined the server (235:127.0.0.1)
+[23:28:29] [npc:join] Zombie[735] has joined the server (234:127.0.0.1)
+[23:28:29] [npc:join] Zombie[734] has joined the server (233:127.0.0.1)
+[23:28:29] [npc:join] Zombie[733] has joined the server (232:127.0.0.1)
+[23:28:29] [npc:join] Zombie[732] has joined the server (231:127.0.0.1)
+[23:28:29] [npc:join] Zombie[731] has joined the server (230:127.0.0.1)
+[23:28:29] [npc:join] Zombie[730] has joined the server (229:127.0.0.1)
+[23:28:29] [npc:join] Zombie[729] has joined the server (228:127.0.0.1)
+[23:28:29] [npc:join] Zombie[728] has joined the server (227:127.0.0.1)
+[23:28:29] [npc:join] Zombie[727] has joined the server (226:127.0.0.1)
+[23:28:29] [npc:join] Zombie[726] has joined the server (225:127.0.0.1)
+[23:28:29] [npc:join] Zombie[725] has joined the server (224:127.0.0.1)
+[23:28:30] [npc:join] Zombie[724] has joined the server (223:127.0.0.1)
+[23:28:30] [npc:join] Zombie[723] has joined the server (222:127.0.0.1)
+[23:28:30] [npc:join] Zombie[722] has joined the server (221:127.0.0.1)
+[23:28:30] [npc:join] Zombie[721] has joined the server (220:127.0.0.1)
+[23:28:30] [npc:join] Zombie[720] has joined the server (219:127.0.0.1)
+[23:28:30] [npc:join] Zombie[719] has joined the server (218:127.0.0.1)
+[23:28:30] [npc:join] Zombie[718] has joined the server (217:127.0.0.1)
+[23:28:30] [npc:join] Zombie[717] has joined the server (216:127.0.0.1)
+[23:28:30] [npc:join] Zombie[716] has joined the server (215:127.0.0.1)
+[23:28:30] [npc:join] Zombie[715] has joined the server (214:127.0.0.1)
+[23:28:30] [npc:join] Zombie[714] has joined the server (213:127.0.0.1)
+[23:28:30] [npc:join] Zombie[713] has joined the server (212:127.0.0.1)
+[23:28:30] [npc:join] Zombie[712] has joined the server (211:127.0.0.1)
+[23:28:30] [npc:join] Zombie[711] has joined the server (210:127.0.0.1)
+[23:28:30] [npc:join] Zombie[710] has joined the server (209:127.0.0.1)
+[23:28:30] [npc:join] Zombie[709] has joined the server (208:127.0.0.1)
+[23:28:30] [npc:join] Zombie[708] has joined the server (207:127.0.0.1)
+[23:28:31] [npc:join] Zombie[707] has joined the server (206:127.0.0.1)
+[23:28:31] [npc:join] Zombie[706] has joined the server (205:127.0.0.1)
+[23:28:31] [npc:join] Zombie[705] has joined the server (204:127.0.0.1)
+[23:28:31] [npc:join] Zombie[704] has joined the server (203:127.0.0.1)
+[23:28:31] [npc:join] Zombie[703] has joined the server (202:127.0.0.1)
+[23:28:31] [npc:join] Zombie[702] has joined the server (201:127.0.0.1)
+[23:28:31] [npc:join] Zombie[701] has joined the server (200:127.0.0.1)
+[23:28:31] [npc:join] Zombie[700] has joined the server (199:127.0.0.1)
+[23:28:31] [npc:join] Zombie[699] has joined the server (198:127.0.0.1)
+[23:28:31] [npc:join] Zombie[698] has joined the server (197:127.0.0.1)
+[23:28:31] [npc:join] Zombie[697] has joined the server (196:127.0.0.1)
+[23:28:31] [npc:join] Zombie[696] has joined the server (195:127.0.0.1)
+[23:28:31] [npc:join] Zombie[695] has joined the server (194:127.0.0.1)
+[23:28:31] [npc:join] Zombie[694] has joined the server (193:127.0.0.1)
+[23:28:31] [npc:join] Zombie[693] has joined the server (192:127.0.0.1)
+[23:28:31] [npc:join] Zombie[692] has joined the server (191:127.0.0.1)
+[23:28:32] [npc:join] Zombie[691] has joined the server (190:127.0.0.1)
+[23:28:32] [npc:join] Zombie[690] has joined the server (189:127.0.0.1)
+[23:28:32] [npc:join] Zombie[689] has joined the server (188:127.0.0.1)
+[23:28:32] [npc:join] Zombie[688] has joined the server (187:127.0.0.1)
+[23:28:32] [npc:join] Zombie[687] has joined the server (186:127.0.0.1)
+[23:28:32] [npc:join] Zombie[686] has joined the server (185:127.0.0.1)
+[23:28:32] [npc:join] Zombie[685] has joined the server (184:127.0.0.1)
+[23:28:32] [npc:join] Zombie[684] has joined the server (183:127.0.0.1)
+[23:28:32] [npc:join] Zombie[683] has joined the server (182:127.0.0.1)
+[23:28:32] [npc:join] Zombie[682] has joined the server (181:127.0.0.1)
+[23:28:32] [npc:join] Zombie[681] has joined the server (180:127.0.0.1)
+[23:28:32] [npc:join] Zombie[680] has joined the server (179:127.0.0.1)
+[23:28:32] [npc:join] Zombie[679] has joined the server (178:127.0.0.1)
+[23:28:32] [npc:join] Zombie[678] has joined the server (177:127.0.0.1)
+[23:28:32] [npc:join] Zombie[677] has joined the server (176:127.0.0.1)
+[23:28:32] [npc:join] Zombie[676] has joined the server (175:127.0.0.1)
+[23:28:32] [npc:join] Zombie[675] has joined the server (174:127.0.0.1)
+[23:28:33] [npc:join] Zombie[674] has joined the server (173:127.0.0.1)
+[23:28:33] [npc:join] Zombie[673] has joined the server (172:127.0.0.1)
+[23:28:33] [npc:join] Zombie[672] has joined the server (171:127.0.0.1)
+[23:28:33] [npc:join] Zombie[671] has joined the server (170:127.0.0.1)
+[23:28:33] [npc:join] Zombie[670] has joined the server (169:127.0.0.1)
+[23:28:33] [npc:join] Zombie[669] has joined the server (168:127.0.0.1)
+[23:28:33] [npc:join] Zombie[668] has joined the server (167:127.0.0.1)
+[23:28:33] [npc:join] Zombie[667] has joined the server (166:127.0.0.1)
+[23:28:33] [npc:join] Zombie[666] has joined the server (165:127.0.0.1)
+[23:28:33] [npc:join] Zombie[665] has joined the server (164:127.0.0.1)
+[23:28:33] [npc:join] Zombie[664] has joined the server (163:127.0.0.1)
+[23:28:33] [npc:join] Zombie[663] has joined the server (162:127.0.0.1)
+[23:28:33] [npc:join] Zombie[662] has joined the server (161:127.0.0.1)
+[23:28:33] [npc:join] Zombie[661] has joined the server (160:127.0.0.1)
+[23:28:33] [npc:join] Zombie[660] has joined the server (159:127.0.0.1)
+[23:28:34] [npc:join] Zombie[659] has joined the server (158:127.0.0.1)
+[23:28:34] [npc:join] Zombie[658] has joined the server (157:127.0.0.1)
+[23:28:34] [npc:join] Zombie[657] has joined the server (156:127.0.0.1)
+[23:28:34] [npc:join] Zombie[656] has joined the server (155:127.0.0.1)
+[23:28:34] [npc:join] Zombie[655] has joined the server (154:127.0.0.1)
+[23:28:34] [npc:join] Zombie[654] has joined the server (153:127.0.0.1)
+[23:28:34] [npc:join] Zombie[653] has joined the server (152:127.0.0.1)
+[23:28:34] [npc:join] Zombie[652] has joined the server (151:127.0.0.1)
+[23:28:34] [npc:join] Zombie[651] has joined the server (150:127.0.0.1)
+[23:28:34] [npc:join] Zombie[650] has joined the server (149:127.0.0.1)
+[23:28:34] [npc:join] Zombie[649] has joined the server (148:127.0.0.1)
+[23:28:34] [npc:join] Zombie[648] has joined the server (147:127.0.0.1)
+[23:28:34] [npc:join] Zombie[647] has joined the server (146:127.0.0.1)
+[23:28:34] [npc:join] Zombie[646] has joined the server (145:127.0.0.1)
+[23:28:34] [npc:join] Zombie[645] has joined the server (144:127.0.0.1)
+[23:28:34] [npc:join] Zombie[644] has joined the server (143:127.0.0.1)
+[23:28:34] [npc:join] Zombie[643] has joined the server (142:127.0.0.1)
+[23:28:35] [npc:join] Zombie[642] has joined the server (141:127.0.0.1)
+[23:28:35] [npc:join] Zombie[641] has joined the server (140:127.0.0.1)
+[23:28:35] [npc:join] Zombie[640] has joined the server (139:127.0.0.1)
+[23:28:35] [npc:join] Zombie[639] has joined the server (138:127.0.0.1)
+[23:28:35] [npc:join] Zombie[638] has joined the server (137:127.0.0.1)
+[23:28:35] [npc:join] Zombie[637] has joined the server (136:127.0.0.1)
+[23:28:35] [npc:join] Zombie[636] has joined the server (135:127.0.0.1)
+[23:28:35] [npc:join] Zombie[635] has joined the server (134:127.0.0.1)
+[23:28:35] [npc:join] Zombie[634] has joined the server (133:127.0.0.1)
+[23:28:35] [npc:join] Zombie[633] has joined the server (132:127.0.0.1)
+[23:28:35] [npc:join] Zombie[632] has joined the server (131:127.0.0.1)
+[23:28:35] [npc:join] Zombie[631] has joined the server (130:127.0.0.1)
+[23:28:35] [npc:join] Zombie[630] has joined the server (129:127.0.0.1)
+[23:28:35] [npc:join] Zombie[629] has joined the server (128:127.0.0.1)
+[23:28:35] [npc:join] Zombie[628] has joined the server (127:127.0.0.1)
+[23:28:35] [npc:join] Zombie[627] has joined the server (126:127.0.0.1)
+[23:28:36] [npc:join] Zombie[626] has joined the server (125:127.0.0.1)
+[23:28:36] [npc:join] Zombie[625] has joined the server (124:127.0.0.1)
+[23:28:36] [npc:join] Zombie[624] has joined the server (123:127.0.0.1)
+[23:28:36] [npc:join] Zombie[623] has joined the server (122:127.0.0.1)
+[23:28:36] [npc:join] Zombie[622] has joined the server (121:127.0.0.1)
+[23:28:36] [npc:join] Zombie[621] has joined the server (120:127.0.0.1)
+[23:28:36] [npc:join] Zombie[620] has joined the server (119:127.0.0.1)
+[23:28:36] [npc:join] Zombie[619] has joined the server (118:127.0.0.1)
+[23:28:36] [npc:join] Zombie[618] has joined the server (117:127.0.0.1)
+[23:28:36] [npc:join] Zombie[617] has joined the server (116:127.0.0.1)
+[23:28:36] [npc:join] Zombie[616] has joined the server (115:127.0.0.1)
+[23:28:36] [npc:join] Zombie[615] has joined the server (114:127.0.0.1)
+[23:28:36] [npc:join] Zombie[614] has joined the server (113:127.0.0.1)
+[23:28:36] [npc:join] Zombie[613] has joined the server (112:127.0.0.1)
+[23:28:36] [npc:join] Zombie[612] has joined the server (111:127.0.0.1)
+[23:28:36] [npc:join] Zombie[611] has joined the server (110:127.0.0.1)
+[23:28:37] [npc:join] Zombie[610] has joined the server (109:127.0.0.1)
+[23:28:37] [npc:join] Zombie[609] has joined the server (108:127.0.0.1)
+[23:28:37] [npc:join] Zombie[608] has joined the server (107:127.0.0.1)
+[23:28:37] [npc:join] Zombie[607] has joined the server (106:127.0.0.1)
+[23:28:37] [npc:join] Zombie[606] has joined the server (105:127.0.0.1)
+[23:28:37] [npc:join] Zombie[605] has joined the server (104:127.0.0.1)
+[23:28:37] [npc:join] Zombie[604] has joined the server (103:127.0.0.1)
+[23:28:37] [npc:join] Zombie[603] has joined the server (102:127.0.0.1)
+[23:28:37] [npc:join] Zombie[602] has joined the server (101:127.0.0.1)
+[23:28:37] [npc:join] Zombie[601] has joined the server (100:127.0.0.1)
+[23:28:37] Zombies creation done!
+[23:28:56] [connection] incoming connection: 192.168.183.1:52698 id: 0
+[23:28:56] [join] thang_minh has joined the server (0:192.168.183.1)
+[23:29:33] [INV] thang_minh[0]'s inventory saved.
+[23:29:33] [part] thang_minh has left the server (0:1)
+[23:29:48] [connection] incoming connection: 192.168.183.1:61676 id: 0
+[23:29:49] [join] thang_minh has joined the server (0:192.168.183.1)
+[23:29:59] INSERT INTO `users` (Username,Password,IP) VALUES ('thang_minh', sha1('00000000'),'192.168.183.1')
+[23:30:11] thang_minh has logged in.
+[23:30:11] [INV] thang_minh[0]'s inventory loaded.
