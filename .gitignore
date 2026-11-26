@@ -9,3 +9,8 @@ bans.json
 
 # MapAndreas data (72 MB): copy from the MapAndreas v1.2.1 release
 scriptfiles/SAfull.hmap
+
+# local database (binaries, data, credentials)
+tools/
+database/
+mysql.ini

@@ -34,10 +34,7 @@
 #define ACTION_SPECIAL 1
 
 // **** MYSQL CONFIGURATION **** //
-#define mysql_host "localhost"
-#define mysql_user  "root"
-#define mysql_password ""
-#define mysql_database  "samp"
+// Connection settings live in mysql.ini (see mysql.example.ini)
 
 //achievements
 #define SAN_ANDREAS
@@ -17730,14 +17727,14 @@ function jban_OnQueryFinish(extraid)
 
 function MySQLConnect()
 {
-	handle = mysql_connect(mysql_host, mysql_user, mysql_password, mysql_database);
+	handle = mysql_connect_file("mysql.ini");
 	if(mysql_errno(handle) == 0)
 	{
-		printf("[DayZ MySQL]: Connection to database (%s) was established!", mysql_database);
+		printf("[DayZ MySQL]: Connection to database was established!");
 	}
 	else
 	{
-		printf("[DayZ MySQL]: Connection to database (%s) failed!", mysql_database);
+		printf("[DayZ MySQL]: Connection to database failed! Check mysql.ini and start-database.bat");
 	}
 	return 1;
 }
