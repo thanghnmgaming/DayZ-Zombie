@@ -40,6 +40,7 @@ public OnGameModeInit()
   	strcat(querystr,"`IsPlayerLegBroken` int(11) NOT NULL,`pAmbientEnable` int(11) NOT NULL,`DefaultGender` int(11) NOT NULL, `IP` varchar(16) NOT NULL,`ID` int(11) NOT NULL)");
 
 	mysql_tquery(handle, querystr, "", "");
+	CreatePersistenceTables();
 
 	new querystr2[600];
 	strcat(querystr2,"CREATE TABLE IF NOT EXISTS `statsglobal` (`gStatsID` int(11) NOT NULL,`gZombiesKilled` int(11) NOT NULL,`gBanditsKilled` int(11) NOT NULL,`gSurvivorsKilled` int(11) NOT NULL,");
@@ -144,6 +145,9 @@ function startServer()
     DayZSA_CreateAllVehicles();
     DayZSA_CreateAllLoots();
     DayZSA_CreateVehicleStorage();
+    LoadVehicleStates();
+    LoadTents();
+    LoadStorageItems();
 	return 1;
  	}
 

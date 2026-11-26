@@ -124,53 +124,7 @@ stock ShowInventory(playerid)
 	return 1;
 }
 
-stock SaveInventory(playerid)
-{
-    if(!IsPlayerNPC(playerid) && pInfo[playerid][pLogged] == 1)
-    {
-		gItemList="";
-		new filename[64];
-		GetPlayerName(playerid,filename,24);
-		format(filename,64,""ITEM_PATH"/%s.inv",filename);
-		new File:file=fopen(filename,io_write);
-		for(new item;item<MAX_ITEMS;item++)
-		{
-			if(!strlen(_GetItemNamePVar(playerid,item))||!_GetItemAmountPVar(playerid,item))continue;
-			format(gItemList,sizeof(gItemList),"%s%s\n%d\n",gItemList,_GetItemNamePVar(playerid,item),_GetItemAmountPVar(playerid,item));
-		}
-		fwrite(file,gItemList);
-		fclose(file);
-		GetPlayerName(playerid,filename,24);
-		printf("[INV] %s[%d]'s inventory saved.",filename,playerid);
-	}
-	return 1;
-}
 
-stock LoadInventory(playerid)
-{
-    if(!IsPlayerNPC(playerid))
-    {
-		new tstring[64];
-		new tstring2[24];
-		GetPlayerName(playerid,tstring,48);
-		format(tstring,64,""ITEM_PATH"/%s.inv",tstring);
-		if(!fexist(tstring))return 0;
-		new File:file=fopen(tstring,io_read);
-		fread(file,tstring);
-		while(tstring[0])
-		{
-			format(tstring,strlen(tstring),"%s",tstring); //Delete last character
-			fread(file,tstring2);
-			AddItem(playerid,tstring,strval(tstring2));
-			fread(file,tstring);
-		}
-		fclose(file);
-		RecountBackpack(playerid);
-		GetPlayerName(playerid,tstring,24);
-		printf("[INV] %s[%d]'s inventory loaded.",tstring,playerid);
-	}
-	return 1;
-}
 
 GetXYInFrontOfPlayer(playerid, &Float:x, &Float:y, Float:distance)
 {

@@ -4,7 +4,6 @@
 // when the dialog opens and is re-checked when the answer arrives.
 // ---------------------------------------------------------------------------
 
-#define EMPTY_SLOT "Empty Slot"
 
 stock GetEntryItemName(const entry[], dest[], size = sizeof(dest))
 {
@@ -20,51 +19,33 @@ stock bool:IsItemName(const name[])
 	return name[0] != EOS && strcmp(name, EMPTY_SLOT, true) != 0;
 }
 
-#define TENT_CASE(%0,%1) case %0: format(dest, 64, "%s", Tent[tentid][tentSlot%1])
 stock GetTentSlot(tentid, slot, dest[])
 {
-	switch(slot)
-	{
-		TENT_CASE(0,1); TENT_CASE(1,2); TENT_CASE(2,3); TENT_CASE(3,4);
-		TENT_CASE(4,5); TENT_CASE(5,6); TENT_CASE(6,7); TENT_CASE(7,8);
-		TENT_CASE(8,9); TENT_CASE(9,10); TENT_CASE(10,11); TENT_CASE(11,12);
-		TENT_CASE(12,13); TENT_CASE(13,14); TENT_CASE(14,15); TENT_CASE(15,16);
-		default: return 0;
-	}
+	if(!(0 <= slot < MAX_TENT_SLOTS)) return 0;
+	format(dest, 64, "%s", TentSlots[tentid][slot]);
 	return 1;
 }
 
-#define TENT_SET(%0,%1) case %0: format(Tent[tentid][tentSlot%1], 64, "%s", value)
 stock SetTentSlot(tentid, slot, const value[])
 {
-	switch(slot)
-	{
-		TENT_SET(0,1); TENT_SET(1,2); TENT_SET(2,3); TENT_SET(3,4);
-		TENT_SET(4,5); TENT_SET(5,6); TENT_SET(6,7); TENT_SET(7,8);
-		TENT_SET(8,9); TENT_SET(9,10); TENT_SET(10,11); TENT_SET(11,12);
-		TENT_SET(12,13); TENT_SET(13,14); TENT_SET(14,15); TENT_SET(15,16);
-	}
+	if(!(0 <= slot < MAX_TENT_SLOTS)) return 0;
+	format(TentSlots[tentid][slot], 64, "%s", value);
+	SaveStorageSlot(STORAGE_TENT, tentid, slot, value);
 	return 1;
 }
 
-#define VEH_CASE(%0,%1) case %0: format(dest, 64, "%s", vInfo[vehicleid][vSlot%1])
 stock GetStorageSlot(vehicleid, slot, dest[])
 {
-	switch(slot)
-	{
-		VEH_CASE(0,1); VEH_CASE(1,2); VEH_CASE(2,3); VEH_CASE(3,4); VEH_CASE(4,5); VEH_CASE(5,6);
-		default: return 0;
-	}
+	if(!(0 <= slot < MAX_VEHICLE_SLOTS)) return 0;
+	format(dest, 64, "%s", VehicleSlots[vehicleid][slot]);
 	return 1;
 }
 
-#define VEH_SET(%0,%1) case %0: format(vInfo[vehicleid][vSlot%1], 64, "%s", value)
 stock SetStorageSlot(vehicleid, slot, const value[])
 {
-	switch(slot)
-	{
-		VEH_SET(0,1); VEH_SET(1,2); VEH_SET(2,3); VEH_SET(3,4); VEH_SET(4,5); VEH_SET(5,6);
-	}
+	if(!(0 <= slot < MAX_VEHICLE_SLOTS)) return 0;
+	format(VehicleSlots[vehicleid][slot], 64, "%s", value);
+	SaveStorageSlot(STORAGE_VEHICLE, vehicleid, slot, value);
 	return 1;
 }
 
@@ -140,6 +121,7 @@ stock GetMaxTires(playerid)
 
 stock PlayRepairAnim(playerid)
 {
+	if(ViewId[playerid] > 0) SaveVehicleState(ViewId[playerid]);
 	if(!IsPlayerInAnyVehicle(playerid))
 	{
 		ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 4.1, false, true, false, true, 1);

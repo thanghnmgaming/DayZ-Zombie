@@ -54,4 +54,5 @@
 #include "modules/items/containers.inc"
 #include "modules/server/bans.inc"
 #include "modules/server/session.inc"
+#include "modules/server/persistence.inc"
 #include "modules/zombies/zombies.inc"

@@ -144,6 +144,7 @@ stock ClearChat()
 
 stock ResetVars(playerid)
 {
+	InventoryLoaded[playerid] = false;
 	ViewId[playerid] = 0;
 	ViewItem[playerid][0] = EOS;
 	pInfo[playerid][IsPlayerGroupOwner] = 0;

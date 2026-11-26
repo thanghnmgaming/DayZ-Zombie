@@ -171,12 +171,7 @@ public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 				new Float:fPos[3];
 				GetPlayerPos(playerid,fPos[0],fPos[1],fPos[2]);
 				DayZSA_CreateLootsFunction("Tent",fPos[0],fPos[1],fPos[2]);
-			    DestroyDynamicObject(Tent[GetTentID(playerid)][TentID]);
-			    DestroyDynamic3DTextLabel(Tent[GetTentID(playerid)][tentText]);
-   				Tent[GetTentID(playerid)][xTent] = 0.0;
-				Tent[GetTentID(playerid)][yTent] = 0.0;
-				Tent[GetTentID(playerid)][zTent] = 0.0;
-				pInfo[playerid][pTentCreated] = 0;
+			    RemoveTent(GetTentID(playerid));
 				SendClientMessage(playerid, -1, "*"COL_RED" Tent sucessfully destroyed.");
 			}
             else return SendClientMessage(playerid,-1,"*"COL_RED" You need a toolbox to destroy this tent");

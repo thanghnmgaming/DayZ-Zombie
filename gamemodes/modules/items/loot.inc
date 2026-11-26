@@ -145,75 +145,7 @@ stock DayZSA_GetLootNameHigh()
 	return str;
 }
 
-function DayZSA_DisplayVehicleStorage(playerid)
-{
-	ViewId[playerid] = GetVehicleNearID(playerid);
-	new str[256];
 
-	if(vInfo[GetVehicleNearID(playerid)][vehicleSlots] == 1)
-	{
-		format(str,sizeof(str),"%s",
-		vInfo[GetVehicleNearID(playerid)][vSlot1]);
-	    ShowPlayerDialog(playerid,DIALOG_VEHICLE_STORAGE,DIALOG_STYLE_LIST,""COL_GREEN"GEAR Vehicle Storage (1 SLOTS)",str,"Select","Close");
-	}
-
-	if(vInfo[GetVehicleNearID(playerid)][vehicleSlots] == 2)
-	{
-		format(str,sizeof(str),"%s\n%s",
-		vInfo[GetVehicleNearID(playerid)][vSlot1],
-		vInfo[GetVehicleNearID(playerid)][vSlot2]);
-	    ShowPlayerDialog(playerid,DIALOG_VEHICLE_STORAGE,DIALOG_STYLE_LIST,""COL_GREEN"GEAR Vehicle Storage (2 SLOTS)",str,"Select","Close");
-	}
-
-	if(vInfo[GetVehicleNearID(playerid)][vehicleSlots] == 4)
-	{
-		format(str,sizeof(str),"%s\n%s\n%s\n%s",
-		vInfo[GetVehicleNearID(playerid)][vSlot1],
-		vInfo[GetVehicleNearID(playerid)][vSlot2],
-		vInfo[GetVehicleNearID(playerid)][vSlot3],
-		vInfo[GetVehicleNearID(playerid)][vSlot4]);
-	    ShowPlayerDialog(playerid,DIALOG_VEHICLE_STORAGE,DIALOG_STYLE_LIST,""COL_GREEN"GEAR Vehicle Storage (4 SLOTS)",str,"Select","Close");
-	}
-
-	if(vInfo[GetVehicleNearID(playerid)][vehicleSlots] == 6)
-	{
-		format(str,sizeof(str),"%s\n%s\n%s\n%s\n%s\n%s",
-		vInfo[GetVehicleNearID(playerid)][vSlot1],
-		vInfo[GetVehicleNearID(playerid)][vSlot2],
-		vInfo[GetVehicleNearID(playerid)][vSlot3],
-		vInfo[GetVehicleNearID(playerid)][vSlot4],
-		vInfo[GetVehicleNearID(playerid)][vSlot5],
-		vInfo[GetVehicleNearID(playerid)][vSlot6]);
-	    ShowPlayerDialog(playerid,DIALOG_VEHICLE_STORAGE,DIALOG_STYLE_LIST,""COL_GREEN"GEAR Vehicle Storage (6 SLOTS)",str,"Select","Close");
-	}
-	return 1;
-}
-
-function DayZSA_DisplayTent(playerid)
-{
-	ViewId[playerid] = GetTentID(playerid);
-	new str[364];
-	format(str,sizeof(str),"%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
-	Tent[GetTentID(playerid)][tentSlot1],
-	Tent[GetTentID(playerid)][tentSlot2],
-	Tent[GetTentID(playerid)][tentSlot3],
-	Tent[GetTentID(playerid)][tentSlot4],
-	Tent[GetTentID(playerid)][tentSlot5],
-	Tent[GetTentID(playerid)][tentSlot6],
-	Tent[GetTentID(playerid)][tentSlot7],
-	Tent[GetTentID(playerid)][tentSlot8],
-	Tent[GetTentID(playerid)][tentSlot9],
-	Tent[GetTentID(playerid)][tentSlot10],
-	Tent[GetTentID(playerid)][tentSlot11],
-	Tent[GetTentID(playerid)][tentSlot12],
-	Tent[GetTentID(playerid)][tentSlot13],
-	Tent[GetTentID(playerid)][tentSlot14],
-	Tent[GetTentID(playerid)][tentSlot15],
-	Tent[GetTentID(playerid)][tentSlot16]);
-
-	ShowPlayerDialog(playerid,DIALOG_TENT_VIEW,DIALOG_STYLE_LIST,""COL_WHITE"GEAR Tent"COL_GREEN" (16 SLOTS)",str,"Select","Close");
-	return 1;
-}
 
 function DayZSA_DisplayHospital(playerid)
 {
@@ -521,21 +453,15 @@ function DayZSA_LootSetupMilitary()
 
 function DayZSA_CreateVehicleStorage()
 {
-	new str[128],strV[64];
+	new str[128];
     new Float:x, Float:y, Float:z;
-    format(strV,sizeof(strV),"Empty Slot");
     for(new i = 0; i < MAX_VEHICLES; i++)
     {
         GetVehiclePos(i, x, y, z);
         vInfo[i][vX] = x;
         vInfo[i][vY] = y;
         vInfo[i][vZ] = z;
-        vInfo[i][vSlot1] = strV;
-        vInfo[i][vSlot2] = strV;
-        vInfo[i][vSlot3] = strV;
-        vInfo[i][vSlot4] = strV;
-        vInfo[i][vSlot5] = strV;
-        vInfo[i][vSlot6] = strV;
+        for(new slot; slot < MAX_VEHICLE_SLOTS; slot++) format(VehicleSlots[i][slot], 64, EMPTY_SLOT);
 
         new vID = GetVehicleModel(i);
 
@@ -692,42 +618,6 @@ function DayZSA_CreateCampFire(playerid)
 	return 1;
 }
 
-function DayZSA_CreateTent(playerid)
-{
-	new strt[128],reset[64];
-	tentCount += 1;
-	format(reset,sizeof(reset),"Empty Slot");
-	new Float:pXX,Float:pYX,Float:pZX;
- 	GetPlayerPos(playerid,pXX,pYX,pZX);
-	GetXYInFrontOfPlayer(playerid,pXX,pYX, 3.8);
-	Tent[tentCount][xTent] = pXX;
-	Tent[tentCount][yTent] = pYX;
-	Tent[tentCount][zTent] = pZX;
-	Tent[tentCount][tentSlot1] = reset;
-	Tent[tentCount][tentSlot2] = reset;
-	Tent[tentCount][tentSlot3] = reset;
-	Tent[tentCount][tentSlot4] = reset;
-	Tent[tentCount][tentSlot5] = reset;
-	Tent[tentCount][tentSlot6] = reset;
-	Tent[tentCount][tentSlot7] = reset;
-	Tent[tentCount][tentSlot8] = reset;
-	Tent[tentCount][tentSlot9] = reset;
-	Tent[tentCount][tentSlot10] = reset;
-	Tent[tentCount][tentSlot11] = reset;
-	Tent[tentCount][tentSlot12] = reset;
-	Tent[tentCount][tentSlot13] = reset;
-	Tent[tentCount][tentSlot14] = reset;
-	Tent[tentCount][tentSlot15] = reset;
-	Tent[tentCount][tentSlot16] = reset;
-
-	pInfo[playerid][pTentCreated] = 1;
-
-	Tent[tentCount][TentID] = CreateDynamicObject(1336,pXX,pYX,pZX,0.0,0.0,0.0,-1,-1,-1,1000.0);
-	SetDynamicObjectMaterial(Tent[tentCount][TentID],0, 2068, "cj_ammo_net", "CJ_cammonet", 0);
-	format(strt,sizeof(strt),""COL_GREEN"GEAR\n"COL_GREY"Press LEFT ALT to view tent!\nPress N to Destroy it!");
-	Tent[tentCount][tentText] = CreateDynamic3DTextLabel(strt,-1,pXX,pYX,pZX,8.0,INVALID_PLAYER_ID,INVALID_VEHICLE_ID,1,-1,-1,-1, 8.0);
-	return 1;
-}
 
 function DayZSA_CreateLootsDeadBody(playerid,Float:pXX,Float:pYX,Float:pZX)
 {
@@ -1020,15 +910,7 @@ CMD:tentres(playerid)
 {
 	if(pInfo[playerid][pAdminLevel] >= 6)
 	{
-		for(new iv2 = 0; iv2 < 500; iv2++)
-	 	{
-		    DestroyDynamicObject(Tent[iv2][TentID]);
-		    DestroyDynamic3DTextLabel(Tent[iv2][tentText]);
-	   		Tent[iv2][xTent] = 0.0;
-			Tent[iv2][yTent] = 0.0;
-			Tent[iv2][zTent] = 0.0;
-			tentCount = 0;
-		}
+		for(new i = 1; i < MAX_TENTS; i++) RemoveTent(i);
 	}
 	return 1;
 }
@@ -1074,3 +956,96 @@ function DayZSA_DestroyLootZombie(id)
 	return 1;
 }
 
+
+stock BuildSlotList(const slots[][], count, dest[], size)
+{
+	dest[0] = EOS;
+	for(new i; i < count; i++)
+	{
+		if(i) strcat(dest, "\n", size);
+		strcat(dest, slots[i], size);
+	}
+	return 1;
+}
+
+function DayZSA_DisplayVehicleStorage(playerid)
+{
+	new id = GetVehicleNearID(playerid);
+	ViewId[playerid] = id;
+	if(id <= 0 || vInfo[id][vehicleSlots] <= 0) return 1;
+
+	new list[MAX_VEHICLE_SLOTS * 65], title[64];
+	BuildSlotList(VehicleSlots[id], vInfo[id][vehicleSlots], list, sizeof(list));
+	format(title, sizeof(title), ""COL_GREEN"GEAR Vehicle Storage (%d SLOTS)", vInfo[id][vehicleSlots]);
+	ShowPlayerDialog(playerid, DIALOG_VEHICLE_STORAGE, DIALOG_STYLE_LIST, title, list, "Select", "Close");
+	return 1;
+}
+
+function DayZSA_DisplayTent(playerid)
+{
+	new id = GetTentID(playerid);
+	ViewId[playerid] = id;
+	if(id <= 0) return 1;
+
+	new list[MAX_TENT_SLOTS * 65];
+	BuildSlotList(TentSlots[id], MAX_TENT_SLOTS, list, sizeof(list));
+	ShowPlayerDialog(playerid, DIALOG_TENT_VIEW, DIALOG_STYLE_LIST, ""COL_WHITE"GEAR Tent"COL_GREEN" (16 SLOTS)", list, "Select", "Close");
+	return 1;
+}
+
+// Places a tent object in an array slot (new tents and tents loaded from the database)
+stock SpawnTent(id, const owner[], Float:x, Float:y, Float:z)
+{
+	Tent[id][xTent] = x;
+	Tent[id][yTent] = y;
+	Tent[id][zTent] = z;
+	format(TentOwner[id], MAX_PLAYER_NAME, "%s", owner);
+	for(new slot; slot < MAX_TENT_SLOTS; slot++) format(TentSlots[id][slot], 64, EMPTY_SLOT);
+	Tent[id][TentID] = CreateDynamicObject(1336, x, y, z, 0.0, 0.0, 0.0, -1, -1, -1, 1000.0);
+	SetDynamicObjectMaterial(Tent[id][TentID], 0, 2068, "cj_ammo_net", "CJ_cammonet", 0);
+	Tent[id][tentText] = CreateDynamic3DTextLabel(""COL_GREEN"GEAR\n"COL_GREY"Press LEFT ALT to view tent!\nPress N to Destroy it!", -1, x, y, z, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, -1, -1, -1, 8.0);
+	return 1;
+}
+
+stock RemoveTent(id)
+{
+	if(id <= 0 || id >= MAX_TENTS || !TentOwner[id][0]) return 0;
+	DestroyDynamicObject(Tent[id][TentID]);
+	DestroyDynamic3DTextLabel(Tent[id][tentText]);
+	Tent[id][xTent] = 0.0;
+	Tent[id][yTent] = 0.0;
+	Tent[id][zTent] = 0.0;
+	foreach(new i : Player)
+	{
+		new name[MAX_PLAYER_NAME];
+		GetPlayerName(i, name, sizeof(name));
+		if(!strcmp(name, TentOwner[id])) pInfo[i][pTentCreated] = 0;
+	}
+	TentOwner[id][0] = EOS;
+	DeleteTentRecord(id);
+	return 1;
+}
+
+public bool:PlayerOwnsTent(playerid)
+{
+	new name[MAX_PLAYER_NAME];
+	GetPlayerName(playerid, name, sizeof(name));
+	for(new i = 1; i < MAX_TENTS; i++) if(TentOwner[i][0] && !strcmp(name, TentOwner[i])) return true;
+	return false;
+}
+
+function DayZSA_CreateTent(playerid)
+{
+	new id = 1;
+	while(id < MAX_TENTS && TentOwner[id][0]) id++;
+	if(id == MAX_TENTS) return SendClientMessage(playerid, -1, ""chat" There are too many tents in the world."), 0;
+
+	new Float:x, Float:y, Float:z, name[MAX_PLAYER_NAME];
+	GetPlayerPos(playerid, x, y, z);
+	GetXYInFrontOfPlayer(playerid, x, y, 3.8);
+	GetPlayerName(playerid, name, sizeof(name));
+	SpawnTent(id, name, x, y, z);
+	SaveTent(id, name);
+	pInfo[playerid][pTentCreated] = 1;
+	return 1;
+}

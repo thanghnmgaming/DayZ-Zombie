@@ -44,29 +44,6 @@ public UpdateServer()
 		}
 */
 
-		if(gettime() - 108000 > ServerLimit[TentRespawn])
-		{
-			for(new iv2 = 0; iv2 < 500; iv2++)
-		 	{
-			    DestroyDynamicObject(Tent[iv2][TentID]);
-			    DestroyDynamic3DTextLabel(Tent[iv2][tentText]);
-   				Tent[iv2][xTent] = 0.0;
-				Tent[iv2][yTent] = 0.0;
-				Tent[iv2][zTent] = 0.0;
-				tentCount = 0;
-			}
-
-			foreach (new i : Player)
-			{
-			   	if(!IsPlayerNPC(i))
-   				{
-					PlayerLabel[i] = CreateDynamic3DTextLabel("" , 0xADFF2FAA, 0.0, 0.0, 0.2, 15.0, i, INVALID_VEHICLE_ID, 1, -1, -1, -1, 100.0);
-				}
-			}
-
-			ServerLimit[TentRespawn] = gettime();
-		}
-
   		for(new iv = 0; iv < MAX_VEHICLES; iv++)
 	    {
 	        GetVehiclePos(iv, x2d, y2d, z2d);
@@ -449,6 +426,7 @@ public UpdatePlayer()
 forward AutoSaveAll();
 public AutoSaveAll()
 {
+	SaveAllVehicleStates();
 	new count;
 	foreach (new i : Player)
 	{

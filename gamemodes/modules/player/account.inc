@@ -253,6 +253,7 @@ public WhenPlayerLogin(playerid, serial)
 	    ClearChatPlayer(playerid);
 
 		LoadInventory(playerid);
+		pInfo[playerid][pTentCreated] = PlayerOwnsTent(playerid);
 		SetPlayerScore(playerid,pInfo[playerid][pHour]);
 		DayZSA_ShowMenuForPlayer(playerid);
 	}

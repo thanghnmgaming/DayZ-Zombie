@@ -688,7 +688,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 		{
 			if(pInfo[playerid][pTentCreated] == 0)
 			{
-		    	DayZSA_CreateTent(playerid);
+		    	if(!DayZSA_CreateTent(playerid)) return 0;
 		    	SendClientMessage(playerid,-1,"*"COL_GREEN" Placed a tent!");
             	RemoveSlotToInventory(playerid,"Tent",1);
    				if(!IsPlayerInAnyVehicle(playerid))

@@ -366,7 +366,6 @@ new bool:PlayerWeapons[MAX_PLAYERS][47],bool:Spawned[MAX_PLAYERS];
 new strwep[128];
 new strupdate[285];
 new lootCount;
-new tentCount;
 new groupCount;
 new campCount;
 forward Float:GetDistanceBetweenPlayers(p1,p2);
@@ -572,12 +571,6 @@ enum vehicleinfo
 	vehicleTires,
 	vehicleFuel,
 	vehicleEngine,
-	vSlot1[64],
-	vSlot2[64],
-	vSlot3[64],
-	vSlot4[64],
-	vSlot5[64],
-	vSlot6[64],
 	Float:vX,
 	Float:vY,
 	Float:vZ,
@@ -588,22 +581,6 @@ new vInfo[MAX_VEHICLES][vehicleinfo];
 
 enum tentinfo
 {
-	tentSlot1[64],
-	tentSlot2[64],
-	tentSlot3[64],
-	tentSlot4[64],
-	tentSlot5[64],
-	tentSlot6[64],
-	tentSlot7[64],
-	tentSlot8[64],
-	tentSlot9[64],
-	tentSlot10[64],
-	tentSlot11[64],
-	tentSlot12[64],
-	tentSlot13[64],
-	tentSlot14[64],
-	tentSlot15[64],
-	tentSlot16[64],
 	Float:xTent,
 	Float:yTent,
 	Float:zTent,
@@ -611,6 +588,16 @@ enum tentinfo
 	TentID
 }
 new Tent[MAX_TENTS][tentinfo];
+#define MAX_TENT_SLOTS 16
+#define MAX_VEHICLE_SLOTS 6
+new TentSlots[MAX_TENTS][MAX_TENT_SLOTS][64];
+new VehicleSlots[MAX_VEHICLES][MAX_VEHICLE_SLOTS][64];
+new TentOwner[MAX_TENTS][MAX_PLAYER_NAME];
+#define EMPTY_SLOT "Empty Slot"
+#define STORAGE_VEHICLE 1
+#define STORAGE_TENT 2
+new bool:InventoryLoaded[MAX_PLAYERS];
+forward bool:PlayerOwnsTent(playerid);
 
 enum campinfo
 {
