@@ -12,3 +12,9 @@ Admin: log in with `/rcon login`, then `/thanghnm`.
 ## Credits
 - https://github.com/lightningpriest/samp-dayz
 - https://github.com/AaronNader96/Project-DayZ-SAMP
+
+## Operations
+- `start-server.bat` backs up the database, then starts the server.
+- `backup-database.bat` writes `backups\samp-<time>.sql` (30 kept; not in Git).
+- Restore: `tools\mariadb\bin\mariadb.exe --defaults-extra-file=database\root.cnf samp -e "source backups/<file>.sql"`.
+- Admins (level 5) read the audit log in game with `/logs`.

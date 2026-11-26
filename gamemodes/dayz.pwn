@@ -56,6 +56,7 @@
 #include "modules/server/bans.inc"
 #include "modules/server/session.inc"
 #include "modules/server/persistence.inc"
+#include "modules/server/audit.inc"
 #include "modules/survival/infection.inc"
 #include "modules/survival/building.inc"
 #include "modules/survival/crafting.inc"

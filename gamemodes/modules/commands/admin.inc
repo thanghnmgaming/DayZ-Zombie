@@ -611,7 +611,7 @@ CMD:specoff(playerid, params[])
         TogglePlayerSpectating(playerid, false);
         for (new i = 0; i < 13; i++)
         {
-            GivePlayerWeapon(playerid, weapons[i][0], weapons[i][1]);
+            GivePlayerWeaponEx(playerid, weapons[i][0], weapons[i][1]);
         }
     }
     else {

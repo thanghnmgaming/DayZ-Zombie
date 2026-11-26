@@ -14,3 +14,4 @@ scriptfiles/SAfull.hmap
 tools/
 database/
 mysql.ini
+backups/

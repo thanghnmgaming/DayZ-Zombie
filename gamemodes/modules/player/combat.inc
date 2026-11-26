@@ -326,6 +326,7 @@ public OnPlayerAirbreak(playerid)
 
 public OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hitid, Float:fX, Float:fY, Float:fZ)
 {
+	if(!CheckShot(playerid, _:weaponid, hittype, hitid)) return 0;
 	if(!IsPlayerNPC(playerid))
 	{
 		new Float:sx, Float:sy, Float:sz;

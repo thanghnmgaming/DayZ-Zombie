@@ -169,6 +169,7 @@ public ResetAction(playerid,actionid)
 
 function SetPlayerPos_Allow(playerid, Float:px_ab, Float:py_ab, Float:pz_ab)
 {
+    AllowTeleport(playerid);
     abAllow[playerid] = 1;
     SetTimerEx("ResetAB_Allow", 2500, false, "i", playerid);
     SetPlayerPos(playerid, px_ab, py_ab, pz_ab);

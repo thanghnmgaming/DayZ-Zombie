@@ -145,6 +145,10 @@ stock ClearChat()
 
 stock ResetVars(playerid)
 {
+	LastAlert[playerid] = 0;
+	CommandWindow[playerid] = 0;
+	HasLastPos[playerid] = false;
+	TeleportGrace[playerid] = GetTickCount();
 	PlayerZone[playerid] = -1;
 	MissionGoal[playerid] = 0;
 	MissionNext[playerid] = 0;

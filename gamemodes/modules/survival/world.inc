@@ -159,6 +159,8 @@ stock StartSurvivalSystems()
 			DangerZones[i][dzX] + DangerZones[i][dzRadius], DangerZones[i][dzY] + DangerZones[i][dzRadius]);
 	mysql_tquery(handle, "ALTER TABLE `users` ADD COLUMN IF NOT EXISTS `pInfection` int NOT NULL DEFAULT 0");
 	LoadStructures();
+	CreateAuditTable();
+	SetTimer("MovementCheck", 1000, true);
 	SetTimer("ZoneTick", 3000, true);
 	SetTimer("InfectionTick", INFECTION_TICK_MS, true);
 	SetTimer("Airdrop", AIRDROP_INTERVAL_MS, true);

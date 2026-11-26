@@ -180,6 +180,9 @@ forward AlertZombies(Float:x, Float:y, Float:z, Float:radius);
 #define STRUCTURE_GATE 1
 new PlayerZone[MAX_PLAYERS];    // danger zone index + 1, 0 outside
 new MissionGoal[MAX_PLAYERS], MissionNext[MAX_PLAYERS];
+new TeleportGrace[MAX_PLAYERS];
+new CommandWindow[MAX_PLAYERS], CommandsInWindow[MAX_PLAYERS], LastAlert[MAX_PLAYERS], bool:HasLastPos[MAX_PLAYERS];
+forward bool:CheckShot(playerid, weaponid, BULLET_HIT_TYPE:hittype, hitid);
 #if defined ZOMBIE_TEST
 new ZombieProbe = INVALID_PLAYER_ID;
 new ProbeBlood = 12000;
