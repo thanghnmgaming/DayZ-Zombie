@@ -107,7 +107,6 @@ new const MissionRewards[][ITEM_NAME_SIZE] =
 	"Medical Kit", "Blood Bag", "Antibiotics", "Assault Ammo", "Sniper Ammo", "Wooden Wall", "Toolbox", "M4"
 };
 
-new MissionKills[MAX_PLAYERS], bool:MissionInDanger[MAX_PLAYERS];
 
 CMD:mission(playerid)
 {
@@ -152,6 +151,10 @@ stock StartSurvivalSystems()
 		DangerGangZone[i] = GangZoneCreate(DangerZones[i][dzX] - DangerZones[i][dzRadius], DangerZones[i][dzY] - DangerZones[i][dzRadius],
 			DangerZones[i][dzX] + DangerZones[i][dzRadius], DangerZones[i][dzY] + DangerZones[i][dzRadius]);
 	mysql_tquery(handle, "ALTER TABLE `users` ADD COLUMN IF NOT EXISTS `pInfection` int NOT NULL DEFAULT 0");
+	mysql_tquery(handle, "ALTER TABLE `users` ADD COLUMN IF NOT EXISTS `pMissionGoal` int NOT NULL DEFAULT 0");
+	mysql_tquery(handle, "ALTER TABLE `users` ADD COLUMN IF NOT EXISTS `pMissionKills` int NOT NULL DEFAULT 0");
+	mysql_tquery(handle, "ALTER TABLE `users` ADD COLUMN IF NOT EXISTS `pMissionDanger` int NOT NULL DEFAULT 0");
+	mysql_tquery(handle, "ALTER TABLE `users` ADD COLUMN IF NOT EXISTS `pMissionNext` int NOT NULL DEFAULT 0");
 	LoadStructures();
 	SetTimer("GodModeTick", 250, true);
 	CreateAuditTable();

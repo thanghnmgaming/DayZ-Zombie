@@ -40,9 +40,10 @@ public InfectionTick()
 
 stock SaveInfection(playerid)
 {
-	new query[128], name[MAX_PLAYER_NAME];
+	new query[256], name[MAX_PLAYER_NAME];
 	GetPlayerName(playerid, name, sizeof(name));
-	mysql_format(handle, query, sizeof(query), "UPDATE `users` SET `pInfection`=%d WHERE `Username`='%e'", pInfo[playerid][pInfection], name);
+	mysql_format(handle, query, sizeof(query), "UPDATE `users` SET `pInfection`=%d, `pMissionGoal`=%d, `pMissionKills`=%d, `pMissionDanger`=%d, `pMissionNext`=%d WHERE `Username`='%e'",
+		pInfo[playerid][pInfection], MissionGoal[playerid], MissionKills[playerid], _:MissionInDanger[playerid], MissionNext[playerid], name);
 	mysql_tquery(handle, query);
 	return 1;
 }

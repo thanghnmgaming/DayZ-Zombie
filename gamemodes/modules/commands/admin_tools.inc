@@ -116,7 +116,7 @@ public GodModeTick()
 		pInfo[playerid][pInfection] = 0;
 		if(pInfo[playerid][IsPlayerBleeding] == 1)
 		{
-			KillTimer(pInfo[playerid][Bleeding]);
+			StopTimer(pInfo[playerid][Bleeding]);
 			pInfo[playerid][IsPlayerBleeding] = 0;
 			RemovePlayerAttachedObject(playerid, 2);
 		}

@@ -103,8 +103,12 @@ public UpdatePlayer()
 			                StartVehicle(i);
 			                CheckPlayerColor(i);
 
-			                if(GetPlayerPing(i) >= 850)
+			                if(GetPlayerPing(i) >= 850) HighPingCount[i]++;
+			                else HighPingCount[i] = 0;
+
+			                if(HighPingCount[i] >= 10 && pInfo[i][pAdminLevel] == 0)
 			                {
+			                    HighPingCount[i] = 0;
 			                    SendClientMessage(i, -1, ""chat""COL_RED" You have been kicked. Reason: High Ping Over 850");
 			                    KickEx(i);
 							}

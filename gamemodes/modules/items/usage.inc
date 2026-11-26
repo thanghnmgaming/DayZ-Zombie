@@ -80,7 +80,7 @@ stock UseSpecialItem(playerid, const ItemName[])
 	{
 		if(pInfo[playerid][IsPlayerBleeding] == 0) return SendClientMessage(playerid,-1,""chat" You are not bleeding!");
 		RemovePlayerAttachedObject(playerid, 2);
-		KillTimer(pInfo[playerid][Bleeding]);
+		StopTimer(pInfo[playerid][Bleeding]);
 		pInfo[playerid][IsPlayerBleeding] = 0;
 		RemoveSlotToInventory(playerid,"Bandage",1);
 		if(!IsPlayerInAnyVehicle(playerid))
@@ -160,7 +160,7 @@ stock UseSpecialItem(playerid, const ItemName[])
 		if(pInfo[playerid][IsPlayerBleeding] == 1)
 		{
 			RemovePlayerAttachedObject(playerid, 2);
-			KillTimer(pInfo[playerid][Bleeding]);
+			StopTimer(pInfo[playerid][Bleeding]);
 			pInfo[playerid][IsPlayerBleeding] = 0;
 		}
 		RemoveSlotToInventory(playerid,"Medical Kit",1);
@@ -182,7 +182,7 @@ stock UseSpecialItem(playerid, const ItemName[])
 	{
 		if(pInfo[playerid][IsPlayerDrunk] == 0)
 		{
-			KillTimer(pInfo[playerid][IsPlayerDrunkTimer]);
+			StopTimer(pInfo[playerid][IsPlayerDrunkTimer]);
 			pInfo[playerid][IsPlayerDrunkTimer] = SetTimerEx("VodkaStop",60000,false,"i",playerid);
 			SetPlayerDrunkLevel(playerid,8000);
 			pInfo[playerid][IsPlayerDrunk] = 1;

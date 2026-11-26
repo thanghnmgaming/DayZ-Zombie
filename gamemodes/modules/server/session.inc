@@ -53,6 +53,7 @@ function DayZSA_ShowMenuForPlayer(playerid)
 forward MeowShow(playerid);
 public MeowShow(playerid)
 {
+	if(!IsPlayerConnected(playerid) || !isPlayerInMenu[playerid]) return 1;
 	SetPlayerPos_Allow(playerid, -2820.2588,-1530.7047,144.9823);
 	SetPlayerFacingAngle(playerid,299.6856);
 	SetPlayerCameraPos(playerid, -2867.5381,-1556.2440,140.2921);
@@ -81,6 +82,7 @@ function DayZSA_HideMenuForPlayer(playerid)
 forward loadingSpawn(playerid);
 public loadingSpawn(playerid)
 {
+	if(!IsPlayerConnected(playerid) || pInfo[playerid][pLogged] != 1) return 1;
     SetSpawnInfo(playerid, 0, 285, 0.0, 0.0, 0.0, 0.0, 0,0,0,0,0,0);
     TogglePlayerSpectating(playerid, false);
     return 1;

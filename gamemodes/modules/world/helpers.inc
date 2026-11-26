@@ -788,7 +788,7 @@ function VodkaStop(playerid)
 	SetPlayerDrunkLevel(playerid,0);
 	ClearAnimations(playerid);
 	pInfo[playerid][IsPlayerDrunk] = 0;
-	KillTimer(pInfo[playerid][IsPlayerDrunkTimer]);
+	StopTimer(pInfo[playerid][IsPlayerDrunkTimer]);
 	return 1;
 }
 

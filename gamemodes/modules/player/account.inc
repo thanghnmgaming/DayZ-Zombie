@@ -228,6 +228,12 @@ public WhenPlayerLogin(playerid, serial)
 	        cache_get_value_name(0, "pAmbientEnable", tmp), pInfo[playerid][pAmbientEnable] = strval(tmp);
 	        cache_get_value_name(0, "DefaultGender", tmp), pInfo[playerid][DefaultGender] = strval(tmp);
 	        cache_get_value_name_int(0, "pInfection", pInfo[playerid][pInfection]);
+	        cache_get_value_name_int(0, "pMissionGoal", MissionGoal[playerid]);
+	        cache_get_value_name_int(0, "pMissionKills", MissionKills[playerid]);
+	        cache_get_value_name_int(0, "pMissionNext", MissionNext[playerid]);
+	        new danger;
+	        cache_get_value_name_int(0, "pMissionDanger", danger);
+	        MissionInDanger[playerid] = danger != 0;
 	        cache_get_value_name(0, "ID", tmp), pInfo[playerid][pUserID] = strval(tmp);
 
 		}

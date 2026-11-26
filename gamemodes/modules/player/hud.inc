@@ -61,7 +61,7 @@ function FadeTextdraw ( playerid )
 		case 15:
 		{
 			TextDrawBoxColor( WholeScreen, 0x00000000 );
-			KillTimer( FadeTDTimer [ playerid ] );
+			StopTimer( FadeTDTimer [ playerid ] );
 			TextDrawHideForPlayer( playerid, WholeScreen );
 			ScreenStatus [ playerid ] = 0;
 			return true;
@@ -964,7 +964,7 @@ function SpawnVars(playerid)
 		SetPlayerVirtualWorld(playerid,0);
 		SetPlayerHealth(playerid,100.0);
 		RemovePlayerAttachedObject(playerid, 2);
-		KillTimer(pInfo[playerid][Bleeding]);
+		StopTimer(pInfo[playerid][Bleeding]);
 		pInfo[playerid][pIsSpawned] = 1;
 		if(pInfo[playerid][IsPlayerBleeding] == 1) pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood", 5000, true, "i", playerid);
 		SetPlayerSkillLevel(playerid, WEAPONSKILL_PISTOL, 1);

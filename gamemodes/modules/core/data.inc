@@ -180,6 +180,7 @@ forward AlertZombies(Float:x, Float:y, Float:z, Float:radius);
 #define STRUCTURE_GATE 1
 new PlayerZone[MAX_PLAYERS];    // danger zone index + 1, 0 outside
 new MissionGoal[MAX_PLAYERS], MissionNext[MAX_PLAYERS];
+new MissionKills[MAX_PLAYERS], bool:MissionInDanger[MAX_PLAYERS];
 new TeleportGrace[MAX_PLAYERS];
 new bool:GodMode[MAX_PLAYERS];
 new bool:AdminVehicle[MAX_VEHICLES];
@@ -382,6 +383,8 @@ new LootFree[20000], bool:LootUsed[20000];
 new CampObject[500][2];
 forward FreeLoot(id);
 new bool:PlayerDying[MAX_PLAYERS];
+new HighPingCount[MAX_PLAYERS];
+#define MAX_DEATH_DROPS 60
 forward ReportSuspect(playerid, const reason[]);
 forward Float:GetWeaponMaxRange(weaponid);
 new groupCount;
@@ -465,6 +468,14 @@ new PlayerText:IndicatorBox1[MAX_PLAYERS];
 
 // **** FORWARDS ***** //
 forward Kick_Load(playerid, serial);
+
+// stops a timer and forgets its id, so a reused id is never killed twice
+stock StopTimer(&timerid)
+{
+	if(timerid) KillTimer(timerid);
+	timerid = 0;
+	return 1;
+}
 forward KickEx(playerid);
 forward WhenAccountCheck(playerid, serial);
 forward OnPlayerRegister(playerid, password[]);

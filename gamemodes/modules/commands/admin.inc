@@ -722,7 +722,7 @@ CMD:respawnallcars(playerid,params[])
 			{
 	            SetVehicleToRespawn(i);
             	vInfo[i][vehicleFuel] = 0;
-				vInfo[i][vehicleEngine] = random(1);
+				vInfo[i][vehicleEngine] = random(2);
 				vInfo[i][vehicleTires] = random(4);
 				SetVehicleHealth(i,800.0);
 	        }

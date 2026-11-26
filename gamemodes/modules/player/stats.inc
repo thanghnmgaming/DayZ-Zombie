@@ -147,6 +147,8 @@ stock ClearChat()
 stock ResetVars(playerid)
 {
 	PlayerDying[playerid] = false;
+	HighPingCount[playerid] = 0;
+	MissionKills[playerid] = 0;
 	pInfo[playerid][pFlashlight] = 0;
 	GodMode[playerid] = false;
 	LastAlert[playerid] = 0;
@@ -251,8 +253,8 @@ stock ResetVars(playerid)
 	pInfo[playerid][IsPlayerCleoFly] = 0;
 	pInfo[playerid][IsPlayerInGroupID] = 0;
  	IsSpecing[playerid] = 0;
-	KillTimer(pInfo[playerid][Bleeding]);
-	KillTimer(pInfo[playerid][IsPlayerDrunkTimer]);
+	StopTimer(pInfo[playerid][Bleeding]);
+	StopTimer(pInfo[playerid][IsPlayerDrunkTimer]);
 	PlayerTextDrawHide(playerid, LegBroken[playerid]);
 	SetPlayerSkillLevel(playerid, WEAPONSKILL_PISTOL, 1);
 	player_Handsup[playerid] = 0;
@@ -295,7 +297,7 @@ stock FadePlayerScreen(playerid)
 {
 	if(ScreenStatus[playerid] == 0)
     {
-        KillTimer( FadeTDTimer [ playerid ] );
+        StopTimer( FadeTDTimer [ playerid ] );
         ScreenStatus [ playerid ] = 1;
         TextDrawShowForPlayer( playerid, WholeScreen );
         FadeTDTimer [ playerid ] = SetTimerEx( "FadeTextdraw", 50, true, "i", playerid );

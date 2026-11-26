@@ -256,7 +256,7 @@ public OnPlayerDeath(playerid, killerid, WEAPON:reason)
 		SaveStats(playerid);    // a death must survive a crash or a quick quit
 
 		RemovePlayerAttachedObject(playerid, 2);
-		KillTimer(pInfo[playerid][Bleeding]);
+		StopTimer(pInfo[playerid][Bleeding]);
 		PlayerTextDrawHide(playerid, LegBroken[playerid]);
 
         if(pInfo[playerid][pInfection] == 1)
@@ -269,7 +269,7 @@ public OnPlayerDeath(playerid, killerid, WEAPON:reason)
 			PlayerTextDrawSetString(playerid, LegBroken[playerid], "Broken Leg");
 			PlayerTextDrawHide(playerid, LegBroken[playerid]);
 			SetPlayerDrunkLevel(playerid, 0);
-			KillTimer(pInfo[playerid][Bleeding]);
+			StopTimer(pInfo[playerid][Bleeding]);
 		}
 
 		if(IsBeingSpeced[playerid] == 1)

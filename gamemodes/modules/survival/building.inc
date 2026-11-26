@@ -5,6 +5,9 @@
 #define MAX_STRUCTURES          500
 #define MAX_STRUCTURES_PER_PLAYER 20
 #define GATE_DROP               3.6     // how far an open gate sinks into the ground
+#define STRUCTURE_HEALTH        1500
+#define NO_BUILD_CRATE          12.0    // around supply and hospital crates
+#define NO_BUILD_PLAYER         8.0     // around players outside the builder's group
 
 new const StructureItem[][ITEM_NAME_SIZE] = {"Wooden Wall", "Wooden Gate"};
 
@@ -18,6 +21,7 @@ enum E_STRUCTURE
 	Float:stY,
 	Float:stZ,
 	Float:stAngle,
+	stHealth,
 	stObject
 }
 
@@ -33,6 +37,7 @@ stock SpawnStructure(id, type, const owner[], Float:x, Float:y, Float:z, Float:a
 	Structure[id][stY] = y;
 	Structure[id][stZ] = z;
 	Structure[id][stAngle] = angle;
+	Structure[id][stHealth] = STRUCTURE_HEALTH;
 	Structure[id][stObject] = CreateDynamicObject(19353, x, y, z, 0.0, 0.0, angle, 0, 0, -1, 300.0);
 	// gates get a different texture so they can be told apart
 	if(type == STRUCTURE_GATE) SetDynamicObjectMaterial(Structure[id][stObject], 0, 1355, "break_s_bins", "CJ_WOOD_DARK", 0);
@@ -43,6 +48,7 @@ stock SpawnStructure(id, type, const owner[], Float:x, Float:y, Float:z, Float:a
 stock LoadStructures()
 {
 	mysql_query(handle, "CREATE TABLE IF NOT EXISTS `structures` (`ID` int NOT NULL, `Type` int NOT NULL, `Owner` varchar(24) NOT NULL, `X` float NOT NULL, `Y` float NOT NULL, `Z` float NOT NULL, `Angle` float NOT NULL, PRIMARY KEY (`ID`))", false);
+	mysql_query(handle, "ALTER TABLE `structures` ADD COLUMN IF NOT EXISTS `Health` int NOT NULL DEFAULT 1500", false);
 	new Cache:result = mysql_query(handle, "SELECT * FROM `structures`"), rows, loaded;
 	cache_get_row_count(rows);
 	for(new row; row < rows; row++)
@@ -57,10 +63,77 @@ stock LoadStructures()
 		cache_get_value_name_float(row, "Z", z);
 		cache_get_value_name_float(row, "Angle", angle);
 		SpawnStructure(id, type, owner, x, y, z, angle);
+		cache_get_value_name_int(row, "Health", Structure[id][stHealth]);
 		loaded++;
 	}
 	cache_delete(result);
 	printf("[DB] %d structure(s) loaded.", loaded);
+	return 1;
+}
+
+stock bool:CanBuildHere(playerid)
+{
+	if(IsPlayerNearSpawn(playerid)) return SendClientMessage(playerid, -1, ""chat" You cannot build near a spawn point."), false;
+	for(new i = 1; i <= LootHigh; i++)
+	{
+		if((Loot[i][xHos] != 0.0 && IsPlayerInRangeOfPoint(playerid, NO_BUILD_CRATE, Loot[i][xHos], Loot[i][yHos], Loot[i][zHos])) ||
+		   (Loot[i][xAir] != 0.0 && IsPlayerInRangeOfPoint(playerid, NO_BUILD_CRATE, Loot[i][xAir], Loot[i][yAir], Loot[i][zAir])))
+			return SendClientMessage(playerid, -1, ""chat" You cannot build next to a supply crate."), false;
+	}
+	new Float:x, Float:y, Float:z;
+	GetPlayerPos(playerid, x, y, z);
+	foreach(new i : Player)
+	{
+		if(i == playerid || IsPlayerNPC(i) || !IsPlayerInRangeOfPoint(i, NO_BUILD_PLAYER, x, y, z)) continue;
+		if(pInfo[playerid][IsPlayerInGroup] == 1 && pInfo[i][IsPlayerInGroup] == 1 && pInfo[i][IsPlayerInGroupID] == pInfo[playerid][IsPlayerInGroupID]) continue;
+		return SendClientMessage(playerid, -1, ""chat" You cannot build this close to another survivor."), false;
+	}
+	return true;
+}
+
+stock RemoveStructure(id)
+{
+	new query[96];
+	DestroyDynamicObject(Structure[id][stObject]);
+	Structure[id][stUsed] = false;
+	mysql_format(handle, query, sizeof(query), "DELETE FROM `structures` WHERE `ID`=%d", id);
+	mysql_tquery(handle, query);
+	return 1;
+}
+
+// Gunfire wears walls and gates down
+public OnPlayerShootDynamicObject(playerid, weaponid, STREAMER_TAG_OBJECT:objectid, Float:x, Float:y, Float:z)
+{
+	for(new id; id < MAX_STRUCTURES; id++)
+	{
+		if(!Structure[id][stUsed] || _:Structure[id][stObject] != _:objectid) continue;
+		new damage;
+		switch(weaponid)
+		{
+			case 22..24: damage = 6;
+			case 25..27: damage = 15;
+			case 28, 29, 32: damage = 4;
+			case 30, 31: damage = 7;
+			case 33, 34: damage = 30;
+			default: return 1;
+		}
+		new before = Structure[id][stHealth], msg[64], query[96];
+		Structure[id][stHealth] -= damage;
+		if(Structure[id][stHealth] <= 0)
+		{
+			RemoveStructure(id);
+			return SendClientMessage(playerid, -1, ""chat" The structure collapsed."), 1;
+		}
+		format(msg, sizeof(msg), "~w~structure %d%%", Structure[id][stHealth] * 100 / STRUCTURE_HEALTH);
+		GameTextForPlayer(playerid, msg, 1000, 4);
+		// written only every 100 points to keep the database quiet
+		if(before / 100 != Structure[id][stHealth] / 100)
+		{
+			mysql_format(handle, query, sizeof(query), "UPDATE `structures` SET `Health`=%d WHERE `ID`=%d", Structure[id][stHealth], id);
+			mysql_tquery(handle, query);
+		}
+		return 1;
+	}
 	return 1;
 }
 
@@ -79,13 +152,15 @@ stock PlaceStructure(playerid, type)
 	if(owned >= MAX_STRUCTURES_PER_PLAYER) return SendClientMessage(playerid, -1, ""chat" You have reached your building limit."), 0;
 	if(id == -1) return SendClientMessage(playerid, -1, ""chat" There are too many structures in the world."), 0;
 
+	if(!CanBuildHere(playerid)) return 0;
+
 	new Float:x, Float:y, Float:z, Float:angle, query[256];
 	GetPlayerPos(playerid, x, y, z);
 	GetPlayerFacingAngle(playerid, angle);
 	x += 1.8 * floatsin(-angle, degrees);
 	y += 1.8 * floatcos(-angle, degrees);
 	SpawnStructure(id, type, name, x, y, z + 0.7, angle + 90.0);
-	mysql_format(handle, query, sizeof(query), "REPLACE INTO `structures` VALUES (%d,%d,'%e',%f,%f,%f,%f)", id, type, name, x, y, z + 0.7, angle + 90.0);
+	mysql_format(handle, query, sizeof(query), "REPLACE INTO `structures` (`ID`,`Type`,`Owner`,`X`,`Y`,`Z`,`Angle`) VALUES (%d,%d,'%e',%f,%f,%f,%f)", id, type, name, x, y, z + 0.7, angle + 90.0);
 	mysql_tquery(handle, query);
 	RemoveSlotToInventory(playerid, StructureItem[type], 1);
 	SendClientMessage(playerid, -1, ""chat" Built. /gate opens your gate, /demolish removes your structure.");
@@ -138,7 +213,7 @@ CMD:gate(playerid)
 
 CMD:demolish(playerid)
 {
-	new id = GetNearStructure(playerid), name[MAX_PLAYER_NAME], query[96];
+	new id = GetNearStructure(playerid), name[MAX_PLAYER_NAME];
 	if(id == -1) return SendClientMessage(playerid, -1, ""chat" There is nothing to demolish here.");
 	GetPlayerName(playerid, name, sizeof(name));
 	new bool:owner = !strcmp(name, Structure[id][stOwner]);
@@ -148,10 +223,7 @@ CMD:demolish(playerid)
 		if(!PlayerHasItem(playerid, "Toolbox")) return SendClientMessage(playerid, -1, ""chat" You need a Toolbox.");
 		if(!AddSlotToInventoryWorld(playerid, StructureItem[Structure[id][stType]], 1)) return 1;
 	}
-	DestroyDynamicObject(Structure[id][stObject]);
-	Structure[id][stUsed] = false;
-	mysql_format(handle, query, sizeof(query), "DELETE FROM `structures` WHERE `ID`=%d", id);
-	mysql_tquery(handle, query);
+	RemoveStructure(id);
 	SendClientMessage(playerid, -1, ""chat" Demolished.");
 	return 1;
 }

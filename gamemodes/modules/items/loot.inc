@@ -294,10 +294,10 @@ function DayZSA_CreateVehicleStorage()
 		UpdateVehicleDamageStatus(i, 5, 7, 4, 8);
 		switch(random(4))
 		{
-			case 0: SetVehicleHealth(i,480.0), vInfo[i][vehicleFuel] = random(21), vInfo[i][vehicleEngine] = random(1), vInfo[i][vehicleTires] = random(4);
-			case 1: SetVehicleHealth(i,800.0), vInfo[i][vehicleFuel] = random(21), vInfo[i][vehicleEngine] = random(1), vInfo[i][vehicleTires] = random(4);
-			case 2: SetVehicleHealth(i,580.0), vInfo[i][vehicleFuel] = random(21), vInfo[i][vehicleEngine] = random(1), vInfo[i][vehicleTires] = random(4);
-			case 3: SetVehicleHealth(i,400.0), vInfo[i][vehicleFuel] = random(21), vInfo[i][vehicleEngine] = random(1), vInfo[i][vehicleTires] = random(4);
+			case 0: SetVehicleHealth(i,480.0), vInfo[i][vehicleFuel] = random(21), vInfo[i][vehicleEngine] = random(2), vInfo[i][vehicleTires] = random(4);
+			case 1: SetVehicleHealth(i,800.0), vInfo[i][vehicleFuel] = random(21), vInfo[i][vehicleEngine] = random(2), vInfo[i][vehicleTires] = random(4);
+			case 2: SetVehicleHealth(i,580.0), vInfo[i][vehicleFuel] = random(21), vInfo[i][vehicleEngine] = random(2), vInfo[i][vehicleTires] = random(4);
+			case 3: SetVehicleHealth(i,400.0), vInfo[i][vehicleFuel] = random(21), vInfo[i][vehicleEngine] = random(2), vInfo[i][vehicleTires] = random(4);
 		}
 
 		if(GetVehicleModel(i) == 510 || GetVehicleModel(i) == 473)
@@ -426,11 +426,27 @@ function DayZSA_CreateCampFire(playerid)
 function DayZSA_CreateLootsDeadBody(playerid,Float:pXX,Float:pYX,Float:pZX)
 {
 
-	for(new i; i < sizeof(ItemCatalog); i++)
+	// every carried item, one pile per unit
+	new name[64], dropped;
+	for(new slot; slot < MAX_ITEMS && dropped < MAX_DEATH_DROPS; slot++)
 	{
-		if(ItemCatalog[i][itemDeathDrop] && PlayerHasItem(playerid, ItemCatalog[i][itemName]))
-			DayZSA_CreateLootsFunction(ItemCatalog[i][itemName], pXX + random(2), pYX + random(4), pZX);
+		new amount = _GetItemAmountPVar(playerid, slot);
+		if(amount <= 0) continue;
+		format(name, sizeof(name), "%s", _GetItemNamePVar(playerid, slot));
+		if(FindItem(name) == -1) continue;
+		for(new unit; unit < amount && dropped < MAX_DEATH_DROPS; unit++, dropped++)
+			DayZSA_CreateLootsFunction(name, pXX + float(random(41) - 20) / 10.0, pYX + float(random(41) - 20) / 10.0, pZX);
 	}
+	// equipped weapons keep their remaining ammo
+	for(new slot; slot <= 12; slot++)
+	{
+		new WEAPON:weaponid, ammo;
+		GetPlayerWeaponData(playerid, WEAPON_SLOT:slot, weaponid, ammo);
+		new item = FindWeaponItem(_:weaponid);
+		if(item == -1 || ammo <= 0) continue;
+		DayZSA_DropWeapon(ItemCatalog[item][itemName], ammo, pXX + float(random(41) - 20) / 10.0, pYX + float(random(41) - 20) / 10.0, pZX);
+	}
+	ResetPlayerWeapons(playerid);
 
 
 	if(GetPlayerSkin(playerid) == CIVSKIN) DayZSA_CreateLootsFunction("Civilian Skin",pXX+random(7),pYX+random(3),pZX);
