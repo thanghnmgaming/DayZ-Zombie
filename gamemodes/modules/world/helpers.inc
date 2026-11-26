@@ -559,7 +559,7 @@ stock GetWeaponModel(weaponid)
 	return 0;
 }
 
-function DayZSA_LootModelDropWeapon(objectname[])
+function DayZSA_LootModelDropWeapon(const objectname[])
 {
 	new dayzsaid, Float:rotx, Float:roty, Float:rotz;
     if(strfind(objectname, "Binoculars", true) != -1) dayzsaid = 3070, rotx = 0.0, roty = 0.0, rotz = 0.0;
@@ -580,7 +580,7 @@ function DayZSA_LootModelDropWeapon(objectname[])
     return 1;
 }
 
-function DayZSA_LootModelDrop(objectname[])
+function DayZSA_LootModelDrop(const objectname[])
 {
 	new dayzsaid, Float:rotx, Float:roty, Float:rotz;
     if(strfind(objectname, "Binoculars", true) != -1) dayzsaid = 3070, rotx = 0.0, roty = 0.0, rotz = 0.0;
@@ -926,7 +926,7 @@ function GetClosestPlayer(p1)
     return player;
 }
 
-function Float:GetDistanceBetweenPlayers(p1,p2)
+public Float:GetDistanceBetweenPlayers(p1,p2)
 {
     new Float:x1,Float:y1,Float:z1,Float:x2,Float:y2,Float:z2;
     if(!IsPlayerConnected(p1) || !IsPlayerConnected(p2)) {
@@ -1012,7 +1012,6 @@ stock IsPlayerSight(Float:point1[3], Float:point2[3])
 function SetWeatherEx(weatherid)
 {
 	SetWeather(weatherid);
-	CurrentWeather = weatherid;
 }
 
 

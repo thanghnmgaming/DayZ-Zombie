@@ -81,7 +81,7 @@ forward loadingSpawn(playerid);
 public loadingSpawn(playerid)
 {
     SetSpawnInfo(playerid, 0, 285, 0.0, 0.0, 0.0, 0.0, 0,0,0,0,0,0);
-    TogglePlayerSpectating(playerid, 0);
+    TogglePlayerSpectating(playerid, false);
     return 1;
 }
 
@@ -145,7 +145,7 @@ public ResetAB_Allow(playerid)
 	return 1;
 }
 
-stock PreloadAnimLib(playerid, animlib[]) ApplyAnimation(playerid,animlib,"null",0.0,0,0,0,0,0);
+stock PreloadAnimLib(playerid, const animlib[]) ApplyAnimation(playerid,animlib,"null",0.0,0,0,0,0,0);
 
 forward ResetAction(playerid,actionid);
 public ResetAction(playerid,actionid)

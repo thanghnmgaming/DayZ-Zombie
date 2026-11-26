@@ -104,11 +104,11 @@ public OnGameModeInit()
 	SetWorldTime(21);
     UsePlayerPedAnims();
    	ShowPlayerMarkers(0);
-	ShowNameTags(0);
+	ShowNameTags(false);
 	SetNameTagDrawDistance(25.0);
 	DisableInteriorEnterExits();
-	EnableStuntBonusForAll(0);
-	EnableStuntBonusForAll(0);
+	EnableStuntBonusForAll(false);
+	EnableStuntBonusForAll(false);
  	CreateBases();
  	DayZSA_CreateObject();
     CreateTDS();
@@ -122,7 +122,7 @@ public OnActorSpawn(actorid)
 {
     for(new i; i < actorid; i++)
 	{
-	    ApplyActorAnimation(actorid, "WUZI", "CS_Dead_Guy", 4.1, 0, 1, 1, 1, 0);
+	    ApplyActorAnimation(actorid, "WUZI", "CS_Dead_Guy", 4.1, false, true, true, true, 0);
 	    SetActorInvulnerable(actorid, true);
 	}
 	return 1;

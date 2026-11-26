@@ -76,7 +76,7 @@ stock static PreloadActorAnimations(actorid)
 {
 	for(new i = 0; i < sizeof(s_AnimationLibraries); i ++)
 	{
-	    ApplyActorAnimation(actorid, s_AnimationLibraries[i], "null", 0.0, 0, 0, 0, 0, 0);
+	    ApplyActorAnimation(actorid, s_AnimationLibraries[i], "null", 0.0, false, false, false, false, 0);
 	}
 }
 
@@ -96,7 +96,7 @@ stock ResyncActor(actorid)
 		SetActorPos(actorid, 1000.0, -2000.0, 500.0);
 		SetActorVirtualWorld(actorid, random(cellmax));
 		// We need a timer to defer the actions. Doing it right away doesn't seem to work.
-		SetTimerEx("RestoreActor", 850, 0, "iifff", actorid, worldid, x, y, z);
+		SetTimerEx("RestoreActor", 850, false, "iifff", actorid, worldid, x, y, z);
 		return 1;
 	}
 	return 0;

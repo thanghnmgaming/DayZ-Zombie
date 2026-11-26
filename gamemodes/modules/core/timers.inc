@@ -319,7 +319,7 @@ public UpdatePlayer()
 							    	RemoveSlotToInventory(i,"Czech Vest Pouch",1);
 		   							if(!IsPlayerInAnyVehicle(i))
 									{
-										ApplyAnimation(i, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
+										ApplyAnimation(i, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
 										SetTimerEx("ResetAction", 1450, false, "ii", i, ACTION_ANIMATION);
 									}
 								}
@@ -341,7 +341,7 @@ public UpdatePlayer()
 									RemoveSlotToInventory(i,"Alice Pack",1);
 	 								if(!IsPlayerInAnyVehicle(i))
 									{
-										ApplyAnimation(i, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
+										ApplyAnimation(i, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
 										SetTimerEx("ResetAction", 1450, false, "ii", i, ACTION_ANIMATION);
 									}
 								}
@@ -356,7 +356,7 @@ public UpdatePlayer()
 								RemoveSlotToInventory(i,"Coyote Backpack",1);
 			    				if(!IsPlayerInAnyVehicle(i))
 								{
-									ApplyAnimation(i, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
+									ApplyAnimation(i, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
 									SetTimerEx("ResetAction", 1450, false, "ii", i, ACTION_ANIMATION);
 								}
 							}

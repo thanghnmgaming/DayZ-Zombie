@@ -40,7 +40,7 @@ public OnPlayerSpawn(playerid)
 				if(pInfo[playerid][pAmbientEnable] == 1)
 				if(pInfo[playerid][pKidnapped] == 1)
 	{
-	    TogglePlayerControllable(playerid,0);
+	    TogglePlayerControllable(playerid,false);
 	    SendClientMessage(playerid,COLOR_RED,"WARNING: You are still tied with rope!");
 	}
 	  			{

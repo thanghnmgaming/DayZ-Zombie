@@ -132,7 +132,7 @@ public Kick_Load(playerid)
 }
 public KickEx(playerid)
 {
-    SetTimerEx("Kick_Load", 1500, 0, "d", playerid);
+    SetTimerEx("Kick_Load", 1500, false, "d", playerid);
     return 1;
 }
 

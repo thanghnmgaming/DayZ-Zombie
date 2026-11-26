@@ -14,6 +14,7 @@
 */
 
 #define MIXED_SPELLINGS
+#define NO_TAGS // legacy code passes plain numbers for weapons, fonts and flags
 #include <open.mp>
 #include <a_mysql>
 #include <samp_bcrypt>

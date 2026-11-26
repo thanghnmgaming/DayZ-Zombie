@@ -190,9 +190,9 @@ stock GetPlayerFPS(playerid)
 stock GetPlayerPausedTime(playerid)
 	return (g_cbCallbackData[playerid][e_cbTime]);
 
-stock CB_ApplyAnimation(playerid, animlib[], animname[], Float:fDelta, loop, lockx, locky, freeze, time, forcesync = 0)
+stock CB_ApplyAnimation(playerid, const animlib[], const animname[], Float:fDelta, loop, lockx, locky, freeze, time, forcesync = 0)
 {
-	ApplyAnimation(playerid, animlib, animname, fDelta, loop, lockx, locky, freeze, time, forcesync);
+	ApplyAnimation(playerid, animlib, animname, fDelta, bool:loop, bool:lockx, bool:locky, bool:freeze, time, forcesync);
 
  	SetTimerEx("CB_UpdateAnim", 100, false, "d", playerid);
  	return 1;

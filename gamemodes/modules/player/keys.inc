@@ -59,7 +59,7 @@ public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 		    {
 		    	if(gettime() - 5 < pInfo[playerid][pProneSpam]) return SendClientMessage(playerid,-1,"*"COL_RED" Don't prone abuse!");
 				{
-			    	ApplyAnimation(playerid,"WUZI","CS_Dead_Guy",4.1,1,1,1,1,0,1);
+			    	ApplyAnimation(playerid,"WUZI","CS_Dead_Guy",4.1,true,true,true,true,0,1);
 				    pInfo[playerid][pProne] = 1;
 		     	 	DayZSA_SetPlayerNoiseLevel(playerid,0);
 		     	 	DayZSA_SetPlayerEyeLevel(playerid,1);

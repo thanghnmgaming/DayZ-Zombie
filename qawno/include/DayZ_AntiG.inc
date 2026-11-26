@@ -24,6 +24,7 @@ stock gbug_OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 
 stock gbug_OnPlayerStateChange(playerid, newstate, oldstate)
 {
+	#pragma unused oldstate
 	if(newstate == 3) // Entered vehicle
 	{
 		if((gBugPlayerData[playerid][gbug_playerenteringveh] == 1 || gBugPlayerData[playerid][gbug_playerenteringveh] == 2) && GetVehicleDistanceFromPoint(GetPlayerVehicleID(playerid), gBugPlayerData[playerid][gbug_vehpos][0], gBugPlayerData[playerid][gbug_vehpos][1], gBugPlayerData[playerid][gbug_vehpos][2]) > MAX_VEHICLE_MOVE_RADIUS)

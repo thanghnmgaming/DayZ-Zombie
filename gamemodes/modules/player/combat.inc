@@ -55,7 +55,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float: amount, WEAPON:weaponid)
 	    hit[playerid]++;
 	    damage2[playerid] += amount;
 
-	    timerdamage[playerid] = SetTimerEx("DamageReset", 3000, 0, "i", playerid);
+	    timerdamage[playerid] = SetTimerEx("DamageReset", 3000, false, "i", playerid);
 
 	    PlayerTextDrawShow(playerid, IndicatorBox[playerid]);
 	    PlayerTextDrawShow(playerid, Indicator[playerid]);
@@ -96,7 +96,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float: amount, WEAPON:weaponid)
 				    new Float:h = GetPlayerDistanceFromPoint(issuerid, px, py, pz),Float:c1 = py - iy,Float:c2 = px - ix;
 					new Float:vx = c2 / h,Float:vy = c1 / h;
 				    SetPlayerVelocity(playerid, 0.35 * vx, 0.35 * vy, 0.1);
-				    ApplyAnimation(playerid, "PED", "FALL_back", 4.0, 0, 1, 1, 1, 0, 1);
+				    ApplyAnimation(playerid, "PED", "FALL_back", 4.0, false, true, true, true, 0, 1);
 				    SetTimerEx("GetUp", 1000, false, "i", playerid);
 				}
 			}
@@ -115,18 +115,18 @@ public OnPlayerTakeDamage(playerid, issuerid, Float: amount, WEAPON:weaponid)
       				switch(random(14))
 					{
 						case 0: pInfo[playerid][pBlood] -= random(4000);
-						case 1: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",2500,1,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 2.5 seconds!
+						case 1: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",2500,true,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 2.5 seconds!
 						case 2: pInfo[playerid][pBlood] -= random(4000);
-						case 3: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",1000,1,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 1 second!
+						case 3: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",1000,true,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 1 second!
 						case 4: pInfo[playerid][pBlood] -= random(4000);
 						case 5: pInfo[playerid][pBlood] -= random(4000);
-						case 6: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",5000,1,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 5 seconds!
+						case 6: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",5000,true,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 5 seconds!
 						case 7: pInfo[playerid][pBlood] -= random(4000);
-						case 8: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",10000,1,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 10 seconds!
+						case 8: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",10000,true,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 10 seconds!
 						case 9: pInfo[playerid][pBlood] -= random(4000);
-						case 10: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",5500,1,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 5.5 seconds!
+						case 10: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",5500,true,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 5.5 seconds!
 						case 11: pInfo[playerid][pBlood] -= random(4000);
-						case 12: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",25000,1,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 25 seconds!
+						case 12: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",25000,true,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 25 seconds!
 						case 13: pInfo[playerid][pBlood] -= random(4000);
 					}
 				}
@@ -137,18 +137,18 @@ public OnPlayerTakeDamage(playerid, issuerid, Float: amount, WEAPON:weaponid)
 			switch(random(14))
 			{
 				case 0: pInfo[playerid][pBlood] -= random(4000);
-				case 1: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",2500,1,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 2.5 seconds!
+				case 1: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",2500,true,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 2.5 seconds!
 				case 2: pInfo[playerid][pBlood] -= random(4000);
-				case 3: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",1000,1,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 1 second!
+				case 3: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",1000,true,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 1 second!
 				case 4: pInfo[playerid][pBlood] -= random(4000);
 				case 5: pInfo[playerid][pBlood] -= random(4000);
-				case 6: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",5000,1,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 5 seconds!
+				case 6: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",5000,true,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 5 seconds!
 				case 7: pInfo[playerid][pBlood] -= random(4000);
-				case 8: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",10000,1,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 10 seconds!
+				case 8: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",10000,true,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 10 seconds!
 				case 9: pInfo[playerid][pBlood] -= random(4000);
-				case 10: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",5500,1,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 5.5 seconds!
+				case 10: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",5500,true,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 5.5 seconds!
 				case 11: pInfo[playerid][pBlood] -= random(4000);
-				case 12: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",25000,1,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 25 seconds!
+				case 12: if(pInfo[playerid][IsPlayerBleeding] == 0) { pInfo[playerid][pBlood] -= random(4000), KillTimer(pInfo[playerid][Bleeding]), RemovePlayerAttachedObject(playerid, 2),pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood",25000,true,"i",playerid),pInfo[playerid][IsPlayerBleeding] = 1; } // Loosing blood ever 25 seconds!
 				case 13: pInfo[playerid][pBlood] -= random(4000);
 			}
 		}
@@ -164,7 +164,7 @@ public OnPlayerGiveDamage(playerid, damagedid, Float: amount, WEAPON:weaponid, b
 	hit1[playerid]++;
 	damage1[playerid] += amount;
 
-	timerdamage1[playerid] = SetTimerEx("DamageReset1", 3000, 0, "i", playerid);
+	timerdamage1[playerid] = SetTimerEx("DamageReset1", 3000, false, "i", playerid);
 
 	PlayerTextDrawShow(playerid, IndicatorBox1[playerid]);
 	PlayerTextDrawShow(playerid, Indicator1[playerid]);
@@ -266,7 +266,7 @@ public OnPlayerGiveDamage(playerid, damagedid, Float: amount, WEAPON:weaponid, b
 forward GetUp(playerid);
 public GetUp(playerid)
 {
-    ApplyAnimation(playerid, "PED", "getup", 4.0, 0, 1, 1, 0, 0, 1);
+    ApplyAnimation(playerid, "PED", "getup", 4.0, false, true, true, false, 0, 1);
 }
 
 public OnPlayerRequestClass(playerid, classid)
@@ -274,7 +274,7 @@ public OnPlayerRequestClass(playerid, classid)
     if(IsPlayerNPC(playerid)) {
         return 1;
     }
-    TogglePlayerSpectating(playerid,1);
+    TogglePlayerSpectating(playerid,true);
 	SetPlayerPos_Allow(playerid, 2372.0027,2243.0608,10.8203);
 	SetPlayerFacingAngle(playerid,119.5071);
 	SetPlayerCameraPos(playerid, 2365.5837,2238.2991,12.9480);

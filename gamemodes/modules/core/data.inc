@@ -168,7 +168,7 @@
     {1294.7103,-1657.8138,13.3745,179.1254}
 };*/
 
-PlayAnim(playerid, animlib[], animname[], Float:fDelta, loop, lockx, locky, freeze, time, forcesync)
+stock PlayAnim(playerid, const animlib[], const animname[], Float:fDelta, loop, lockx, locky, freeze, time, forcesync)
 {
 	ApplyAnimation(playerid, animlib, animname, fDelta, loop, lockx, locky, freeze, time, forcesync);
 }
@@ -369,7 +369,7 @@ new lootCount;
 new tentCount;
 new groupCount;
 new campCount;
-new CurrentWeather;
+forward Float:GetDistanceBetweenPlayers(p1,p2);
 new Handup[MAX_PLAYERS] = 0;
 new Float:p_PlayerBuggerX[MAX_PLAYERS], Float:p_PlayerBuggerY[MAX_PLAYERS], Float:p_PlayerBuggerZ[MAX_PLAYERS];
 new Text:Clock;

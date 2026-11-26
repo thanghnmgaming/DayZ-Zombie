@@ -25,7 +25,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemoveSlotToInventory(playerid,"Cooked Meat",1);
 			if(!IsPlayerInAnyVehicle(playerid))
 			{
-				ApplyAnimation(playerid, "FOOD", "EAT_Chicken",4.1,0,1,0,1000,1);
+				ApplyAnimation(playerid, "FOOD", "EAT_Chicken",4.1,false,true,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 		}
@@ -39,7 +39,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			AddSlotToInventoryWorld(playerid,"Empty Water Bottle",1);
 			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
-				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,0,1,0,1000,1);
+				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,false,true,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
@@ -66,7 +66,7 @@ public OnPlayerUseItem(playerid,ItemName[])
                 DayZSA_CreateCampFire(playerid);
 				if(!IsPlayerInAnyVehicle(playerid))
 				{
-					ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
@@ -80,7 +80,7 @@ public OnPlayerUseItem(playerid,ItemName[])
                 DayZSA_CreateCampFire(playerid);
        			if(!IsPlayerInAnyVehicle(playerid))
 				{
-					ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
@@ -96,7 +96,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemoveSlotToInventory(playerid,"Bandage",1);
 			if(!IsPlayerInAnyVehicle(playerid))
 			{
-				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
+				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
@@ -109,7 +109,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemoveSlotToInventory(playerid,"Morphine",1);
 			if(!IsPlayerInAnyVehicle(playerid))
 			{
-				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
+				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
@@ -122,7 +122,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemoveSlotToInventory(playerid,"Can of Beans",1);
 			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
-				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,0,0,0,1000,1);
+				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,false,false,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
@@ -135,7 +135,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemoveSlotToInventory(playerid,"Dirty Pizza Slice",1);
   			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
-				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,0,0,0,1000,1);
+				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,false,false,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
@@ -165,7 +165,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemoveSlotToInventory(playerid,"Orange",1);
   			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
-				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,0,0,0,1000,1);
+				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,false,false,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
@@ -177,7 +177,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemoveSlotToInventory(playerid,"Banana",1);
   			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
-				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,0,0,0,1000,1);
+				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,false,false,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
@@ -189,7 +189,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemoveSlotToInventory(playerid,"Tomato",1);
   			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
-				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,0,0,0,1000,1);
+				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,false,false,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
@@ -201,7 +201,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemoveSlotToInventory(playerid,"Apple",1);
   			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
-				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,0,0,0,1000,1);
+				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,false,false,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
@@ -213,7 +213,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemoveSlotToInventory(playerid,"Packet Of Cereals",1);
   			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
-				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,0,0,0,1000,1);
+				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,false,false,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
@@ -225,7 +225,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemoveSlotToInventory(playerid,"Burger",1);
 			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
-				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,0,0,0,1000,1);
+				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,false,false,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
@@ -237,7 +237,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemoveSlotToInventory(playerid,"Blood Bag",1);
 			if(!IsPlayerInAnyVehicle(playerid))
 			{
-				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
+				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
@@ -257,7 +257,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemoveSlotToInventory(playerid,"Painkiller",1);
 			if(!IsPlayerInAnyVehicle(playerid))
 			{
-				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
+				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
@@ -281,15 +281,15 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemoveSlotToInventory(playerid,"Medical Kit",1);
 			if(!IsPlayerInAnyVehicle(playerid))
 			{
-				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
+				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
 
 	  	if(!strcmp(ItemName,"Road Flare",true))
 	  	{
-			//ApplyAnimation(playerid,"GRENADE","WEAPON_throwu",4.0,0,1,1,0,1,1);
-			ApplyAnimation(playerid, "GRENADE", "WEAPON_throw", 4.5, 0, 1, 1, 1, 1, 1);
+			//ApplyAnimation(playerid,"GRENADE","WEAPON_throwu",4.0,false,true,true,false,1,1);
+			ApplyAnimation(playerid, "GRENADE", "WEAPON_throw", 4.5, false, true, true, true, 1, 1);
 			SetTimerEx("ThrowFlare",4000,false,"i",playerid);
 			SetTimerEx("DestroyRoadFlare",480000,false,"i",playerid);
 			RemoveSlotToInventory(playerid,"Road Flare",1);
@@ -303,8 +303,8 @@ public OnPlayerUseItem(playerid,ItemName[])
 		    	pInfo[playerid][IsPlayerDrunkTimer] = SetTimerEx("VodkaStop",60000,false,"i",playerid);
 				SetPlayerDrunkLevel(playerid,8000);
 				pInfo[playerid][IsPlayerDrunk] = 1;
-            	//ApplyAnimation(playerid,"PED","WALK_DRUNK",4.0,1,1,1,1,1);
-            	ApplyAnimation(playerid, "PED", "WALK_DRUNK", 4.0, 1, 1, 1, 1, 1, 1);
+            	//ApplyAnimation(playerid,"PED","WALK_DRUNK",4.0,true,true,true,true,1);
+            	ApplyAnimation(playerid, "PED", "WALK_DRUNK", 4.0, true, true, true, true, 1, 1);
             	pInfo[playerid][pThrist] += 800;
             	pInfo[playerid][pBlood] += 800;
             	RemoveSlotToInventory(playerid,"Whiskey Bottle",1);
@@ -319,7 +319,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemoveSlotToInventory(playerid,"Soda Bottle",1);
 			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
-				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,0,1,0,1000,1);
+				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,false,true,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
@@ -339,7 +339,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			AddSlotToInventoryWorld(playerid,"Empty Water Bottle",1);
 			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
-				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,0,1,0,1000,1);
+				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,false,true,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
@@ -350,7 +350,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemoveSlotToInventory(playerid,"Fresh Juice",1);
 			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
-				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,0,1,0,1000,1);
+				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,false,true,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
@@ -361,7 +361,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemoveSlotToInventory(playerid,"Rum",1);
 			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
-				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,0,1,0,1000,1);
+				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,false,true,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
@@ -372,7 +372,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemoveSlotToInventory(playerid,"Gin",1);
 			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
-				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,0,1,0,1000,1);
+				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,false,true,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
@@ -386,7 +386,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				RemoveSlotToInventory(playerid,"Shotgun Ammo",1);
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
@@ -402,7 +402,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				RemoveSlotToInventory(playerid,"Pistol Ammo",1);
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
@@ -418,7 +418,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				RemoveSlotToInventory(playerid,"Assault Ammo",1);
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
@@ -434,7 +434,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				RemoveSlotToInventory(playerid,"Assault Ammo",1);
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
@@ -450,7 +450,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				RemoveSlotToInventory(playerid,"Sniper Ammo",1);
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
@@ -466,7 +466,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				RemoveSlotToInventory(playerid,"Sniper Ammo",1);
  				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
@@ -482,7 +482,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				RemoveSlotToInventory(playerid,"Shotgun Ammo",1);
  				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
@@ -498,7 +498,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				RemoveSlotToInventory(playerid,"SMG Ammo",1);
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
@@ -514,7 +514,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				RemoveSlotToInventory(playerid,"Pistol Ammo",1);
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
@@ -531,7 +531,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 					SetVehicleHealth(GetVehicleNearID(playerid),800.0);
 					if(!IsPlayerInAnyVehicle(playerid))
 					{
-						ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
+						ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
 						SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 					}
 				}
@@ -570,7 +570,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				RemoveSlotToInventory(playerid,"Sniper Ammo",1);
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
@@ -582,7 +582,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				RemoveSlotToInventory(playerid,"Sniper Ammo",1);
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
@@ -597,7 +597,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				RemoveSlotToInventory(playerid,"Shotgun Ammo",1);
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
@@ -609,7 +609,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				RemoveSlotToInventory(playerid,"Shotgun Ammo",1);
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
@@ -624,7 +624,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				RemoveSlotToInventory(playerid,"Pistol Ammo",1);
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
@@ -636,7 +636,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				RemoveSlotToInventory(playerid,"Pistol Ammo",1);
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
@@ -651,7 +651,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				RemoveSlotToInventory(playerid,"Assault Ammo",1);
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
@@ -663,7 +663,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				RemoveSlotToInventory(playerid,"Assault Ammo",1);
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
@@ -678,7 +678,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				RemoveSlotToInventory(playerid,"SMG Ammo",1);
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
@@ -693,7 +693,7 @@ public OnPlayerUseItem(playerid,ItemName[])
             	RemoveSlotToInventory(playerid,"Tent",1);
    				if(!IsPlayerInAnyVehicle(playerid))
 				{
-					ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
@@ -707,7 +707,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemovePlayerAttachedObject(playerid, 4);
 			if(!IsPlayerInAnyVehicle(playerid))
 			{
-				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
+				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 		}
@@ -719,7 +719,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemovePlayerAttachedObject(playerid, 4);
 			if(!IsPlayerInAnyVehicle(playerid))
 			{
-				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
+				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 		}
@@ -731,7 +731,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemovePlayerAttachedObject(playerid, 4);
 			if(!IsPlayerInAnyVehicle(playerid))
 			{
-				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
+				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 		}
@@ -742,7 +742,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemoveSlotToInventory(playerid,"Katana",1);
 			if(!IsPlayerInAnyVehicle(playerid))
   			{
-				ApplyAnimation(playerid, "BASEBALL", "BAT_PART",4.1,0,1,0,1000,1);
+				ApplyAnimation(playerid, "BASEBALL", "BAT_PART",4.1,false,true,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 		}
@@ -753,7 +753,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemoveSlotToInventory(playerid,"Baseball Bat",1);
 			if(!IsPlayerInAnyVehicle(playerid))
   			{
-				ApplyAnimation(playerid, "BASEBALL", "BAT_PART",4.1,0,1,0,1000,1);
+				ApplyAnimation(playerid, "BASEBALL", "BAT_PART",4.1,false,true,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 		}
@@ -764,7 +764,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			RemoveSlotToInventory(playerid,"Binoculars",1);
 			if(!IsPlayerInAnyVehicle(playerid))
   			{
-				ApplyAnimation(playerid, "BASEBALL", "BAT_PART",4.1,0,1,0,1000,1);
+				ApplyAnimation(playerid, "BASEBALL", "BAT_PART",4.1,false,true,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 		}
@@ -800,7 +800,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			    pInfo[playerid][pTemp] = 91.0;
    				if(!IsPlayerInAnyVehicle(playerid))
 				{
-					ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
 					RemoveSlotToInventory(playerid,"Heat Pack",1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
@@ -818,7 +818,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			    pInfo[playerid][pTemp] = 95.0;
    				if(!IsPlayerInAnyVehicle(playerid))
 				{
-					ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
+					ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
 					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			    RemoveSlotToInventory(playerid,"Heat Pack Basic",1);

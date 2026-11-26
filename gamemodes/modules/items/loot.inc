@@ -806,7 +806,7 @@ function DayZSA_CreateLootsDeadBody(playerid,Float:pXX,Float:pYX,Float:pZX)
 	return 1;
 }
 
-function DayZSA_CreateLootsFunction(item[],Float:pXX,Float:pYX,Float:pZX)
+function DayZSA_CreateLootsFunction(const item[],Float:pXX,Float:pYX,Float:pZX)
 {
 	new strt[128];
 	lootCount += 1;
@@ -824,7 +824,7 @@ function DayZSA_CreateLootsFunction(item[],Float:pXX,Float:pYX,Float:pZX)
 	return 1;
 }
 
-function DayZSA_DropWeapon(item[], ammo, Float:pXX,Float:pYX,Float:pZX)
+function DayZSA_DropWeapon(const item[], ammo, Float:pXX,Float:pYX,Float:pZX)
 {
 	new strt[128];
 	lootCount += 1;

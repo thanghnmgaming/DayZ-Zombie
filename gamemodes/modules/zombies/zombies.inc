@@ -63,7 +63,7 @@ public CreateZombies()
 		    case 1: skinidl = 29;
 		}
 		NPC_ClearAnimations(thenpc_);
-		NPC_ApplyAnimation(thenpc_, "PED", "WALK_DRUNK", 4.1, 1, 1,  1,  0,  0);
+		NPC_ApplyAnimation(thenpc_, "PED", "WALK_DRUNK", 4.1, true, true,  true,  false,  0);
 		
 		
 
@@ -90,7 +90,7 @@ public CreateZombies()
 		NPC_SetWeapon(thenpc_, 1);
 		NPC_SetHealth(thenpc_, 100);
 		NPC_ClearAnimations(thenpc_);
-		NPC_ApplyAnimation(thenpc_, "PED", "WALK_DRUNK", 4.1, 1, 1,  1,  0,  0);
+		NPC_ApplyAnimation(thenpc_, "PED", "WALK_DRUNK", 4.1, true, true,  true,  false,  0);
 		ZombieTimer[thenpc_] = SetTimerEx("ZombieMove", 500, true, "i", thenpc_);
 		SetPlayerColor(thenpc_,0xAA333300);
 		IsAZombie[thenpc_] = 1;
@@ -246,7 +246,7 @@ public OnNPCRespawn(npcid)
 	}
 	NPC_StopMeleeAttack(npcid);
 	NPC_SetWeapon(npcid,1);
-	NPC_ApplyAnimation(npcid, "PED", "WALK_DRUNK", 4.1, 1, 1,  1,  0,  0);
+	NPC_ApplyAnimation(npcid, "PED", "WALK_DRUNK", 4.1, true, true,  true,  false,  0);
 	NPC_SetAmmo(npcid,1);
 	ZombiesAlive++;
 	return 1;

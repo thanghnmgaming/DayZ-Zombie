@@ -608,7 +608,7 @@ CMD:specoff(playerid, params[])
     if(pInfo[playerid][pAdminLevel] >= 1)
     {
         if(IsSpecing[playerid] == 0) return SendClientMessage(playerid,-1,"*"COL_RED" You are not spectating anyone.");
-        TogglePlayerSpectating(playerid, 0);
+        TogglePlayerSpectating(playerid, false);
         for (new i = 0; i < 13; i++)
         {
             GivePlayerWeapon(playerid, weapons[i][0], weapons[i][1]);
@@ -715,7 +715,7 @@ CMD:respawnallcars(playerid,params[])
 	{
 		for(new i=0;i<MAX_VEHICLES;i++)
 		{
-	        if(IsVehicleOccupied(i) == 0)
+	        if(!IsVehicleOccupied(i))
 			{
 	            SetVehicleToRespawn(i);
             	vInfo[i][vehicleFuel] = 0;
@@ -746,7 +746,7 @@ CMD:respawncars(playerid,params[])
 		{
 		    if(IsPlayerNearVehicle(playerid, i, range))
 		    {
-		        if(IsVehicleOccupied(i) == 0)
+		        if(!IsVehicleOccupied(i))
 				{
 		            SetVehicleToRespawn(i);
 	            	vInfo[i][vehicleFuel] = 0;

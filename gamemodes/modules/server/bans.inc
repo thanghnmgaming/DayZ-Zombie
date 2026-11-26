@@ -1,6 +1,6 @@
 /* Ban System */
 
-stock jBan(player_banned, player_banner, reason[], time = 0, system = 0)
+stock jBan(player_banned, player_banner, const reason[], time = 0, system = 0)
 {
 	if(system == 0)
 	{

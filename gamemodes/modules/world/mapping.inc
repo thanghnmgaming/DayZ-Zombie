@@ -342,7 +342,7 @@ stock SendMessageToAllInvalid(message[], color)
 	return 1;
 }
 
-stock SendMessageToAllGroups(groupid, message[], color)
+stock SendMessageToAllGroups(groupid, const message[], color)
 {
 	foreach (new i : Player)
 	{
@@ -354,7 +354,7 @@ stock SendMessageToAllGroups(groupid, message[], color)
 	return 1;
 }
 
-stock SendMessageToAllAdmins(message[], color)
+stock SendMessageToAllAdmins(const message[], color)
 {
 	foreach (new i : Player)
 	{
@@ -366,7 +366,7 @@ stock SendMessageToAllAdmins(message[], color)
 	return 1;
 }
 
-stock SendMessageToAllHelpers(message[], color)
+stock SendMessageToAllHelpers(const message[], color)
 {
 	foreach (new i : Player)
 	{
@@ -378,7 +378,7 @@ stock SendMessageToAllHelpers(message[], color)
 	return 1;
 }
 
-stock SendMessageToAllPremium(message[], color)
+stock SendMessageToAllPremium(const message[], color)
 {
 	foreach (new i : Player)
 	{

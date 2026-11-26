@@ -454,25 +454,25 @@ CMD:sit(playerid, params[])
 	}
 	if(strcmp(choice, "1", true) == 0)
 	{
-		ApplyAnimation(playerid,"INT_OFFICE","OFF_Sit_Type_Loop", 4.0, 1, 0, 0, 0, 0);
+		ApplyAnimation(playerid,"INT_OFFICE","OFF_Sit_Type_Loop", 4.0, true, false, false, false, 0);
 		SetPVarInt(playerid, "UsingAnim", 1);
 		SendClientMessage(playerid, -1, ""chat" To stop the animation type in /stopanim");
 	}
 	if(strcmp(choice, "2", true) == 0)
 	{
-		ApplyAnimation(playerid,"BEACH", "ParkSit_M_loop", 4.0, 1, 0, 0, 0, 0);
+		ApplyAnimation(playerid,"BEACH", "ParkSit_M_loop", 4.0, true, false, false, false, 0);
 		SetPVarInt(playerid, "UsingAnim", 1);
 		SendClientMessage(playerid, -1, ""chat" To stop the animation type in /stopanim");
 	}
 	if(strcmp(choice, "3", true) == 0)
 	{
-		ApplyAnimation(playerid,"BEACH", "ParkSit_W_loop", 4.0, 1, 0, 0, 0, 0);
+		ApplyAnimation(playerid,"BEACH", "ParkSit_W_loop", 4.0, true, false, false, false, 0);
 		SetPVarInt(playerid, "UsingAnim", 1);
 		SendClientMessage(playerid, -1, ""chat" To stop the animation type in /stopanim");
 	}
 	if(strcmp(choice, "4", true) == 0)
 	{
-		ApplyAnimation(playerid,"BAR","dnk_stndF_loop", 4.0, 1, 0, 0, 0, 0);
+		ApplyAnimation(playerid,"BAR","dnk_stndF_loop", 4.0, true, false, false, false, 0);
 		SetPVarInt(playerid, "UsingAnim", 1);
 		SendClientMessage(playerid, -1, ""chat" To stop the animation type in /stopanim");
 	}
@@ -489,13 +489,13 @@ CMD:smoke(playerid, params[])
 	}
 	if(strcmp(choice, "1", true) == 0)
 	{
-		ApplyAnimation(playerid, "SMOKING", "F_smklean_loop", 4.0, 1, 0, 0, 0, 0);
+		ApplyAnimation(playerid, "SMOKING", "F_smklean_loop", 4.0, true, false, false, false, 0);
 		SendClientMessage(playerid, -1, ""chat" To stop the animation type in /stopanim");
 		SetPVarInt(playerid, "UsingAnim", 1);
 	}
 	if(strcmp(choice, "2", true) == 0)
 	{
-		ApplyAnimation(playerid,"SMOKING", "M_smklean_loop", 4.0, 1, 0, 0, 0, 0);
+		ApplyAnimation(playerid,"SMOKING", "M_smklean_loop", 4.0, true, false, false, false, 0);
 		SendClientMessage(playerid, -1, ""chat" To stop the animation type in /stopanim");
 		SetPVarInt(playerid, "UsingAnim", 1);
 	}
@@ -504,7 +504,7 @@ CMD:smoke(playerid, params[])
 
 CMD:wave(playerid, params[])
 {
-	ApplyAnimation(playerid, "ON_LOOKERS", "wave_loop", 4.0, 1, 0, 0, 0, 0);
+	ApplyAnimation(playerid, "ON_LOOKERS", "wave_loop", 4.0, true, false, false, false, 0);
 	SendClientMessage(playerid, -1, ""chat" To stop the animation type in /stopanim");
 	SetPVarInt(playerid, "UsingAnim", 1);
 	return 1;
