@@ -61,7 +61,7 @@
         "use_prefix": true,
         "use_timestamp": true
     },
-    "max_bots": 0,
+    "max_bots": 400,
     "max_players": 500,
     "name": "DayZ Zombie Survival",
     "network": {

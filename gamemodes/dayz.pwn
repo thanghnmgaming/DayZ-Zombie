@@ -17967,6 +17967,12 @@ public CreateZombies()
 		new thenpc_;
 		format(str,sizeof(str),"Zombie[%d]",MAX_PLAYERS-(SpawnedZombies));
 		thenpc_ = NPC_Create(str);
+		if(thenpc_ == INVALID_PLAYER_ID)
+		{
+			KillTimer(ZombiesTimer);
+			printf("Zombie creation stopped at %d: check max_bots in config.json", SpawnedZombies);
+			return 1;
+		}
 		/*ZombieLabel[thenpc_] = Create3DTextLabel("Zombie\nHP: 100", -1, 30.0, 40.0, 50.0, 60.0, -1, 0);
 		Attach3DTextLabelToPlayer(ZombieLabel[thenpc_], thenpc_, 0.0, 0.0, 0.4);*/
 
