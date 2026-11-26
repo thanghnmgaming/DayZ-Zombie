@@ -58,6 +58,7 @@
 #include "modules/server/persistence.inc"
 #include "modules/server/audit.inc"
 #include "modules/commands/admin_tools.inc"
+#include "modules/commands/help.inc"
 #include "modules/survival/infection.inc"
 #include "modules/survival/building.inc"
 #include "modules/survival/crafting.inc"

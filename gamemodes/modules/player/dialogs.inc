@@ -7,6 +7,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
     	return 1;
     }
     if(HandleSurvivalDialog(playerid, dialogid, response, listitem)) return 1;
+    if(HandleHelpDialog(playerid, dialogid, response, listitem)) return 1;
     switch(dialogid)
     {
 		case DIALOG_LOGIN:

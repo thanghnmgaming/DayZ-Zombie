@@ -260,6 +260,7 @@ public WhenPlayerLogin(playerid, serial)
 	    ClearChatPlayer(playerid);
 
 		LoadInventory(playerid);
+		SendClientMessage(playerid, -1, ""chat" New here? Type /help to learn how to play.");
 		pInfo[playerid][pTentCreated] = PlayerOwnsTent(playerid);
 		SetPlayerScore(playerid,pInfo[playerid][pHour]);
 		DayZSA_ShowMenuForPlayer(playerid);

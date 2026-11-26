@@ -559,8 +559,7 @@ CMD:inv(playerid) return ShowInventory(playerid);
 
 CMD:help(playerid)
 {
-    ShowPlayerDialog(playerid, 8341, DIALOG_STYLE_LIST, "DayZ - Help", "General Commands\nSurvival Tips\nZombies & Avoidance\n", "Select", "Close");
-	return 1;
+	return ShowHelpMenu(playerid);
 }
 
 CMD:me(playerid, params[])
