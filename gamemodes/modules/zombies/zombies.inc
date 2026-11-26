@@ -7,8 +7,9 @@
 
 #define ZOMBIE_TICK_MS          500
 #define ZOMBIE_HIDDEN_WORLD     9999
-#define ZOMBIES_PER_PLAYER      12      // wanted around each player
-#define ZOMBIES_PER_PLAYER_DANGER 20
+#define ZOMBIES_PER_PLAYER      8       // wanted around each player
+#define ZOMBIES_PER_PLAYER_DANGER 14
+#define ZOMBIE_HIT_GAP_MS       800     // however many surround a player, one hit lands per gap
 #define ZOMBIE_AREA_RADIUS      90.0    // counted as "around" a player
 #define ZOMBIE_SPAWN_MIN        45.0    // never appear closer than this
 #define ZOMBIE_SPAWN_MAX        80.0
@@ -73,6 +74,7 @@ new Zombie[MAX_PLAYERS][E_ZOMBIE];
 new ZombiePool[MAX_ZOMBIES];
 new ZombiePoolSize;
 new ZombieSpawnPass;
+new PlayerNextHit[MAX_PLAYERS];
 
 // ---- pool -----------------------------------------------------------------
 
@@ -317,6 +319,8 @@ stock ZombieAttack(npcid, playerid, tick)
 	new damage = ZombieTypes[type][ztDamageMin] + random(ZombieTypes[type][ztDamageMax] - ZombieTypes[type][ztDamageMin] + 1);
 	Zombie[npcid][zNextAttack] = tick + ZombieTypes[type][ztAttackMs];
 	NPC_MeleeAttack(npcid, 600);
+	if(tick < PlayerNextHit[playerid] && PlayerNextHit[playerid] - tick <= ZOMBIE_HIT_GAP_MS) return 1;
+	PlayerNextHit[playerid] = tick + ZOMBIE_HIT_GAP_MS;
 #if defined ZOMBIE_TEST
 	if(playerid == ZombieProbe)
 	{

@@ -1,5 +1,6 @@
 public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
+	if(IsPlayerNPC(playerid)) return 1; // zombies are not subject to player controls or cheat checks
 
 	if(PRESSED(KEY_WALK))
 	{

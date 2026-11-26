@@ -40,7 +40,12 @@ public OnGameModeExit()
 
 public OnPlayerTakeDamage(playerid, issuerid, Float: amount, WEAPON:weaponid)
 {
-    if(issuerid != INVALID_PLAYER_ID && IsPlayerNPC(issuerid)) return 1; // zombie damage: see ZombieAttack
+    if(issuerid != INVALID_PLAYER_ID && IsPlayerNPC(issuerid))
+    {
+    	// blood is taken in ZombieAttack; the melee animation must not drain engine health
+    	SetPlayerHealth(playerid, 100.0);
+    	return 1;
+    }
 
     if(issuerid != INVALID_PLAYER_ID)
     {
