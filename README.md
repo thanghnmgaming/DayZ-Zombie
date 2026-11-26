@@ -33,7 +33,7 @@ A free zombie survival gamemode you can download and run as your own server (Win
 5. `start-server.bat`
 6. Connect to `127.0.0.1:7777`.
 
-Tables are created automatically on the first start.
+Tables are created automatically on the first start. `database.sql` lists their structure (no data) if you prefer to import it yourself.
 
 ## Map data
 These files are too large for the repository.
