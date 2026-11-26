@@ -22,7 +22,8 @@
 #define ZOMBIE_SILENCED_RADIUS  15.0
 #define ZOMBIE_MEMORY_MS        8000    // how long a lost target is searched for
 #define ZOMBIE_CORPSE_MS        20000
-#define ZOMBIE_ATTACK_RANGE     1.6
+#define ZOMBIE_ATTACK_RANGE     2.2
+#define ZOMBIE_STAND_OFF        1.3     // distance a zombie keeps from its prey
 #define ZOMBIE_STEP             6.0     // length of one terrain-following move
 
 enum
@@ -148,7 +149,7 @@ stock ActivateZombie(npcid, Float:x, Float:y, Float:z)
 	NPC_SetVirtualWorld(npcid, 0);
 	NPC_SetInvulnerable(npcid, false);
 	NPC_SetHealth(npcid, ZombieTypes[type][ztHealth]);
-	NPC_SetWeapon(npcid, WEAPON:1);
+	NPC_SetWeapon(npcid, WEAPON_FIST);
 	NPC_ClearAnimations(npcid);
 	SetZombieLooks(npcid);
 	return 1;
@@ -264,7 +265,7 @@ stock ZombieStepTowards(npcid, Float:zx, Float:zy, Float:zz, Float:gx, Float:gy,
 		if(tick >= Zombie[npcid][zNextAttack])
 		{
 			Zombie[npcid][zNextAttack] = tick + ZombieTypes[Zombie[npcid][zType]][ztAttackMs];
-			NPC_MeleeAttack(npcid, 600);
+			ZombieSwing(npcid);
 			DamageStructure(wall, ZOMBIE_WALL_DAMAGE);
 		}
 		return 1;
@@ -315,7 +316,9 @@ stock ZombieThink(npcid, const prey[], preyCount, tick)
 			return ZombieAttack(npcid, target, tick);
 
 		NPC_StopMeleeAttack(npcid);
-		return ZombieStepTowards(npcid, zx, zy, zz, px, py, pz, ZombieTypes[Zombie[npcid][zType]][ztMove]);
+		// stop just short of the player, spread around them instead of piling into one spot
+		new Float:side = atan2(zy - py, zx - px) + float(npcid % 7 - 3) * 18.0;
+		return ZombieStepTowards(npcid, zx, zy, zz, px + floatcos(side, degrees) * ZOMBIE_STAND_OFF, py + floatsin(side, degrees) * ZOMBIE_STAND_OFF, pz, ZombieTypes[Zombie[npcid][zType]][ztMove]);
 	}
 
 	switch(Zombie[npcid][zState])
@@ -347,6 +350,13 @@ stock ZombieThink(npcid, const prey[], preyCount, tick)
 	return 1;
 }
 
+// Only an animation: a real melee attack staggers the player on every hit and locks them in place
+stock ZombieSwing(npcid)
+{
+	NPC_ApplyAnimation(npcid, "FIGHT_B", "FightB_1", 4.1, false, false, false, false, 600);
+	return 1;
+}
+
 stock ZombieAttack(npcid, playerid, tick)
 {
 	NPC_StopMove(npcid);
@@ -356,7 +366,7 @@ stock ZombieAttack(npcid, playerid, tick)
 	new type = Zombie[npcid][zType];
 	new damage = ZombieTypes[type][ztDamageMin] + random(ZombieTypes[type][ztDamageMax] - ZombieTypes[type][ztDamageMin] + 1);
 	Zombie[npcid][zNextAttack] = tick + ZombieTypes[type][ztAttackMs];
-	NPC_MeleeAttack(npcid, 600);
+	ZombieSwing(npcid);
 	if(tick < PlayerNextHit[playerid] && PlayerNextHit[playerid] - tick <= ZOMBIE_HIT_GAP_MS) return 1;
 	PlayerNextHit[playerid] = tick + ZOMBIE_HIT_GAP_MS;
 #if defined ZOMBIE_TEST
