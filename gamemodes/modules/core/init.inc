@@ -1,7 +1,7 @@
 main()
 {
 	print("\n----------------------------------");
-	print(""CName" - "Name" "Version" Loaded");
+	print(SERVER_TITLE" "SERVER_VERSION" loaded");
 	print("----------------------------------\n");
 	WasteDeAMXersTime();
 }
@@ -33,14 +33,14 @@ public OnGameModeInit()
 #if defined ZOMBIE_TEST
 	SetTimer("ZombieProbeStart", 15000, false);
 #endif
-	new querystr[1700];
+	new querystr[2600];
 
-	strcat(querystr,"CREATE TABLE IF NOT EXISTS `users` (`Username` varchar(24) NOT NULL,`Password` varchar(128) NOT NULL,`Headshots` int(11) NOT NULL,`Murders` int(11) NOT NULL,`BanditsKilled` int(11) NOT NULL,`ZombiesKilled` int(11) NOT NULL, `Backpack` int(11) NOT NULL,`BackpackSlots` int(11) NOT NULL,");
-	strcat(querystr,"`BackpackSlotsUsed` int(11) NOT NULL,`pAdminLevel` int(11) NOT NULL,`pPremium` int(11) NOT NULL,`pX` float NOT NULL,`pY` float NOT NULL,`pZ` float NOT NULL,`pWeap1` int(11) NOT NULL,`pAmmo1` int(11) NOT NULL,`pWeap2` int(11) NOT NULL,");
-	strcat(querystr,"`pAmmo2` int(11) NOT NULL,`pWeap3` int(11) NOT NULL,`pAmmo3` int(11) NOT NULL,`pWeap4` int(11) NOT NULL,`pAmmo4` int(11) NOT NULL,`pWeap5` int(11) NOT NULL,`pAmmo5` int(11) NOT NULL,`pWeap6` int(11) NOT NULL,`pAmmo6` int(11) NOT NULL,`pWeap7` int(11) NOT NULL,");
-	strcat(querystr,"`pAmmo7` int(11) NOT NULL,`pWeap8` int(11) NOT NULL,`pAmmo8` int(11) NOT NULL,`pWeap9` int(11) NOT NULL,`pAmmo9` int(11) NOT NULL,`pHour` int(11) NOT NULL,`pMin` int(11) NOT NULL,`pSec` int(11) NOT NULL,`pBlood` int(11) NOT NULL,`pThrist` int(11) NOT NULL,");
-	strcat(querystr,"`pHunger` int(11) NOT NULL,`Humanity` int(11) NOT NULL,`pFirstSpawn` int(11) NOT NULL,`pAliveTime` int(11) NOT NULL,`pIsMapOpened` int(11) NOT NULL,`pSkin` int(11) NOT NULL,`Helper` int(11) NOT NULL,`IsPlayerBleeding` int(11) NOT NULL,");
-  	strcat(querystr,"`IsPlayerLegBroken` int(11) NOT NULL,`pAmbientEnable` int(11) NOT NULL,`DefaultGender` int(11) NOT NULL, `IP` varchar(16) NOT NULL,`ID` int(11) NOT NULL)");
+	strcat(querystr,"CREATE TABLE IF NOT EXISTS `users` (`Username` varchar(24) NOT NULL,`Password` varchar(128) NOT NULL DEFAULT '',`Headshots` int NOT NULL DEFAULT 0,`Murders` int NOT NULL DEFAULT 0,`BanditsKilled` int NOT NULL DEFAULT 0,`ZombiesKilled` int NOT NULL DEFAULT 0, `Backpack` int NOT NULL DEFAULT 0,`BackpackSlots` int NOT NULL DEFAULT 0,");
+	strcat(querystr,"`BackpackSlotsUsed` int NOT NULL DEFAULT 0,`pAdminLevel` int NOT NULL DEFAULT 0,`pPremium` int NOT NULL DEFAULT 0,`pX` float NOT NULL DEFAULT 0,`pY` float NOT NULL DEFAULT 0,`pZ` float NOT NULL DEFAULT 0,`pWeap1` int NOT NULL DEFAULT 0,`pAmmo1` int NOT NULL DEFAULT 0,`pWeap2` int NOT NULL DEFAULT 0,");
+	strcat(querystr,"`pAmmo2` int NOT NULL DEFAULT 0,`pWeap3` int NOT NULL DEFAULT 0,`pAmmo3` int NOT NULL DEFAULT 0,`pWeap4` int NOT NULL DEFAULT 0,`pAmmo4` int NOT NULL DEFAULT 0,`pWeap5` int NOT NULL DEFAULT 0,`pAmmo5` int NOT NULL DEFAULT 0,`pWeap6` int NOT NULL DEFAULT 0,`pAmmo6` int NOT NULL DEFAULT 0,`pWeap7` int NOT NULL DEFAULT 0,");
+	strcat(querystr,"`pAmmo7` int NOT NULL DEFAULT 0,`pWeap8` int NOT NULL DEFAULT 0,`pAmmo8` int NOT NULL DEFAULT 0,`pWeap9` int NOT NULL DEFAULT 0,`pAmmo9` int NOT NULL DEFAULT 0,`pHour` int NOT NULL DEFAULT 0,`pMin` int NOT NULL DEFAULT 0,`pSec` int NOT NULL DEFAULT 0,`pBlood` int NOT NULL DEFAULT 0,`pThrist` int NOT NULL DEFAULT 0,");
+	strcat(querystr,"`pHunger` int NOT NULL DEFAULT 0,`Humanity` int NOT NULL DEFAULT 0,`pFirstSpawn` int NOT NULL DEFAULT 0,`pAliveTime` int NOT NULL DEFAULT 0,`pIsMapOpened` int NOT NULL DEFAULT 0,`pSkin` int NOT NULL DEFAULT 0,`Helper` int NOT NULL DEFAULT 0,`IsPlayerBleeding` int NOT NULL DEFAULT 0,");
+  	strcat(querystr,"`IsPlayerLegBroken` int NOT NULL DEFAULT 0,`pAmbientEnable` int NOT NULL DEFAULT 0,`DefaultGender` int NOT NULL DEFAULT 0, `IP` varchar(16) NOT NULL DEFAULT '',`ID` int NOT NULL DEFAULT 0,`pInfection` int NOT NULL DEFAULT 0,"); strcat(querystr,"`pMissionGoal` int NOT NULL DEFAULT 0,`pMissionKills` int NOT NULL DEFAULT 0,`pMissionDanger` int NOT NULL DEFAULT 0,`pMissionNext` int NOT NULL DEFAULT 0,UNIQUE KEY `uq_username` (`Username`))");
 
 	mysql_tquery(handle, querystr, "", "");
 	CreatePersistenceTables();
@@ -50,8 +50,8 @@ public OnGameModeInit()
 	strcat(querystr2,"`gHerosKilled` int(11) NOT NULL,`gDeaths` int(11) NOT NULL,`gBulletsFired` int(11) NOT NULL,`gHoursPlayed` int(11) NOT NULL,`gAccounts` int(11) NOT NULL)");
 	mysql_tquery(handle, querystr2, "", "");
 
-	new querystr3[340];
-	strcat(querystr3,"CREATE TABLE IF NOT EXISTS `samp_ban` (`BanID` int(6) NOT NULL,`user_banned` varchar(24) NOT NULL,`user_banned_ip` varchar(15) NOT NULL,`user_banner` varchar(24) NOT NULL,`ban_reason` varchar(40) NOT NULL,`ban_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,`ban_time` int(10) NOT NULL)");
+	new querystr3[600];
+	strcat(querystr3,"CREATE TABLE IF NOT EXISTS `samp_ban` (`BanID` int NOT NULL AUTO_INCREMENT PRIMARY KEY,`user_banned` varchar(24) NOT NULL,`user_banned_ip` varchar(45) NOT NULL,`user_banner` varchar(24) NOT NULL,`ban_reason` varchar(40) NOT NULL,`ban_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,`ban_time` int(10) NOT NULL)");
     mysql_tquery(handle, querystr3, "", "");
 	//CreateDynamicObject(18688, -2820.2588,-1530.7047,144.9823-1.47, 0.0, 0.0, 0.0, -1, -1, -1, 1000.0);
 	//CreateDynamicObject(841, -2820.2588,-1530.7047,144.9823-0.7, 0.0, 0.0, 0.0, -1, -1, -1, 1000.0);
@@ -87,10 +87,7 @@ public OnGameModeInit()
 	CreateActor(Zskins[random(4)],319.0655,1884.5758,17.6406,200.2218);
 	CreateActor(Zskins[random(4)],314.4778,1816.7428,17.6406,234.0621);
 
-	SetGameModeText(""Version" Loading");
-	SendRconCommand("hostname "Name" Loading Variables!");
-	SendRconCommand("language Zombies: 100");
-	SendRconCommand("weburl "Web"");
+	SetGameModeText(SERVER_TITLE);
 	AddPlayerClass(29, 1958.3783, 1343.1572, 15.3746, 269.1425, 0, 0, 0, 0, 0, 0);
 
 	InitCollision();
@@ -138,14 +135,11 @@ public OnActorSpawn(actorid)
 
 function startServer()
 {
-	SetGameModeText("DayZ Zombie "Version"");
-	SendRconCommand("hostname "Name"");
-	SendRconCommand("weburl "Web"");
-	SendRconCommand("password 0");
+	SetGameModeText(SERVER_TITLE" "SERVER_VERSION);
 	printf("+---------------------------------+");
     printf("+---------------------------------+");
     printf("+---------------------------------+");
-    printf("DayZSA "Version" Sucessfully Loaded!");
+    printf(SERVER_TITLE" "SERVER_VERSION" successfully loaded");
     printf("+---------------------------------+");
     printf("+---------------------------------+");
     printf("+---------------------------------+");

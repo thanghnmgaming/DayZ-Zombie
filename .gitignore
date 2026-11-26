@@ -18,3 +18,7 @@ backups/
 
 # collision database built with tools/colandreas/ColAndreasWizard.exe
 scriptfiles/colandreas/
+
+# personal data of a local installation
+scriptfiles/DayZSA/Inv/*.inv
+samp.sql

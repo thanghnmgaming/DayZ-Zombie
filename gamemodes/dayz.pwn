@@ -33,6 +33,7 @@
 #include <DayZ_AntiG>
 
 // Modules (order matters: Pawn compiles them as one script)
+#include "modules/config.inc"
 #include "modules/core/data.inc"
 #include "modules/items/catalog.inc"
 #include "modules/core/init.inc"

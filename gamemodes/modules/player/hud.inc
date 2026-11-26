@@ -77,7 +77,7 @@ stock CreatePlayerTD(playerid)
 {
     if(!IsPlayerNPC(playerid))
 	{
-		WebsiteLogo[playerid] = CreatePlayerTextDraw(playerid,509.000000, 4.000000, ""Web" / "Version"");
+		WebsiteLogo[playerid] = CreatePlayerTextDraw(playerid,509.000000, 4.000000, SERVER_TAG" / "SERVER_VERSION);
 		PlayerTextDrawBackgroundColor(playerid,WebsiteLogo[playerid], 255);
 		PlayerTextDrawFont(playerid,WebsiteLogo[playerid], TEXT_DRAW_FONT:2);
 		PlayerTextDrawLetterSize(playerid,WebsiteLogo[playerid], 0.200000, 0.799999);
@@ -156,7 +156,7 @@ stock CreatePlayerTD(playerid)
 		PlayerTextDrawTextSize(playerid,GeneralInfo[playerid], 389.000000, 10.0);
 		PlayerTextDrawSetSelectable(playerid,GeneralInfo[playerid], true);
 
-		MenuCredits[playerid] = CreatePlayerTextDraw(playerid,320.000000, 269.000000, "~w~Created by~g~ [pGA]AldenJ~w~~n~www.pgagaming.net to download!");
+		MenuCredits[playerid] = CreatePlayerTextDraw(playerid,320.000000, 269.000000, "~w~Original gamemode by~g~ AaronN~w~~n~community edition");
 		PlayerTextDrawAlignment(playerid,MenuCredits[playerid], TEXT_DRAW_ALIGN:2);
 		PlayerTextDrawBackgroundColor(playerid,MenuCredits[playerid], 255);
 		PlayerTextDrawFont(playerid,MenuCredits[playerid], TEXT_DRAW_FONT:1);
@@ -205,7 +205,7 @@ stock CreatePlayerTD(playerid)
 		PlayerTextDrawTextSize(playerid,PlayerIntroBox[playerid], 647.000000, 10.000000);
 		PlayerTextDrawSetSelectable(playerid,PlayerIntroBox[playerid], false);
 
-		PlayerIntroVersion[playerid] = CreatePlayerTextDraw(playerid,389.000000, 50.000000, "DayZSA "Version"");
+		PlayerIntroVersion[playerid] = CreatePlayerTextDraw(playerid,389.000000, 50.000000, SERVER_TITLE" "SERVER_VERSION);
 		PlayerTextDrawAlignment(playerid,PlayerIntroVersion[playerid], TEXT_DRAW_ALIGN:2);
 		PlayerTextDrawBackgroundColor(playerid,PlayerIntroVersion[playerid], 255);
 		PlayerTextDrawFont(playerid,PlayerIntroVersion[playerid], TEXT_DRAW_FONT:1);
@@ -215,7 +215,7 @@ stock CreatePlayerTD(playerid)
 		PlayerTextDrawSetProportional(playerid,PlayerIntroVersion[playerid], true);
 		PlayerTextDrawSetSelectable(playerid,PlayerIntroVersion[playerid], false);
 
-		PlayerIntroNote[playerid] = CreatePlayerTextDraw(playerid,353.000000, 109.000000, "Welcome AldenJ~n~Please login");
+		PlayerIntroNote[playerid] = CreatePlayerTextDraw(playerid,353.000000, 109.000000, "Welcome~n~Please login");
 		PlayerTextDrawAlignment(playerid,PlayerIntroNote[playerid], TEXT_DRAW_ALIGN:2);
 		PlayerTextDrawBackgroundColor(playerid,PlayerIntroNote[playerid], 255);
 		PlayerTextDrawFont(playerid,PlayerIntroNote[playerid], TEXT_DRAW_FONT:1);
@@ -765,7 +765,7 @@ stock CreateTDS()
 	TextDrawSetProportional(DebugText, true);
 	TextDrawSetSelectable(DebugText, false);
 
-	DayZSA_Web = TextDrawCreate(509.000000, 4.000000, "pgagaming.net / v15.0");
+	DayZSA_Web = TextDrawCreate(509.000000, 4.000000, SERVER_TAG" / "SERVER_VERSION);
 	TextDrawBackgroundColor(DayZSA_Web, 255);
 	TextDrawFont(DayZSA_Web, TEXT_DRAW_FONT:2);
 	TextDrawLetterSize(DayZSA_Web, 0.200000, 0.799999);

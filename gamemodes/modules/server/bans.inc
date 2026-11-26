@@ -18,7 +18,7 @@ stock jBan(player_banned, player_banner, const reason[], time = 0, system = 0)
 			new strkick[180];
 			format(strkick, sizeof(strkick), ""chat" System has banned %s (%i) for: %s", PlayerName(player_banned), player_banned, reason);
 			SendClientMessageToAll(-1, strkick);
-            SendClientMessage(player_banned, -1, ""chat""COL_WHITE" If you feel this is a mistake please, visit www.pgagaming.net under DayZ boards -> Unban Requests");
+            SendClientMessage(player_banned, -1, ""chat""COL_WHITE" If you believe this is a mistake, contact the server staff.");
 
 			KickEx(player_banned);
 			print(jQuery);
@@ -37,7 +37,7 @@ stock jBan(player_banned, player_banner, const reason[], time = 0, system = 0)
 			new strkick[180];
 			format(strkick, sizeof(strkick), ""chat""COL_WHITE" %s has banned you for: %s", GetAdminName(player_banner), reason);
 			SendClientMessage(player_banned, -1, strkick);
-			SendClientMessage(player_banned, -1, ""chat""COL_WHITE" If you feel this is a mistake please, visit www.pgagaming.net under DayZ boards -> Unban Requests");
+			SendClientMessage(player_banned, -1, ""chat""COL_WHITE" If you believe this is a mistake, contact the server staff.");
 			print(jQuery);
 			KickEx(player_banned);
 		}
@@ -79,7 +79,7 @@ function jban_OnQueryFinish(extraid, serial)
 	if(rows)
 	{
 		SendClientMessage(extraid, -1, ""COL_RED" *** YOU ARE CURRENTLY BANNED FROM THIS SERVER");
-		SendClientMessage(extraid, -1, ""COL_RED" *** POST YOUR APPEAL AT "COL_WHITE"WWW.PGAGAMING.NET");
+		SendClientMessage(extraid, -1, ""COL_RED" *** Contact the server staff to appeal");
 
 		Kick(extraid);
 	}

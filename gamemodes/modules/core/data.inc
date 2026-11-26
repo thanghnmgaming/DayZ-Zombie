@@ -7,12 +7,8 @@
 //achievements
 #define SAN_ANDREAS
 #define function%0(%1) forward%0(%1);public%0(%1)
-#define Web "www.pgagaming.net"
-#define Country "[EUROPE]"
-#define Version "v15.0"
 #define Creator "Kitten aka AldenJ" // Please be kind and don't remove this.
 #define Name "GTA SA: DayZ Survival [ZOMBIE AI]"
-#define CName "Pro Gaming Arena"
 #define MAX_ZONE_NAME 28
 #define MAX_GROUPS 750
 #define chat "*"COL_GREY""
@@ -508,12 +504,10 @@ AntiDeAMX()
 // **** ENUMERATORS **** //
 new randomMessages[][] =
 {
-	"*"COL_LIGHTBLUE" Buy Premium/V.I.P at www.pgagaming.net",
- 	"*"COL_LIGHTBLUE" Join our forums today! "Web"",
-  	"*"COL_LIGHTBLUE" Use global chat to talk to others via /o or /ooc",
-  	"*"COL_LIGHTBLUE" Remember to report hackers and rule breakers at /report [id] [reason]",
-  	"*"COL_LIGHTBLUE" Join our discord server! More information on our forums!",
-  	"*"COL_LIGHTBLUE" Remember to read the rules to prevent you from getting banned /rules"
+	"*"COL_LIGHTBLUE" New here? Type /help to learn how to play",
+	"*"COL_LIGHTBLUE" Use global chat to talk to others via /o or /ooc",
+	"*"COL_LIGHTBLUE" Report rule breakers with /report [id] [reason]",
+	"*"COL_LIGHTBLUE" Remember to read the /rules"
 };
 
 enum pinfo

@@ -208,7 +208,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			if(response)
 			{
-			    PlayAudioStreamForPlayer(playerid,"http://k007.kiwi6.com/hotlink/w3111dmsph/dayz_ost_-_ambient_music_hq_.mp3");
+			    PlayServerAudio(playerid, MENU_MUSIC_URL);
 			    PlayerTextDrawHide(playerid, PlayerIntroBox[playerid]);
 			}
 

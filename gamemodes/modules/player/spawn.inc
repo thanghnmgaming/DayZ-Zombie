@@ -46,12 +46,12 @@ public OnPlayerSpawn(playerid)
 	  			{
 					if(timeMode == DAY)
 	  				{
-	   					PlayAudioStreamForPlayer(playerid, "http://pgagaming.net/samp/dayz/dayz_ambient_day.mp3");
+	   					PlayServerAudio(playerid, AMBIENT_DAY_URL);
 					}
 
 					if(timeMode == NIGHT)
 	  				{
-	   					PlayAudioStreamForPlayer(playerid, "http://pgagaming.net/samp/dayz/dayz_ambient_night.mp3");
+	   					PlayServerAudio(playerid, AMBIENT_NIGHT_URL);
 					}
 				}
 			}

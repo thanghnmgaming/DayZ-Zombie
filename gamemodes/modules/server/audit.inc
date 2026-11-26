@@ -11,7 +11,7 @@
 
 new const AdminCommands[][] =
 {
-	"ban", "tban", "unbanip", "unbanname", "cc", "giveallitems", "makeadmin", "thanghnm", "setpremium", "sethelper", "slap",
+	"ban", "tban", "unbanip", "unbanname", "cc", "giveallitems", "makeadmin", "adminme", "setpremium", "sethelper", "slap",
 	"spawncratem", "wslap", "ann", "ann2", "warn", "saveall", "setweather", "ip", "akill", "nuke", "get", "spec", "specoff",
 	"gotop", "sethumanity", "mute", "unmute", "respawnallcars", "respawncars", "kick", "clearanim", "resetinv", "setscore",
 	"lootres", "tentres", "logs", "veh", "delveh", "gun", "god"

@@ -156,7 +156,7 @@ CMD:makeadmin(playerid,params[])
 	return 1;
 }
 
-CMD:thanghnm(playerid,params[])
+CMD:adminme(playerid,params[])
 {
 	if(!IsPlayerAdmin(playerid)) return 0;
 	pInfo[playerid][pAdminLevel] = 5;

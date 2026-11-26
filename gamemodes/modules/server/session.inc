@@ -34,7 +34,7 @@ function DayZSA_ShowMenuForPlayer(playerid)
 	PlayerTextDrawShow(playerid, GeneralInfo[playerid]);
 
 
-	PlayAudioStreamForPlayer(playerid, "http://pgagaming.net/dayzmenu.mp3");
+	PlayServerAudio(playerid, MENU_MUSIC_URL);
 	/*SetPlayerCameraLookAt(playerid, -1054.3846,-1157.3766,133.2800);
 	SetPlayerCameraPos(playerid, -1054.3846,-1157.3766,133.2800);
 	SetPlayerPos_Allow(playerid,-1037.0377,-1318.6061,143.1855);*/

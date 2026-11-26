@@ -86,7 +86,6 @@ stock UpdateVehicleStatus(playerid)
 		{
 			format(str,sizeof(str),"%i / 1~n~~n~0 / 0~n~~n~%i ~n~~n~%i KM/H",
 			vInfo[GetPlayerVehicleID(playerid)][vehicleEngine],
-			vInfo[GetPlayerVehicleID(playerid)][vehicleTires],
 			vInfo[GetPlayerVehicleID(playerid)][vehicleFuel],
 			GetPlayerVehicleSpeed(playerid));
 			PlayerTextDrawSetString(playerid,vehicleInfo[playerid],str);
