@@ -87,7 +87,6 @@ public OnGameModeInit()
 	CreateActor(Zskins[random(4)],319.0655,1884.5758,17.6406,200.2218);
 	CreateActor(Zskins[random(4)],314.4778,1816.7428,17.6406,234.0621);
 
-    SetTimer("Airdrop", 480000, true);
 	SetGameModeText(""Version" Loading");
 	SendRconCommand("hostname "Name" Loading Variables!");
 	SendRconCommand("language Zombies: 100");
@@ -151,6 +150,7 @@ function startServer()
     LoadVehicleStates();
     LoadTents();
     LoadStorageItems();
+    StartSurvivalSystems();
 	return 1;
  	}
 

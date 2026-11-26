@@ -39,20 +39,16 @@ public OnPlayerUseItem(playerid,ItemName[])
 
 stock UseSpecialItem(playerid, const ItemName[])
 {
-	if(!strcmp(ItemName,"Antibiotics",true))
+	if(!strcmp(ItemName,"Antibiotics",true)) return CureInfection(playerid);
+	if(!strcmp(ItemName,"Wooden Wall",true)) return PlaceStructure(playerid, STRUCTURE_WALL);
+	if(!strcmp(ItemName,"Wooden Gate",true)) return PlaceStructure(playerid, STRUCTURE_GATE);
+	if(!strcmp(ItemName,"Splint",true))
 	{
-		if(pInfo[playerid][pInfection] == 0)
-		{
-			SendClientMessage(playerid, -1, "*"COL_RED" You are not infected of any sort!");
-		}
-		else
-		{
-			PlayerTextDrawSetString(playerid, LegBroken[playerid], "Broken Leg");
-			PlayerTextDrawHide(playerid, LegBroken[playerid]);
-			SetPlayerDrunkLevel(playerid, 0);
-			KillTimer(pInfo[playerid][Bleeding]);
-			SendClientMessage(playerid, -1, ""chat" You have sucessfully used antibiotics. You have been cured. If screen still dark use painkiller!");
-		}
+		if(pInfo[playerid][IsPlayerLegBroken] == 0) return SendClientMessage(playerid, -1, ""chat" Your leg is not broken!");
+		PlayerTextDrawHide(playerid, LegBroken[playerid]);
+		pInfo[playerid][IsPlayerLegBroken] = 0;
+		RemoveSlotToInventory(playerid, "Splint", 1);
+		return PlayItemAnim(playerid, "BOMBER", "BOM_Plant");
 	}
 	if(!strcmp(ItemName,"Wood",true))
 	{

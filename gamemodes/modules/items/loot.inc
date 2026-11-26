@@ -334,7 +334,7 @@ function DayZSA_CreateHospital(Float:pXX,Float:pYX,Float:pZX)
 
    	Loot[lootCount][HospitalID] = CreateDynamicObject(1685/*DayZSA_SelectObj()*/,pXX+0.3,pYX+float(1),pZX-0.7,0.0,0.0,0.0,-1,-1,-1,1000.0);
 	format(strt,sizeof(strt),""COL_GREEN"GEAR\n"COL_GREY"Press LEFT ALT to view hospital crate");
-    CreateDynamic3DTextLabel(strt,-1,pXX+0.3,pYX+float(1),pZX-0.7,8.0,INVALID_PLAYER_ID,INVALID_VEHICLE_ID,1,-1,-1,-1, 8.0);
+    Loot[lootCount][TextID] = CreateDynamic3DTextLabel(strt,-1,pXX+0.3,pYX+float(1),pZX-0.7,8.0,INVALID_PLAYER_ID,INVALID_VEHICLE_ID,1,-1,-1,-1, 8.0);
 
     return 1;
 }
@@ -611,6 +611,7 @@ function DayZSA_RespawnItems()
    		DestroyDynamicObject(Loot[i][LootID]);
 		DestroyDynamic3DTextLabel(Loot[i][TextID]);
 		DestroyDynamicObject(Loot[i][HospitalID]);
+		DestroyDynamicObject(Loot[i][AirID]);
 		Loot[i][xLoot] = 0.0;
 		Loot[i][yLoot] = 0.0;
 		Loot[i][zLoot] = 0.0;

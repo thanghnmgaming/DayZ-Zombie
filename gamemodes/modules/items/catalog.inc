@@ -41,6 +41,12 @@ enum E_ITEM
 //  name, type, model, rotX, rotY, rotZ, hunger, blood, random blood, thirst, weapon, load, ammo item, reload, drops on death, skin, text
 new const ItemCatalog[][E_ITEM] =
 {
+	{"Cloth", ITEM_INFO, 2384, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0, "", 0, true, 0, "A crafting material. Type /craft to use it."},
+	{"Scrap Metal", ITEM_INFO, 19627, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0, "", 0, true, 0, "A crafting material. Type /craft to use it."},
+	{"Nails", ITEM_INFO, 19921, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0, "", 0, true, 0, "A crafting material. Type /craft to use it."},
+	{"Splint", ITEM_SPECIAL, 11736, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0, "", 0, true, 0, ""},
+	{"Wooden Wall", ITEM_SPECIAL, 1271, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0, "", 0, true, 0, ""},
+	{"Wooden Gate", ITEM_SPECIAL, 1271, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0, "", 0, true, 0, ""},
 	{"Binoculars", ITEM_TOOL, 3070, 0.0, 0.0, 0.0, 0, 0, 0, 0, 43, 99, "", 0, true, 0, ""},
 	{"Katana", ITEM_TOOL, 339, 276.0, 90.0, 90.0, 0, 0, 0, 0, 8, 1, "", 0, true, 0, ""},
 	{"Baseball Bat", ITEM_TOOL, 336, 276.0, 90.0, 90.0, 0, 0, 0, 0, 5, 1, "", 0, true, 0, ""},
@@ -110,6 +116,7 @@ new const ItemCatalog[][E_ITEM] =
 
 new const LootPoolMarket[][ITEM_NAME_SIZE] =
 {
+	"Cloth", "Cloth",
 	"Soda Bottle", "Burger", "Whiskey Bottle", "Milk", "Dirty Pizza Slice",
 	"Full Water Bottle", "Can of Beans", "Civilian Skin", "Raw Meat", "Lighter",
 	"Antibiotics", "Orange", "Dirty Water Bottle", "Rope"
@@ -117,6 +124,7 @@ new const LootPoolMarket[][ITEM_NAME_SIZE] =
 
 new const LootPoolFarm[][ITEM_NAME_SIZE] =
 {
+	"Cloth", "Nails", "Nails", "Scrap Metal", "Wood",
 	"Empty Jerry Can", "Soda Bottle", "Toolbox", "Can of Beans", "Dirty Pizza Slice",
 	"Full Water Bottle", "Country Rifle", "Sniper Ammo", "Alice Pack", "Burger",
 	"Whiskey Bottle", "Milk", "Czech Vest Pouch", "Full Water Bottle", "Army Skin",
@@ -125,6 +133,7 @@ new const LootPoolFarm[][ITEM_NAME_SIZE] =
 
 new const LootPoolLow[][ITEM_NAME_SIZE] =
 {
+	"Cloth", "Cloth", "Scrap Metal", "Nails",
 	"Pistol Ammo", "Shotgun Ammo", "Dirty Pizza Slice", "SMG Ammo", "Empty Jerry Can",
 	"Soda Bottle", "Toolbox", "Silenced Pistol", "Pistol", "Burger",
 	"Full Water Bottle", "Empty Water Bottle", "Can of Beans", "Dirty Pizza Slice", "Baseball Bat",
@@ -134,6 +143,7 @@ new const LootPoolLow[][ITEM_NAME_SIZE] =
 
 new const LootPoolMedium[][ITEM_NAME_SIZE] =
 {
+	"Cloth", "Scrap Metal", "Nails",
 	"MP5", "Morphine", "Bandage", "Shotgun", "Map",
 	"GPS", "Milk", "Can of Beans", "Tire", "Blood Bag",
 	"Country Rifle", "SPAZ-12 Shotgun", "Czech Vest Pouch", "Army Skin", "Road Flare",
@@ -152,6 +162,7 @@ new const LootPoolHigh[][ITEM_NAME_SIZE] =
 
 new const LootPoolMilitary[][ITEM_NAME_SIZE] =
 {
+	"Scrap Metal", "Scrap Metal", "Nails",
 	"AK-47", "M4", "Sniper Rifle", "Sniper Ammo", "Engine",
 	"Alice Pack", "Coyote Backpack", "Tent", "Radio Device", "Sniper Skin",
 	"Army Skin", "Assault Ammo", "Tire", "Toolbox", "Pistol Ammo",

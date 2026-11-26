@@ -227,6 +227,7 @@ public WhenPlayerLogin(playerid, serial)
 	        cache_get_value_name(0, "IsPlayerLegBroken", tmp), pInfo[playerid][IsPlayerLegBroken] = strval(tmp);
 	        cache_get_value_name(0, "pAmbientEnable", tmp), pInfo[playerid][pAmbientEnable] = strval(tmp);
 	        cache_get_value_name(0, "DefaultGender", tmp), pInfo[playerid][DefaultGender] = strval(tmp);
+	        cache_get_value_name_int(0, "pInfection", pInfo[playerid][pInfection]);
 	        cache_get_value_name(0, "ID", tmp), pInfo[playerid][pUserID] = strval(tmp);
 
 		}

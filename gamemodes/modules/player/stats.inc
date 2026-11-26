@@ -91,6 +91,7 @@ stock SaveStats(playerid)
 	PlayerName(playerid));
 	mysql_tquery(handle, Query, "", "");
 	SaveInventory(playerid);
+	SaveInfection(playerid);
 	return 1;
 }
 
@@ -144,6 +145,9 @@ stock ClearChat()
 
 stock ResetVars(playerid)
 {
+	PlayerZone[playerid] = -1;
+	MissionGoal[playerid] = 0;
+	MissionNext[playerid] = 0;
 	InventoryLoaded[playerid] = false;
 	ViewId[playerid] = 0;
 	ViewItem[playerid][0] = EOS;

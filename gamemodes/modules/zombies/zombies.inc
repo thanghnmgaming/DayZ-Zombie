@@ -8,6 +8,7 @@
 #define ZOMBIE_TICK_MS          500
 #define ZOMBIE_HIDDEN_WORLD     9999
 #define ZOMBIES_PER_PLAYER      12      // wanted around each player
+#define ZOMBIES_PER_PLAYER_DANGER 20
 #define ZOMBIE_AREA_RADIUS      90.0    // counted as "around" a player
 #define ZOMBIE_SPAWN_MIN        45.0    // never appear closer than this
 #define ZOMBIE_SPAWN_MAX        80.0
@@ -131,6 +132,8 @@ stock PickZombieType()
 stock ActivateZombie(npcid, Float:x, Float:y, Float:z)
 {
 	new type = PickZombieType();
+	// in danger zones half of the ordinary zombies become runners or brutes
+	if(type < 2 && GetDangerZone(x, y) != -1 && random(2) == 0) type = (random(3) == 0) ? 3 : 2;
 	Zombie[npcid][zState] = ZSTATE_IDLE;
 	Zombie[npcid][zType] = type;
 	Zombie[npcid][zTarget] = INVALID_PLAYER_ID;
@@ -323,6 +326,7 @@ stock ZombieAttack(npcid, playerid, tick)
 #endif
 	// This is the only place where a zombie takes blood
 	pInfo[playerid][pBlood] -= damage;
+	TryInfect(playerid, (type == sizeof(ZombieTypes) - 1) ? INFECTION_CHANCE_BRUTE : INFECTION_CHANCE);
 	return 1;
 }
 
@@ -341,7 +345,7 @@ stock SpawnZombiesAround(playerid, const prey[], preyCount)
 		if(VectorSize(x - px, y - py, z - pz) <= ZOMBIE_AREA_RADIUS) around++;
 	}
 
-	new wanted = ZOMBIES_PER_PLAYER - around, spawned, slot;
+	new wanted = ((GetDangerZone(px, py) == -1) ? ZOMBIES_PER_PLAYER : ZOMBIES_PER_PLAYER_DANGER) - around, spawned, slot;
 	if(wanted > ZOMBIE_SPAWNS_PER_PASS) wanted = ZOMBIE_SPAWNS_PER_PASS;
 
 	for(new attempt; attempt < wanted * 6 && spawned < wanted; attempt++)
@@ -424,6 +428,7 @@ public OnNPCDeath(npcid, killerid, WEAPON:reason)
 	if(0 <= killerid < MAX_PLAYERS && IsPlayerConnected(killerid))
 	{
 		pInfo[killerid][ZombiesKilled]++;
+		MissionZombieKilled(killerid, GetDangerZone(x, y) != -1);
 		if(IsPlayerAimingTargetBodyPart(killerid, npcid, BODY_PART_HEAD))
 		{
 			GameTextForPlayer(killerid, "~r~~h~Headshot!", 3000, 3);
@@ -456,8 +461,8 @@ function DayZSA_CreateZLoot(Float:pXX,Float:pYX,Float:pZX)
 	Loot[lootCount][yLoot] = pYX;
 	Loot[lootCount][zLoot] = pZX;
 
-	// low 6 in 16, medium 7 in 16, high 3 in 16
-	switch(random(16))
+	// low 6 in 16, medium 7 in 16, high 3 in 16; danger zones never drop low loot
+	switch((GetDangerZone(pXX, pYX) == -1) ? random(16) : 6 + random(10))
 	{
 		case 0..5: DayZSA_LootSetupLow();
 		case 6..12: DayZSA_LootSetupMedium();

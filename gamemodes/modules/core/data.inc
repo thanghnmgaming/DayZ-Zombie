@@ -176,6 +176,10 @@ stock PlayAnim(playerid, const animlib[], const animname[], Float:fDelta, loop, 
 
 #define MAX_ZOMBIES 200
 forward AlertZombies(Float:x, Float:y, Float:z, Float:radius);
+#define STRUCTURE_WALL 0
+#define STRUCTURE_GATE 1
+new PlayerZone[MAX_PLAYERS];    // danger zone index + 1, 0 outside
+new MissionGoal[MAX_PLAYERS], MissionNext[MAX_PLAYERS];
 #if defined ZOMBIE_TEST
 new ZombieProbe = INVALID_PLAYER_ID;
 new ProbeBlood = 12000;
