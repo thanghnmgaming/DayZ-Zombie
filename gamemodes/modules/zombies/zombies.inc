@@ -71,6 +71,7 @@ enum E_ZOMBIE
 }
 
 new Zombie[MAX_PLAYERS][E_ZOMBIE];
+new const Float:DetourAngles[] = {45.0, -45.0, 90.0, -90.0, 135.0, -135.0};
 new ZombiePool[MAX_ZOMBIES];
 new ZombiePoolSize;
 new ZombieSpawnPass;
@@ -190,6 +191,9 @@ stock bool:ZombieSenses(npcid, playerid, Float:distance, Float:zx, Float:zy, Flo
 	new Float:nx, Float:ny, Float:eyeZ;
 	NPC_GetPos(npcid, nx, ny, eyeZ);
 	if(FindBlockingStructure(zx, zy, eyeZ, px, py) != -1) return false;
+	new Float:preyZ;
+	GetPlayerPos(playerid, nx, ny, preyZ);
+	if(IsWorldBlocked(zx, zy, eyeZ + 0.6, px, py, preyZ + 0.6)) return false;
 	if(Zombie[npcid][zTarget] == playerid) return true;
 
 	new Float:facing;
@@ -234,6 +238,22 @@ stock ZombieStepTowards(npcid, Float:zx, Float:zy, Float:zz, Float:gx, Float:gy,
 	MapAndreas_FindZ_For2DCoord(x, y, ground);
 	// MapAndreas reports the highest surface; ignore it under roofs, bridges and indoors
 	if(ground > 0.0 && floatabs(ground + 1.0 - z) < 3.0) z = ground + 1.0;
+	if(FindFloor(x, y, zz, ground)) z = ground + 1.0;
+
+	// something solid in the way: try to go around it
+	if(IsWorldBlocked(zx, zy, zz, x, y, z))
+	{
+		new Float:heading = atan2(dy, dx), bool:found = false;
+		for(new i; i < sizeof(DetourAngles) && !found; i++)
+		{
+			new Float:tx = zx + floatcos(heading + DetourAngles[i], degrees) * 3.0, Float:ty = zy + floatsin(heading + DetourAngles[i], degrees) * 3.0, Float:tz = zz;
+			if(FindFloor(tx, ty, zz, tz)) tz += 1.0;
+			if(IsWorldBlocked(zx, zy, zz, tx, ty, tz) || FindBlockingStructure(zx, zy, zz, tx, ty) != -1) continue;
+			x = tx, y = ty, z = tz;
+			found = true;
+		}
+		if(!found) return NPC_StopMove(npcid), 1;
+	}
 
 	// look a little past the step so the body does not poke through
 	new wall = FindBlockingStructure(zx, zy, zz, x + dx / length * 0.7, y + dy / length * 0.7);
@@ -291,7 +311,7 @@ stock ZombieThink(npcid, const prey[], preyCount, tick)
 		Zombie[npcid][zGoalY] = py;
 		Zombie[npcid][zGoalZ] = pz;
 
-		if(VectorSize(px - zx, py - zy, 0.0) <= ZOMBIE_ATTACK_RANGE && floatabs(pz - zz) <= 1.5 && FindBlockingStructure(zx, zy, zz, px, py) == -1)
+		if(VectorSize(px - zx, py - zy, 0.0) <= ZOMBIE_ATTACK_RANGE && floatabs(pz - zz) <= 1.5 && FindBlockingStructure(zx, zy, zz, px, py) == -1 && !IsWorldBlocked(zx, zy, zz, px, py, pz))
 			return ZombieAttack(npcid, target, tick);
 
 		NPC_StopMeleeAttack(npcid);
@@ -320,7 +340,7 @@ stock ZombieThink(npcid, const prey[], preyCount, tick)
 			{
 				new Float:x = zx + float(random(17) - 8), Float:y = zy + float(random(17) - 8), Float:ground;
 				MapAndreas_FindZ_For2DCoord(x, y, ground);
-				if(ground > 0.5 && floatabs(ground + 1.0 - zz) < 3.0 && FindBlockingStructure(zx, zy, zz, x, y) == -1) NPC_Move(npcid, x, y, ground + 1.0, NPC_MOVE_TYPE_WALK);
+				if(ground > 0.5 && floatabs(ground + 1.0 - zz) < 3.0 && FindBlockingStructure(zx, zy, zz, x, y) == -1 && !IsWorldBlocked(zx, zy, zz, x, y, ground + 1.0)) NPC_Move(npcid, x, y, ground + 1.0, NPC_MOVE_TYPE_WALK);
 			}
 		}
 	}

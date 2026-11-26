@@ -62,4 +62,5 @@
 #include "modules/survival/building.inc"
 #include "modules/survival/crafting.inc"
 #include "modules/survival/world.inc"
+#include "modules/zombies/collision.inc"
 #include "modules/zombies/zombies.inc"

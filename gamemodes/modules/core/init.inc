@@ -93,7 +93,11 @@ public OnGameModeInit()
 	SendRconCommand("weburl "Web"");
 	AddPlayerClass(29, 1958.3783, 1343.1572, 15.3746, 269.1425, 0, 0, 0, 0, 0, 0);
 
+	InitCollision();
+	new mapObjects = Streamer_GetUpperBound(STREAMER_TYPE_OBJECT);
+	RegisterMapCollision(1, mapObjects);
 	startServer();
+	new lootObjects = Streamer_GetUpperBound(STREAMER_TYPE_OBJECT);
     Streamer_MaxItems(STREAMER_TYPE_OBJECT,100000);
 	SetTimer("AutoSaveAll", AUTOSAVE_INTERVAL, true);
 	SetTimer("TimeOnServer", 1000, true);
@@ -114,6 +118,7 @@ public OnGameModeInit()
 	EnableStuntBonusForAll(false);
  	CreateBases();
  	DayZSA_CreateObject();
+ 	RegisterMapCollision(lootObjects + 1, Streamer_GetUpperBound(STREAMER_TYPE_OBJECT));
     CreateTDS();
 	WeatherUpdate();
     GlobalResetVars();

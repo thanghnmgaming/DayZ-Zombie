@@ -18,3 +18,6 @@ Admin: log in with `/rcon login`, then `/thanghnm`.
 - `backup-database.bat` writes `backups\samp-<time>.sql` (30 kept; not in Git).
 - Restore: `tools\mariadb\bin\mariadb.exe --defaults-extra-file=database\root.cnf samp -e "source backups/<file>.sql"`.
 - Admins (level 5) read the audit log in game with `/logs`.
+
+## Collision data
+Zombies need `scriptfiles/colandreas/ColAndreas.cadb`. Run ColAndreasWizard.exe (ColAndreas v1.5.0), pick the GTA San Andreas folder and save to that path.
