@@ -1,0 +1,11 @@
+# local config (contains the RCON password)
+config.json
+
+# build output and server runtime files
+gamemodes/*.amx
+log.txt
+logs/
+bans.json
+
+# MapAndreas data (72 MB): copy from the MapAndreas v1.2.1 release
+scriptfiles/SAfull.hmap

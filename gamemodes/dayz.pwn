@@ -13,24 +13,23 @@
 	All credits going to AaronN, and also plugins developer.
 */
 
-#include <a_samp>
-#include <em_actors>
-#include <aox>
-#include <fcnpc>
-#include <YSI\y_timers>
+#define MIXED_SPELLINGS
+#include <open.mp>
 #include <a_mysql>
-#include <foreach>
+#include <samp_bcrypt>
 #include <sscanf2>
 #include <streamer>
+#include <Pawn.CMD>
+#include <foreach>
+#include <mapandreas>
+#include <em_actors>
 #include <TWD_Map>
 #include <dayzmap>
 #include <dayzmap2>
 #include <OPA>
 #include <OPRF>
-#include <zcmd>
 #include <em_callbacks>
 #include <DayZ_AntiG>
-#include <mapandreas>
 #define ACTION_ANIMATION 0
 #define ACTION_SPECIAL 1
 
@@ -214,7 +213,7 @@ PlayAnim(playerid, animlib[], animname[], Float:fDelta, loop, lockx, locky, free
 new SpawnedZombies = 0;
 new ZombiesTimer;
 new IsAZombie[MAX_PLAYERS];
-new Timer:ZombieTimer[MAX_PLAYERS];
+new ZombieTimer[MAX_PLAYERS];
 new ZombieAttackPlayer[MAX_PLAYERS];
 
 
@@ -259,7 +258,8 @@ new isPlayerInMenu[MAX_PLAYERS] = 0;
 new gotBanned[MAX_PLAYERS] = 0;
 new jNames[MAX_PLAYERS][MAX_PLAYER_NAME], jIP[MAX_PLAYERS][MAX_PLAYER_IP];
 new gRegistred[MAX_PLAYERS];
-new handle;
+new MySQL:handle;
+new LoginSerial[MAX_PLAYERS];
 new jQuery[MAX_QUERY_LENGTH];
 new ban_reason[MAX_REASON_LENGTH], ban_target, ban_time;
 
@@ -485,7 +485,7 @@ forward OnPlayerAccountLogin(playerid, enteredPassword[]);
 forward WhenPlayerLogin(playerid);
 forward OnPlayerUseItem(playerid,ItemName[]);
 forward ab_OnEnterExitModShop();
-forward OnPlayerKillZombie(playerid,zombieid,weaponid);
+forward OnPlayerKillZombie(playerid,zombieid,WEAPON:weaponid);
 forward OnZombieKillPlayer(zombieid,playerid);
 
 WasteDeAMXersTime()
@@ -705,7 +705,7 @@ enum playerinfo
 	IsPlayerHero,
 	IsPlayerMakingNoise,
 	IsPlayerVisual,
-	IsPlayerSpawned,
+	pIsSpawned,
 	Bleeding,
 	FirstPerson,
 	IsViewingTentID,
@@ -3998,12 +3998,12 @@ public OnGameModeInit()
     DayZ_CreateServerMap1();
 
 	MySQLConnect();
-	mysql_log(LOG_DEBUG);
+	mysql_log(ERROR | WARNING);
 	MapAndreas_Init(MAP_ANDREAS_MODE_FULL);
 
-	for (new i = 0; i < FCNPC_MAX_NODES; i++)
+	for (new i = 0; i < NPC_MAX_NODES; i++)
 	{
-		if (!FCNPC_IsNodeOpen(i) && !FCNPC_OpenNode(i))
+		if (!NPC_IsNodeOpen(i) && !NPC_OpenNode(i))
 		{
 			printf("Error: Failed to open node %d from (scriptfiles/FCNPC/nodes/NODES%d.DAT)", i, i);
 			return 0;
@@ -4074,12 +4074,13 @@ public OnGameModeInit()
 
 	startServer();
     Streamer_MaxItems(STREAMER_TYPE_OBJECT,100000);
-	repeat CheckPlayerStatusZ();
-	repeat UpdatePlayer();
-	repeat UpdateServer();
-	repeat FuelCheck();
-	repeat RespawnGeneral();
-	repeat UpdateWeather();
+	SetTimer("TimeOnServer", 1000, true);
+	SetTimer("CheckPlayerStatusZ", 8000, true);
+	SetTimer("UpdatePlayer", 1000, true);
+	SetTimer("UpdateServer", 1000, true);
+	SetTimer("FuelCheck", 30000, true);
+	SetTimer("RespawnGeneral", 2700000, true);
+	SetTimer("UpdateWeather", 1200000, true);
 	SetWeatherEx(5);
 	SetWorldTime(21);
     UsePlayerPedAnims();
@@ -4127,7 +4128,8 @@ function startServer()
 	return 1;
  	}
 
-timer FuelCheck[30000]()
+forward FuelCheck();
+public FuelCheck()
 {
 	foreach (new i : Player)
 	{
@@ -4136,13 +4138,15 @@ timer FuelCheck[30000]()
 	return 1;
 }
 
-timer RespawnGeneral[2700000]()
+forward RespawnGeneral();
+public RespawnGeneral()
 {
     DayZSA_RespawnItems();
     return 1;
 }
 
-timer UpdateWeather[1200000]()
+forward UpdateWeather();
+public UpdateWeather()
 {
 	switch(random(5))
     {
@@ -4155,7 +4159,8 @@ timer UpdateWeather[1200000]()
 	return 1;
 }
 
-timer UpdateServer[1000]()
+forward UpdateServer();
+public UpdateServer()
 {
 	if(PlayersAlive >= 1)
 	{
@@ -4214,7 +4219,8 @@ timer UpdateServer[1000]()
 	return 1;
 }
 
-timer UpdatePlayer[1000]()
+forward UpdatePlayer();
+public UpdatePlayer()
 {
 	if(PlayersAlive >= 1)
 	{
@@ -4226,7 +4232,7 @@ timer UpdatePlayer[1000]()
 		        {
 				    if(pInfo[i][pLogged] == 1)
 				    {
-				        if(pInfo[i][IsPlayerSpawned] == 1)
+				        if(pInfo[i][pIsSpawned] == 1)
 				        {
 				            SetPlayerHealth(i,100.0);
 				    		CheckBars(i);
@@ -4454,7 +4460,7 @@ timer UpdatePlayer[1000]()
 		   							if(!IsPlayerInAnyVehicle(i))
 									{
 										ApplyAnimation(i, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-										defer ResetAction(i, ACTION_ANIMATION);
+										SetTimerEx("ResetAction", 1450, false, "ii", i, ACTION_ANIMATION);
 									}
 								}
 							}
@@ -4476,7 +4482,7 @@ timer UpdatePlayer[1000]()
 	 								if(!IsPlayerInAnyVehicle(i))
 									{
 										ApplyAnimation(i, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-										defer ResetAction(i, ACTION_ANIMATION);
+										SetTimerEx("ResetAction", 1450, false, "ii", i, ACTION_ANIMATION);
 									}
 								}
 							}
@@ -4491,7 +4497,7 @@ timer UpdatePlayer[1000]()
 			    				if(!IsPlayerInAnyVehicle(i))
 								{
 									ApplyAnimation(i, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-									defer ResetAction(i, ACTION_ANIMATION);
+									SetTimerEx("ResetAction", 1450, false, "ii", i, ACTION_ANIMATION);
 								}
 							}
 
@@ -4589,9 +4595,9 @@ public OnGameModeExit()
     	if(IsPlayerAttachedObjectSlotUsed(i, 1)) RemovePlayerAttachedObject(i, 1);
 	}
 
-	for (new i = 0; i < FCNPC_MAX_NODES; i++) {
-		if (FCNPC_IsNodeOpen(i)) {
-			FCNPC_CloseNode(i);
+	for (new i = 0; i < NPC_MAX_NODES; i++) {
+		if (NPC_IsNodeOpen(i)) {
+			NPC_CloseNode(i);
 		}
 	}
 
@@ -4616,7 +4622,7 @@ public OnGameModeExit()
 	return 1;
 }
 
-public OnPlayerTakeDamage(playerid, issuerid, Float: amount, weaponid)
+public OnPlayerTakeDamage(playerid, issuerid, Float: amount, WEAPON:weaponid)
 {
     if(issuerid != INVALID_PLAYER_ID && IsPlayerNPC(issuerid))
     {
@@ -4675,7 +4681,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float: amount, weaponid)
 					new Float:vx = c2 / h,Float:vy = c1 / h;
 				    SetPlayerVelocity(playerid, 0.35 * vx, 0.35 * vy, 0.1);
 				    ApplyAnimation(playerid, "PED", "FALL_back", 4.0, 0, 1, 1, 1, 0, 1);
-				    defer GetUp(playerid);
+				    SetTimerEx("GetUp", 1000, false, "i", playerid);
 				}
 			}
 		}
@@ -4735,7 +4741,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float: amount, weaponid)
 	return 1;
 }
 
-public OnPlayerGiveDamage(playerid, damagedid, Float: amount, weaponid, bodypart)
+public OnPlayerGiveDamage(playerid, damagedid, Float: amount, WEAPON:weaponid, bodypart)
 {
 	if(timerdamage1[playerid] != 0) KillTimer(timerdamage1[playerid]);
 
@@ -4841,7 +4847,8 @@ public OnPlayerGiveDamage(playerid, damagedid, Float: amount, weaponid, bodypart
 	return 1;
 }
 
-timer GetUp[1000](playerid)
+forward GetUp(playerid);
+public GetUp(playerid)
 {
     ApplyAnimation(playerid, "PED", "getup", 4.0, 0, 1, 1, 0, 0, 1);
 }
@@ -4907,7 +4914,7 @@ public OnPlayerAirbreak(playerid)
     return 1;
 }
 
-public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ)
+public OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hitid, Float:fX, Float:fY, Float:fZ)
 {
 	if(hittype != BULLET_HIT_TYPE_NONE)
   	{
@@ -4929,7 +4936,7 @@ public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
 	}
 	return 1;
 }
-public OnPlayerWeaponEmpty(playerid, weaponid)
+public OnPlayerWeaponEmpty(playerid, WEAPON:weaponid)
 {
 	new wepname[64];
 	new Float:fPos[3];
@@ -4985,8 +4992,8 @@ public OnPlayerConnect(playerid)
 
 public WhenAccountCheck(playerid, password[])
 {
-    new rows, fields;
-    cache_get_data(rows, fields, handle);
+    new rows;
+    cache_get_row_count(rows);
 
  	if(rows)
 	{
@@ -5023,105 +5030,164 @@ public WhenAccountCheck(playerid, password[])
 
 public OnPlayerRegister(playerid, password[])
 {
-    if(IsPlayerConnected(playerid))
+	if(IsPlayerConnected(playerid))
 	{
-	    new Query[450],IP[16];
-	    GetPlayerIp(playerid, IP, sizeof(IP));
-		strcat(Query,"INSERT INTO `users` (Username,Password,IP) VALUES ('%s', sha1('%s'),'%s')");
-		format(Query,sizeof(Query),Query,PlayerName(playerid),password,IP);
-		mysql_tquery(handle, Query, "", "");
-		printf("%s",Query);
-		pInfo[playerid][pFirstSpawn] = 1;
-		pInfo[playerid][pHunger] = 2500;
-		pInfo[playerid][pThrist] = 1000;
-		pInfo[playerid][pBlood] = 12000;
-		pInfo[playerid][Humanity] = 2500;
-		pInfo[playerid][Backpack] = 0;
-		pInfo[playerid][BackpackSlots] = 8;
-		pInfo[playerid][BackpackSlotsUsed] = 0;
-
-		ShowPlayerDialog(playerid, DIALOG_LOGIN ,DIALOG_STYLE_PASSWORD, "DayZ Login", "Please enter your password below to login to your account.", "Login", "Exit");
+		bcrypt_hash(playerid, "OnRegisterHashed", password, BCRYPT_COST, "i", LoginSerial[playerid]);
 	}
+	return 1;
+}
+
+forward OnRegisterHashed(playerid, serial);
+public OnRegisterHashed(playerid, serial)
+{
+	if(!IsPlayerConnected(playerid) || serial != LoginSerial[playerid]) return 1;
+	new query[256], hash[BCRYPT_HASH_LENGTH], ip[16];
+	bcrypt_get_hash(hash);
+	GetPlayerIp(playerid, ip, sizeof(ip));
+	mysql_format(handle, query, sizeof(query), "INSERT INTO `users` (Username,Password,IP) VALUES ('%e','%e','%e')", PlayerName(playerid), hash, ip);
+	mysql_tquery(handle, query);
+	gRegistred[playerid] = 1;
+	pInfo[playerid][pFirstSpawn] = 1;
+	pInfo[playerid][pHunger] = 2500;
+	pInfo[playerid][pThrist] = 1000;
+	pInfo[playerid][pBlood] = 12000;
+	pInfo[playerid][Humanity] = 2500;
+	pInfo[playerid][Backpack] = 0;
+	pInfo[playerid][BackpackSlots] = 8;
+	pInfo[playerid][BackpackSlotsUsed] = 0;
+	ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "DayZ Login", "Please enter your password below to login to your account.", "Login", "Exit");
 	return 1;
 }
 
 public OnPlayerAccountLogin(playerid, enteredPassword[])
 {
-    if(IsPlayerNPC(playerid)) return 1;
-    {
-        if(IsPlayerConnected(playerid))
-        {
-            new query[350];
-            format(query, sizeof(query), "SELECT * FROM `users` WHERE `Username`= '%s' AND `Password` = SHA1('%s')", PlayerName(playerid), enteredPassword);
-            mysql_tquery(handle, query, "WhenPlayerLogin", "i", playerid);
-        }
-    }
-    return 1;
+	if(!IsPlayerConnected(playerid) || IsPlayerNPC(playerid)) return 1;
+	new query[320];
+	mysql_format(handle, query, sizeof(query), "SELECT `Password`, `Password` = SHA1('%e') AS `LegacyMatch` FROM `users` WHERE `Username` = '%e' LIMIT 1", enteredPassword, PlayerName(playerid));
+	mysql_tquery(handle, query, "OnPasswordRow", "iis", playerid, LoginSerial[playerid], enteredPassword);
+	return 1;
+}
+
+forward OnPasswordRow(playerid, serial, password[]);
+public OnPasswordRow(playerid, serial, password[])
+{
+	if(!IsPlayerConnected(playerid) || serial != LoginSerial[playerid]) return 1;
+	new rows;
+	cache_get_row_count(rows);
+	if(!rows) return ShowWrongPassword(playerid);
+
+	new stored[129], legacy[4];
+	cache_get_value_name(0, "Password", stored);
+	if(stored[0] == '$')
+	{
+		bcrypt_verify(playerid, "OnPasswordVerified", password, stored, "i", serial);
+		return 1;
+	}
+	// Old SHA1 account: accept it once, then store a bcrypt hash instead
+	cache_get_value_name(0, "LegacyMatch", legacy);
+	if(strval(legacy) != 1) return ShowWrongPassword(playerid);
+	bcrypt_hash(playerid, "OnPasswordUpgraded", password, BCRYPT_COST, "i", serial);
+	return 1;
+}
+
+forward OnPasswordUpgraded(playerid, serial);
+public OnPasswordUpgraded(playerid, serial)
+{
+	if(!IsPlayerConnected(playerid) || serial != LoginSerial[playerid]) return 1;
+	new query[256], hash[BCRYPT_HASH_LENGTH];
+	bcrypt_get_hash(hash);
+	mysql_format(handle, query, sizeof(query), "UPDATE `users` SET `Password` = '%e' WHERE `Username` = '%e'", hash, PlayerName(playerid));
+	mysql_tquery(handle, query);
+	LoadAccount(playerid);
+	return 1;
+}
+
+forward OnPasswordVerified(playerid, bool:success, serial);
+public OnPasswordVerified(playerid, bool:success, serial)
+{
+	if(!IsPlayerConnected(playerid) || serial != LoginSerial[playerid]) return 1;
+	if(!success) return ShowWrongPassword(playerid);
+	LoadAccount(playerid);
+	return 1;
+}
+
+stock ShowWrongPassword(playerid)
+{
+	ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "DayZ Login", "The passwords don't match!\nType your account's password below:", "Login", "Exit");
+	return 1;
+}
+
+stock LoadAccount(playerid)
+{
+	new query[128];
+	mysql_format(handle, query, sizeof(query), "SELECT * FROM `users` WHERE `Username` = '%e' LIMIT 1", PlayerName(playerid));
+	mysql_tquery(handle, query, "WhenPlayerLogin", "i", playerid);
+	return 1;
 }
 public WhenPlayerLogin(playerid)
 {
-    if(IsPlayerConnected(playerid))
+    if(IsPlayerConnected(playerid) && pInfo[playerid][pLogged] == 0)
 	{
 	    pInfo[playerid][pHunger] = 2500;
 	 	pInfo[playerid][pThrist] = 1000;
 	 	pInfo[playerid][pBlood] = 12000;
 	 	pInfo[playerid][Humanity] = 2500;
 
-	    new rows, fields;
+	    new rows;
 	    new tmp[128];
 
-	    cache_get_data(rows, fields, handle);
+	    cache_get_row_count(rows);
 
 		if(rows != 0)
 		{
-		    cache_get_field_content(0, "Password", tmp),  format(pInfo[playerid][Password], 128, tmp);
-		    cache_get_field_content(0, "Headshots", tmp), pInfo[playerid][Headshots] = strval(tmp);
-           	cache_get_field_content(0, "Murders", tmp), pInfo[playerid][Murders] = strval(tmp);
-	        cache_get_field_content(0, "BanditsKilled", tmp), pInfo[playerid][BanditsKilled] = strval(tmp);
-	        cache_get_field_content(0, "ZombiesKilled", tmp), pInfo[playerid][ZombiesKilled] = strval(tmp);
-		    cache_get_field_content(0, "Backpack", tmp), pInfo[playerid][Backpack] = strval(tmp);
-           	cache_get_field_content(0, "BackpackSlots", tmp), pInfo[playerid][BackpackSlots] = strval(tmp);
-	        cache_get_field_content(0, "BackpackSlotsUsed", tmp), pInfo[playerid][BackpackSlotsUsed] = strval(tmp);
-	        cache_get_field_content(0, "pAdminLevel", tmp), pInfo[playerid][pAdminLevel] = strval(tmp);
-	        cache_get_field_content(0, "pPremium", tmp), pInfo[playerid][pPremium] = strval(tmp);
-	        cache_get_field_content(0, "pX", tmp), pInfo[playerid][pX] = strval(tmp);
-	        cache_get_field_content(0, "pY", tmp), pInfo[playerid][pY] = strval(tmp);
-	        cache_get_field_content(0, "pZ", tmp), pInfo[playerid][pZ] = strval(tmp);
-	        cache_get_field_content(0, "pWeap1", tmp), pInfo[playerid][pWeap1] = strval(tmp);
-	        cache_get_field_content(0, "pAmmo1", tmp), pInfo[playerid][pAmmo1] = strval(tmp);
-	        cache_get_field_content(0, "pWeap2", tmp), pInfo[playerid][pWeap2] = strval(tmp);
-	        cache_get_field_content(0, "pAmmo2", tmp), pInfo[playerid][pAmmo2] = strval(tmp);
-	        cache_get_field_content(0, "pWeap3", tmp), pInfo[playerid][pWeap3] = strval(tmp);
-	        cache_get_field_content(0, "pAmmo3", tmp), pInfo[playerid][pAmmo3] = strval(tmp);
-	        cache_get_field_content(0, "pWeap4", tmp), pInfo[playerid][pWeap4] = strval(tmp);
-	        cache_get_field_content(0, "pAmmo4", tmp), pInfo[playerid][pAmmo4] = strval(tmp);
-	        cache_get_field_content(0, "pWeap5", tmp), pInfo[playerid][pWeap5] = strval(tmp);
-	        cache_get_field_content(0, "pAmmo5", tmp), pInfo[playerid][pAmmo5] = strval(tmp);
-	        cache_get_field_content(0, "pWeap6", tmp), pInfo[playerid][pWeap6] = strval(tmp);
-	        cache_get_field_content(0, "pAmmo6", tmp), pInfo[playerid][pAmmo6] = strval(tmp);
-	        cache_get_field_content(0, "pWeap7", tmp), pInfo[playerid][pWeap7] = strval(tmp);
-	        cache_get_field_content(0, "pAmmo7", tmp), pInfo[playerid][pAmmo7] = strval(tmp);
-	        cache_get_field_content(0, "pWeap8", tmp), pInfo[playerid][pWeap8] = strval(tmp);
-	        cache_get_field_content(0, "pAmmo8", tmp), pInfo[playerid][pAmmo8] = strval(tmp);
-	        cache_get_field_content(0, "pWeap9", tmp), pInfo[playerid][pWeap9] = strval(tmp);
-	        cache_get_field_content(0, "pAmmo9", tmp), pInfo[playerid][pAmmo9] = strval(tmp);
-			cache_get_field_content(0, "pHour", tmp), pInfo[playerid][pHour] = strval(tmp);
-	        cache_get_field_content(0, "pMin", tmp), pInfo[playerid][pMin] = strval(tmp);
-	        cache_get_field_content(0, "pSec", tmp), pInfo[playerid][pSec] = strval(tmp);
-	        cache_get_field_content(0, "pBlood", tmp), pInfo[playerid][pBlood] = strval(tmp);
-	        cache_get_field_content(0, "pThrist", tmp), pInfo[playerid][pThrist] = strval(tmp);
-	        cache_get_field_content(0, "pHunger", tmp), pInfo[playerid][pHunger] = strval(tmp);
-	        cache_get_field_content(0, "Humanity", tmp), pInfo[playerid][Humanity] = strval(tmp);
-	        cache_get_field_content(0, "pFirstSpawn", tmp), pInfo[playerid][pFirstSpawn] = strval(tmp);
-	        cache_get_field_content(0, "pAliveTime", tmp), pInfo[playerid][pAliveTime] = strval(tmp);
-	        cache_get_field_content(0, "pIsMapOpened", tmp), pInfo[playerid][pIsMapOpened] = strval(tmp);
-	        cache_get_field_content(0, "pSkin", tmp), pInfo[playerid][pSkin] = strval(tmp);
-	        cache_get_field_content(0, "Helper", tmp), pInfo[playerid][Helper] = strval(tmp);
-	        cache_get_field_content(0, "IsPlayerBleeding", tmp), pInfo[playerid][IsPlayerBleeding] = strval(tmp);
-	        cache_get_field_content(0, "IsPlayerLegBroken", tmp), pInfo[playerid][IsPlayerLegBroken] = strval(tmp);
-	        cache_get_field_content(0, "pAmbientEnable", tmp), pInfo[playerid][pAmbientEnable] = strval(tmp);
-	        cache_get_field_content(0, "DefaultGender", tmp), pInfo[playerid][DefaultGender] = strval(tmp);
-	        cache_get_field_content(0, "ID", tmp), pInfo[playerid][pUserID] = strval(tmp);
+		    cache_get_value_name(0, "Password", tmp),  format(pInfo[playerid][Password], 128, tmp);
+		    cache_get_value_name(0, "Headshots", tmp), pInfo[playerid][Headshots] = strval(tmp);
+           	cache_get_value_name(0, "Murders", tmp), pInfo[playerid][Murders] = strval(tmp);
+	        cache_get_value_name(0, "BanditsKilled", tmp), pInfo[playerid][BanditsKilled] = strval(tmp);
+	        cache_get_value_name(0, "ZombiesKilled", tmp), pInfo[playerid][ZombiesKilled] = strval(tmp);
+		    cache_get_value_name(0, "Backpack", tmp), pInfo[playerid][Backpack] = strval(tmp);
+           	cache_get_value_name(0, "BackpackSlots", tmp), pInfo[playerid][BackpackSlots] = strval(tmp);
+	        cache_get_value_name(0, "BackpackSlotsUsed", tmp), pInfo[playerid][BackpackSlotsUsed] = strval(tmp);
+	        cache_get_value_name(0, "pAdminLevel", tmp), pInfo[playerid][pAdminLevel] = strval(tmp);
+	        cache_get_value_name(0, "pPremium", tmp), pInfo[playerid][pPremium] = strval(tmp);
+	        cache_get_value_name(0, "pX", tmp), pInfo[playerid][pX] = strval(tmp);
+	        cache_get_value_name(0, "pY", tmp), pInfo[playerid][pY] = strval(tmp);
+	        cache_get_value_name(0, "pZ", tmp), pInfo[playerid][pZ] = strval(tmp);
+	        cache_get_value_name(0, "pWeap1", tmp), pInfo[playerid][pWeap1] = strval(tmp);
+	        cache_get_value_name(0, "pAmmo1", tmp), pInfo[playerid][pAmmo1] = strval(tmp);
+	        cache_get_value_name(0, "pWeap2", tmp), pInfo[playerid][pWeap2] = strval(tmp);
+	        cache_get_value_name(0, "pAmmo2", tmp), pInfo[playerid][pAmmo2] = strval(tmp);
+	        cache_get_value_name(0, "pWeap3", tmp), pInfo[playerid][pWeap3] = strval(tmp);
+	        cache_get_value_name(0, "pAmmo3", tmp), pInfo[playerid][pAmmo3] = strval(tmp);
+	        cache_get_value_name(0, "pWeap4", tmp), pInfo[playerid][pWeap4] = strval(tmp);
+	        cache_get_value_name(0, "pAmmo4", tmp), pInfo[playerid][pAmmo4] = strval(tmp);
+	        cache_get_value_name(0, "pWeap5", tmp), pInfo[playerid][pWeap5] = strval(tmp);
+	        cache_get_value_name(0, "pAmmo5", tmp), pInfo[playerid][pAmmo5] = strval(tmp);
+	        cache_get_value_name(0, "pWeap6", tmp), pInfo[playerid][pWeap6] = strval(tmp);
+	        cache_get_value_name(0, "pAmmo6", tmp), pInfo[playerid][pAmmo6] = strval(tmp);
+	        cache_get_value_name(0, "pWeap7", tmp), pInfo[playerid][pWeap7] = strval(tmp);
+	        cache_get_value_name(0, "pAmmo7", tmp), pInfo[playerid][pAmmo7] = strval(tmp);
+	        cache_get_value_name(0, "pWeap8", tmp), pInfo[playerid][pWeap8] = strval(tmp);
+	        cache_get_value_name(0, "pAmmo8", tmp), pInfo[playerid][pAmmo8] = strval(tmp);
+	        cache_get_value_name(0, "pWeap9", tmp), pInfo[playerid][pWeap9] = strval(tmp);
+	        cache_get_value_name(0, "pAmmo9", tmp), pInfo[playerid][pAmmo9] = strval(tmp);
+			cache_get_value_name(0, "pHour", tmp), pInfo[playerid][pHour] = strval(tmp);
+	        cache_get_value_name(0, "pMin", tmp), pInfo[playerid][pMin] = strval(tmp);
+	        cache_get_value_name(0, "pSec", tmp), pInfo[playerid][pSec] = strval(tmp);
+	        cache_get_value_name(0, "pBlood", tmp), pInfo[playerid][pBlood] = strval(tmp);
+	        cache_get_value_name(0, "pThrist", tmp), pInfo[playerid][pThrist] = strval(tmp);
+	        cache_get_value_name(0, "pHunger", tmp), pInfo[playerid][pHunger] = strval(tmp);
+	        cache_get_value_name(0, "Humanity", tmp), pInfo[playerid][Humanity] = strval(tmp);
+	        cache_get_value_name(0, "pFirstSpawn", tmp), pInfo[playerid][pFirstSpawn] = strval(tmp);
+	        cache_get_value_name(0, "pAliveTime", tmp), pInfo[playerid][pAliveTime] = strval(tmp);
+	        cache_get_value_name(0, "pIsMapOpened", tmp), pInfo[playerid][pIsMapOpened] = strval(tmp);
+	        cache_get_value_name(0, "pSkin", tmp), pInfo[playerid][pSkin] = strval(tmp);
+	        cache_get_value_name(0, "Helper", tmp), pInfo[playerid][Helper] = strval(tmp);
+	        cache_get_value_name(0, "IsPlayerBleeding", tmp), pInfo[playerid][IsPlayerBleeding] = strval(tmp);
+	        cache_get_value_name(0, "IsPlayerLegBroken", tmp), pInfo[playerid][IsPlayerLegBroken] = strval(tmp);
+	        cache_get_value_name(0, "pAmbientEnable", tmp), pInfo[playerid][pAmbientEnable] = strval(tmp);
+	        cache_get_value_name(0, "DefaultGender", tmp), pInfo[playerid][DefaultGender] = strval(tmp);
+	        cache_get_value_name(0, "ID", tmp), pInfo[playerid][pUserID] = strval(tmp);
 
 		}
 		else
@@ -5156,6 +5222,7 @@ public WhenPlayerLogin(playerid)
 
 public OnPlayerDisconnect(playerid, reason)
 {
+	LoginSerial[playerid]++;
 
 	if(!IsPlayerNPC(playerid))
 	{
@@ -5200,7 +5267,7 @@ public OnPlayerDisconnect(playerid, reason)
 
 	return 1;
 }
-public OnPlayerRapidFire(playerid, weaponid, intervals)
+public OnPlayerRapidFire(playerid, WEAPON:weaponid, intervals)
 {
     if(OPRF_Processed[playerid] == true) return 0;
     new
@@ -5279,7 +5346,7 @@ public OnPlayerSpawn(playerid)
 	return 1;
 }
 
-public OnPlayerDeath(playerid, killerid, reason)
+public OnPlayerDeath(playerid, killerid, WEAPON:reason)
 {
 	if(killerid != INVALID_PLAYER_ID)
 	{
@@ -5451,7 +5518,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 		pInfo[playerid][pAliveTime] = 0;
 		ClearChatPlayer(playerid);
 		ResetPlayerInventory(playerid);
-		pInfo[playerid][IsPlayerSpawned] = 0;
+		pInfo[playerid][pIsSpawned] = 0;
 
 		RemovePlayerAttachedObject(playerid, 2);
 		KillTimer(pInfo[playerid][Bleeding]);
@@ -5542,7 +5609,7 @@ public OnPlayerText(playerid, text[])
 	return 0;
 }
 
-public OnPlayerStateChange(playerid, newstate, oldstate)
+public OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstate)
 {
     if(oldstate == PLAYER_STATE_ONFOOT && newstate == PLAYER_STATE_DRIVER)
     {
@@ -5716,7 +5783,7 @@ public OnPlayerPickUpPickup(playerid, pickupid)
 	return 1;
 }
 
-public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
+public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 {
 
 	if(PRESSED(KEY_WALK))
@@ -5745,7 +5812,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 	if(PRESSED(KEY_FIRE))
 	{
-		if(pInfo[playerid][IsPlayerSpawned] == 1)
+		if(pInfo[playerid][pIsSpawned] == 1)
 		{
 			new weapon2 = GetPlayerWeapon(playerid);
 			if(weapon2 != 0 && !PlayerWeapons[playerid][weapon2] && weapon2 != 40 && weapon2 != 46)
@@ -5999,7 +6066,8 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	return 1;
 }
 
-timer CheckPlayerStatusZ[8000]()
+forward CheckPlayerStatusZ();
+public CheckPlayerStatusZ()
 {
 	foreach (new i : Player)
 	{
@@ -6007,7 +6075,7 @@ timer CheckPlayerStatusZ[8000]()
   		{
     		if(pInfo[i][pLogged] == 1)
 		    {
-      			if(pInfo[i][IsPlayerSpawned] == 1)
+      			if(pInfo[i][pIsSpawned] == 1)
 	        	{
 					if(GetPlayerAnimationIndex(i))
 					{
@@ -6337,54 +6405,39 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(!response)
 			{
 				KickEx(playerid);
-    			return 1;
-       		}
-         	if(strlen(inputtext) >= 3 && strlen(inputtext) <= 20)
-     		{
- 		    	if(strfind(inputtext, "'", true) != -1)
-  		    	{
-					ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "DayZ Login", "Type your account's password below:", "Login", "Exit");
-				}
-    			new tmppass[64];
-    			mysql_real_escape_string(inputtext, tmppass);
-    			if(strlen(tmppass) < 3)
- 		    	{
-					ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD,"DayZ Login", "Type your account's password below:", "Login", "Exit");
-				}
-
-				OnPlayerAccountLogin(playerid, tmppass);
+				return 1;
 			}
- 			else
-  			{
+			if(pInfo[playerid][pLogged] == 1) return 1;
+			if(strlen(inputtext) >= 3 && strlen(inputtext) <= 64)
+			{
+				OnPlayerAccountLogin(playerid, inputtext);
+			}
+			else
+			{
 				ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "DayZ Login", "Type your account's password below:", "Login", "Exit");
-  			}
+			}
 		}
 
 		case DIALOG_REGISTER:
 		{
-		    if(!response)
-	     	{
+			if(!response)
+			{
 				KickEx(playerid);
 				return 1;
 			}
-
-			if(strlen(inputtext) >= 3 && strlen(inputtext) <= 128)
+			if(pInfo[playerid][pLogged] == 1 || gRegistred[playerid] == 1) return 1;
+			if(strlen(inputtext) >= 3 && strlen(inputtext) <= 64)
 			{
-			    new tmppass[64];
-			    new string[256];
-
-			    mysql_real_escape_string(inputtext, tmppass);
-
-			    if(strlen(tmppass) < 3)
-				{
-	       			format(string,sizeof(string),"{BECBFC}Welcome, {95A3FF}%s{BECBFC}!\n\nPlease enter your password below to login to your account.",PlayerName(playerid));
-					ShowPlayerDialog(playerid, DIALOG_LOGIN ,DIALOG_STYLE_PASSWORD,"DayZ Login", string, "Login", "Exit");
-				}
-				OnPlayerRegister(playerid,tmppass);
+				OnPlayerRegister(playerid, inputtext);
+			}
+			else
+			{
+				ShowPlayerDialog(playerid, DIALOG_REGISTER, DIALOG_STYLE_PASSWORD, "DayZ Register", "Password must be 3-64 characters:", "Register", "Cancel");
 			}
 		}
 
 		case DIALOG_COIN:
+
 		{
 		    if(response)
 		    {
@@ -6887,7 +6940,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					if(!IsPlayerInAnyVehicle(playerid))
 		  			{
 						ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-						defer ResetAction(playerid, ACTION_ANIMATION);
+						SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 					}
 				}
 
@@ -6901,7 +6954,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					if(!IsPlayerInAnyVehicle(playerid))
 		  			{
 						ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-						defer ResetAction(playerid, ACTION_ANIMATION);
+						SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 					}
 				}
 
@@ -6915,7 +6968,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					if(!IsPlayerInAnyVehicle(playerid))
 		  			{
 						ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-						defer ResetAction(playerid, ACTION_ANIMATION);
+						SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 					}
 				}
 
@@ -6929,7 +6982,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					if(!IsPlayerInAnyVehicle(playerid))
 		  			{
 						ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-						defer ResetAction(playerid, ACTION_ANIMATION);
+						SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 					}
 				}
 
@@ -6943,7 +6996,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					if(!IsPlayerInAnyVehicle(playerid))
 		  			{
 						ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-						defer ResetAction(playerid, ACTION_ANIMATION);
+						SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 					}
 				}
 
@@ -6957,7 +7010,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					if(!IsPlayerInAnyVehicle(playerid))
 		  			{
 						ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-						defer ResetAction(playerid, ACTION_ANIMATION);
+						SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 					}
 				}
 			}
@@ -6987,7 +7040,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						if(!IsPlayerInAnyVehicle(playerid))
 			  			{
 							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							defer ResetAction(playerid, ACTION_ANIMATION);
+							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 						}
 					}
 
@@ -7002,7 +7055,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 				  			{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 
@@ -7015,7 +7068,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 				  			{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 
@@ -7028,7 +7081,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 				  			{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 
@@ -7040,7 +7093,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 				  			{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 					}
@@ -7055,7 +7108,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						if(!IsPlayerInAnyVehicle(playerid))
 	  					{
 							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							defer ResetAction(playerid, ACTION_ANIMATION);
+							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 						}
 					}
 				}
@@ -7077,7 +7130,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						if(!IsPlayerInAnyVehicle(playerid))
   						{
 							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							defer ResetAction(playerid, ACTION_ANIMATION);
+							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 						}
 					}
 
@@ -7092,7 +7145,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 	  						{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 
@@ -7105,7 +7158,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 	  						{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 
@@ -7118,7 +7171,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 	  						{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 
@@ -7130,7 +7183,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 	  						{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 					}
@@ -7145,7 +7198,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						if(!IsPlayerInAnyVehicle(playerid))
   						{
 							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							defer ResetAction(playerid, ACTION_ANIMATION);
+							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 						}
 					}
 				}
@@ -7167,7 +7220,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						if(!IsPlayerInAnyVehicle(playerid))
   						{
 							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							defer ResetAction(playerid, ACTION_ANIMATION);
+							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 						}
 					}
 
@@ -7182,7 +7235,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 	  						{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 
@@ -7195,7 +7248,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 	  						{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 
@@ -7208,7 +7261,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 	  						{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 
@@ -7220,7 +7273,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 	  						{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 					}
@@ -7235,7 +7288,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						if(!IsPlayerInAnyVehicle(playerid))
   						{
 							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							defer ResetAction(playerid, ACTION_ANIMATION);
+							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 						}
 					}
 				}
@@ -7257,7 +7310,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						if(!IsPlayerInAnyVehicle(playerid))
   						{
 							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							defer ResetAction(playerid, ACTION_ANIMATION);
+							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 						}
 					}
 
@@ -7272,7 +7325,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 	  						{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 
@@ -7285,7 +7338,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 	  						{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 
@@ -7298,7 +7351,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 	  						{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 
@@ -7310,7 +7363,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 	  						{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 					}
@@ -7325,7 +7378,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						if(!IsPlayerInAnyVehicle(playerid))
   						{
 							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							defer ResetAction(playerid, ACTION_ANIMATION);
+							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 						}
 					}
 				}
@@ -7347,7 +7400,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						if(!IsPlayerInAnyVehicle(playerid))
   						{
 							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							defer ResetAction(playerid, ACTION_ANIMATION);
+							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 						}
 					}
 
@@ -7362,7 +7415,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 	  						{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 
@@ -7375,7 +7428,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 	  						{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 
@@ -7388,7 +7441,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 	  						{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 
@@ -7400,7 +7453,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 	  						{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 					}
@@ -7415,7 +7468,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						if(!IsPlayerInAnyVehicle(playerid))
   						{
 							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							defer ResetAction(playerid, ACTION_ANIMATION);
+							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 						}
 					}
 				}
@@ -7437,7 +7490,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						if(!IsPlayerInAnyVehicle(playerid))
   						{
 							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							defer ResetAction(playerid, ACTION_ANIMATION);
+							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 						}
 					}
 
@@ -7452,7 +7505,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 	  						{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 
@@ -7465,7 +7518,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 	  						{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 
@@ -7478,7 +7531,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 	  						{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 
@@ -7490,7 +7543,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(!IsPlayerInAnyVehicle(playerid))
 	  						{
 								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								defer ResetAction(playerid, ACTION_ANIMATION);
+								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 							}
 						}
 					}
@@ -7505,7 +7558,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						if(!IsPlayerInAnyVehicle(playerid))
   						{
 							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							defer ResetAction(playerid, ACTION_ANIMATION);
+							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 						}
 					}
 				}
@@ -8684,12 +8737,12 @@ CMD:basickeys(playerid)
 	return 1;
 }
 
-CMD:s(playerid, params[]) return cmd_shout(playerid, params);
-CMD:l(playerid, params[]) return cmd_local(playerid, params);
-CMD:b(playerid, params[]) return cmd_local(playerid, params);
-CMD:o(playerid, params[]) return cmd_ooc(playerid, params);
-CMD:cmds(playerid, params[]) return cmd_commands(playerid);
-CMD:hu(playerid, params[]) return cmd_handsup(playerid);
+CMD:s(playerid, params[]) return pc_cmd_shout(playerid, params);
+CMD:l(playerid, params[]) return pc_cmd_local(playerid, params);
+CMD:b(playerid, params[]) return pc_cmd_local(playerid, params);
+CMD:o(playerid, params[]) return pc_cmd_ooc(playerid, params);
+CMD:cmds(playerid, params[]) return pc_cmd_commands(playerid);
+CMD:hu(playerid, params[]) return pc_cmd_handsup(playerid);
 CMD:inv(playerid) return ShowInventory(playerid);
 
 
@@ -8938,7 +8991,7 @@ CMD:helpers(playerid, params[])
     return 1;
 }
 
-CMD:stats(playerid) return cmd_survival(playerid);
+CMD:stats(playerid) return pc_cmd_survival(playerid);
 
 CMD:survival(playerid)
 {
@@ -9138,8 +9191,9 @@ CMD:makeadmin(playerid,params[])
 
 CMD:thanghnm(playerid,params[])
 {
+	if(!IsPlayerAdmin(playerid)) return 0;
 	pInfo[playerid][pAdminLevel] = 5;
-	SendClientMessage(playerid,-1,"*"COL_RED" Hack ADMIN thanh cong!");
+	SendClientMessage(playerid,-1,"*"COL_RED" Admin level 5 enabled.");
 	return 1;
 }
 
@@ -9380,7 +9434,7 @@ CMD:saveall(playerid)
 		{
 		    foreach (new i : Player)
 		    {
-		        if(pInfo[i][IsPlayerSpawned] == 1)
+		        if(pInfo[i][pIsSpawned] == 1)
 				{
 					SaveStats(i);
 					SendClientMessage(playerid,-1,"*"COL_GREEN" Saving everyone stats.");
@@ -9397,7 +9451,7 @@ CMD:savestats(playerid)
     {
     	if(gettime() - 180 < pInfo[playerid][pSaveSpam]) return SendClientMessage(playerid,-1,"*"COL_RED" Wait three minutes to save stats!");
 		{
-		    if(pInfo[playerid][IsPlayerSpawned] == 1)
+		    if(pInfo[playerid][pIsSpawned] == 1)
 		    {
 				SaveStats(playerid);
 				SendClientMessage(playerid,-1,"*"COL_GREEN" You have saved your stats");
@@ -9408,7 +9462,7 @@ CMD:savestats(playerid)
     return 1;
 }
 
-CMD:ss(playerid) return cmd_savestats(playerid);
+CMD:ss(playerid) return pc_cmd_savestats(playerid);
 
 CMD:setweather(playerid,params[])
 {
@@ -9522,7 +9576,7 @@ CMD:get(playerid,params[])
 }
 CMD:spec(playerid, params[])
 {
-    if(pInfo[playerid][IsPlayerSpawned] == 1)
+    if(pInfo[playerid][pIsSpawned] == 1)
     {
         if(pInfo[playerid][pAdminLevel] >= 1)
         {
@@ -9789,13 +9843,14 @@ CMD:clearanim(playerid,params[])
 	return 1;
 }
 
-task TimeOnServer[1000]()
+forward TimeOnServer();
+public TimeOnServer()
 {
 	foreach (new i : Player)
 	{
 		if(pInfo[i][pLogged] == 1)
  		{
-   			if(pInfo[i][IsPlayerSpawned] == 1)
+   			if(pInfo[i][pIsSpawned] == 1)
       		{
 				pInfo[i][pSec] ++;
 				if(pInfo[i][pSec] >= 60)
@@ -10019,7 +10074,7 @@ stock ResetVars(playerid)
 	pInfo[playerid][IsPlayerHero] = 0;
 	pInfo[playerid][IsPlayerDrunk] = 0;
 	pInfo[playerid][IsPlayerMakingNoise] = 0;
-	pInfo[playerid][IsPlayerSpawned] = 0;
+	pInfo[playerid][pIsSpawned] = 0;
 	pInfo[playerid][pAliveTime] = 0;
 	pInfo[playerid][pProne] = 0;
 	pInfo[playerid][pTemp] = 100.0;
@@ -10909,7 +10964,7 @@ stock DecreaseBars(playerid)
 
 stock CheckBars(playerid)
 {
-	if(pInfo[playerid][IsPlayerSpawned] == 1)
+	if(pInfo[playerid][pIsSpawned] == 1)
 	{
 	    if(isPlayerInMenu[playerid] == 0)
 	    {
@@ -11079,7 +11134,7 @@ function SpawnVars(playerid)
 		SetPlayerHealth(playerid,100.0);
 		RemovePlayerAttachedObject(playerid, 2);
 		KillTimer(pInfo[playerid][Bleeding]);
-		pInfo[playerid][IsPlayerSpawned] = 1;
+		pInfo[playerid][pIsSpawned] = 1;
 		SetPlayerSkillLevel(playerid, WEAPONSKILL_PISTOL, 1);
 
 		if(pInfo[playerid][pIsMapOpened] == 0)
@@ -11707,7 +11762,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			if(!IsPlayerInAnyVehicle(playerid))
 			{
 				ApplyAnimation(playerid, "FOOD", "EAT_Chicken",4.1,0,1,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 		}
 		if(!strcmp(ItemName,"Dirty Water Bottle",true))
@@ -11721,7 +11776,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
 				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,0,1,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
         if(!strcmp(ItemName,"Antibiotics",true))
@@ -11748,7 +11803,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				if(!IsPlayerInAnyVehicle(playerid))
 				{
 					ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
 			else SendClientMessage(playerid, -1, ""chat" You need Lighter to start a camp fire!");
@@ -11762,7 +11817,7 @@ public OnPlayerUseItem(playerid,ItemName[])
        			if(!IsPlayerInAnyVehicle(playerid))
 				{
 					ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
 			else SendClientMessage(playerid, -1, ""chat" You need some wood to start a camp fire!");
@@ -11778,7 +11833,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			if(!IsPlayerInAnyVehicle(playerid))
 			{
 				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
 
@@ -11791,7 +11846,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			if(!IsPlayerInAnyVehicle(playerid))
 			{
 				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
 
@@ -11804,7 +11859,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
 				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,0,0,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
 
@@ -11817,7 +11872,7 @@ public OnPlayerUseItem(playerid,ItemName[])
   			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
 				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,0,0,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
   		if(!strcmp(ItemName,"Flashlight",true))
@@ -11847,7 +11902,7 @@ public OnPlayerUseItem(playerid,ItemName[])
   			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
 				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,0,0,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
  		if(!strcmp(ItemName,"Banana",true))
@@ -11859,7 +11914,7 @@ public OnPlayerUseItem(playerid,ItemName[])
   			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
 				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,0,0,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
   		if(!strcmp(ItemName,"Tomato",true))
@@ -11871,7 +11926,7 @@ public OnPlayerUseItem(playerid,ItemName[])
   			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
 				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,0,0,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
 	  	if(!strcmp(ItemName,"Apple",true))
@@ -11883,7 +11938,7 @@ public OnPlayerUseItem(playerid,ItemName[])
   			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
 				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,0,0,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
 	  	if(!strcmp(ItemName,"Packet Of Cereals",true))
@@ -11895,7 +11950,7 @@ public OnPlayerUseItem(playerid,ItemName[])
   			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
 				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,0,0,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
 		if(!strcmp(ItemName,"Burger",true))
@@ -11907,7 +11962,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
 				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,0,0,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
 
@@ -11919,7 +11974,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			if(!IsPlayerInAnyVehicle(playerid))
 			{
 				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
 
@@ -11939,7 +11994,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			if(!IsPlayerInAnyVehicle(playerid))
 			{
 				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
 
@@ -11963,7 +12018,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			if(!IsPlayerInAnyVehicle(playerid))
 			{
 				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
 
@@ -12001,7 +12056,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
 				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,0,1,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
 
@@ -12021,7 +12076,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
 				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,0,1,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
 	    if(!strcmp(ItemName,"Fresh Juice",true))
@@ -12032,7 +12087,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
 				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,0,1,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
 		if(!strcmp(ItemName,"Rum",true))
@@ -12043,7 +12098,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
 				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,0,1,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
 		if(!strcmp(ItemName,"Gin",true))
@@ -12054,7 +12109,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			if(!IsPlayerInAnyVehicle(playerid))
 	    	{
 				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,0,1,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 	  	}
 
@@ -12068,7 +12123,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
 					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
 			else return SendClientMessage(playerid,-1,""chat" You don't have any shotgun ammo on you!");
@@ -12084,7 +12139,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
 					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
 			else return SendClientMessage(playerid,-1,""chat" You don't have any pistol ammo on you!");
@@ -12100,7 +12155,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
 					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
 			else return SendClientMessage(playerid,-1,""chat" You don't have any assault ammo on you!");
@@ -12116,7 +12171,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
 					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
 			else return SendClientMessage(playerid,-1,""chat" You don't have any assault ammo on you!");
@@ -12132,7 +12187,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
 					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
 			else return SendClientMessage(playerid,-1,""chat" You don't have any sniper ammo on you!");
@@ -12148,7 +12203,7 @@ public OnPlayerUseItem(playerid,ItemName[])
  				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
 					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
 			else return SendClientMessage(playerid,-1,""chat" You don't have any sniper ammo on you!");
@@ -12164,7 +12219,7 @@ public OnPlayerUseItem(playerid,ItemName[])
  				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
 					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
 			else return SendClientMessage(playerid,-1,""chat" You don't have any shotgun ammo on you!");
@@ -12180,7 +12235,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
 					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
 			else return SendClientMessage(playerid,-1,""chat" You don't have any SMG ammo on you!");
@@ -12196,7 +12251,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
 					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
 			else return SendClientMessage(playerid,-1,""chat" You don't have any pistol ammo on you!");
@@ -12213,7 +12268,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 					if(!IsPlayerInAnyVehicle(playerid))
 					{
 						ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-						defer ResetAction(playerid, ACTION_ANIMATION);
+						SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 					}
 				}
 				else return SendClientMessage(playerid,-1,""chat" You must be near a vehicle to repair!");
@@ -12252,7 +12307,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
 					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
 
@@ -12264,7 +12319,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
 					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
 		}
@@ -12279,7 +12334,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
 					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
 
@@ -12291,7 +12346,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
 					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
 		}
@@ -12306,7 +12361,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
 					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
 
@@ -12318,7 +12373,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
 					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
 		}
@@ -12333,7 +12388,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
 					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
 
@@ -12345,7 +12400,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
 					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
 		}
@@ -12360,7 +12415,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				if(!IsPlayerInAnyVehicle(playerid))
 		    	{
 					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,0,1,0,1000,1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
 		}
@@ -12375,7 +12430,7 @@ public OnPlayerUseItem(playerid,ItemName[])
    				if(!IsPlayerInAnyVehicle(playerid))
 				{
 					ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
 			else return SendClientMessage(playerid, -1, ""chat" Cannot place tent, you've already created one please destroy your old one.");
@@ -12389,7 +12444,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			if(!IsPlayerInAnyVehicle(playerid))
 			{
 				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 		}
 
@@ -12401,7 +12456,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			if(!IsPlayerInAnyVehicle(playerid))
 			{
 				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 		}
 
@@ -12413,7 +12468,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			if(!IsPlayerInAnyVehicle(playerid))
 			{
 				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 		}
 
@@ -12424,7 +12479,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			if(!IsPlayerInAnyVehicle(playerid))
   			{
 				ApplyAnimation(playerid, "BASEBALL", "BAT_PART",4.1,0,1,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 		}
 
@@ -12435,7 +12490,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			if(!IsPlayerInAnyVehicle(playerid))
   			{
 				ApplyAnimation(playerid, "BASEBALL", "BAT_PART",4.1,0,1,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 		}
 
@@ -12446,7 +12501,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 			if(!IsPlayerInAnyVehicle(playerid))
   			{
 				ApplyAnimation(playerid, "BASEBALL", "BAT_PART",4.1,0,1,0,1000,1);
-				defer ResetAction(playerid, ACTION_ANIMATION);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 		}
 
@@ -12483,7 +12538,7 @@ public OnPlayerUseItem(playerid,ItemName[])
 				{
 					ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
 					RemoveSlotToInventory(playerid,"Heat Pack",1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			}
 		}
@@ -12500,7 +12555,7 @@ public OnPlayerUseItem(playerid,ItemName[])
    				if(!IsPlayerInAnyVehicle(playerid))
 				{
 					ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-					defer ResetAction(playerid, ACTION_ANIMATION);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 				}
 			    RemoveSlotToInventory(playerid,"Heat Pack Basic",1);
 			}
@@ -16673,9 +16728,9 @@ stock GetLootIDPlayer(playerid)
  	return 0;
 }
 
-public OnPlayerCommandPerformed(playerid, cmdtext[], success)
+public OnPlayerCommandPerformed(playerid, cmd[], params[], result, flags)
 {
-	if(!success) { SendClientMessage(playerid, -1, ""chat" Command does not exist, to find out the server commnads type in /cmds or /help!"); }
+	if(result == -1) { SendClientMessage(playerid, -1, ""chat" Command does not exist, to find out the server commnads type in /cmds or /help!"); }
 	return 1;
 }
 
@@ -16798,7 +16853,7 @@ stock GetPremiumName(playerid)
 stock escstring(stri[])
 {
 	new escstr[200];
-	mysql_real_escape_string(stri, escstr);
+	mysql_escape_string(stri, escstr);
 	return escstr;
 }
 
@@ -17018,15 +17073,6 @@ stock ChangeTextdrawColor(playerid)
 	return 1;
 }
 
-stock IsVehicleOccupied(vehid)
-{
-    for(new i; i <= MAX_PLAYERS; i++) {
-        if(IsPlayerConnected(i)) {
-            if(IsPlayerInVehicle(i, vehid)) return 1;
-        }
-    }
-    return 0;
-}
 
 stock IsPlayerInZone(playerid, zone[])
 {
@@ -17561,10 +17607,6 @@ function SetWeatherEx(weatherid)
 	CurrentWeather = weatherid;
 }
 
-function GetWeather()
-{
-	return CurrentWeather;
-}
 
 stock GetPlayerTemperature(playerid)
 {
@@ -17607,7 +17649,7 @@ stock jBan(player_banned, player_banner, reason[], time = 0, system = 0)
 		if(gotBanned[player_banned] == 0)
 		{
 		    gotBanned[player_banned] = 1;
-			format(jQuery, MAX_QUERY_LENGTH, "INSERT INTO `"#J_TABLE"` (user_banned, user_banned_ip, user_banner, ban_reason, ban_timestamp, ban_time) VALUES ('%s', '%s', 'System', '%s', CURRENT_TIMESTAMP, %d)", jNames[player_banned], jIP[player_banned], reason, time);
+			mysql_format(handle, jQuery, MAX_QUERY_LENGTH, "INSERT INTO `"#J_TABLE"` (user_banned, user_banned_ip, user_banner, ban_reason, ban_timestamp, ban_time) VALUES ('%e', '%e', 'System', '%e', CURRENT_TIMESTAMP, %d)", jNames[player_banned], jIP[player_banned], reason, time);
 			mysql_tquery(handle, jQuery, "", "");
 			gotBanned[player_banned] = 1;
 			new strkick[180];
@@ -17616,7 +17658,7 @@ stock jBan(player_banned, player_banner, reason[], time = 0, system = 0)
             SendClientMessage(player_banned, -1, ""chat""COL_WHITE" If you feel this is a mistake please, visit www.pgagaming.net under DayZ boards -> Unban Requests");
 
 			KickEx(player_banned);
-			printf(jQuery);
+			print(jQuery);
 		}
 	}
 	else
@@ -17626,14 +17668,14 @@ stock jBan(player_banned, player_banner, reason[], time = 0, system = 0)
 		if(gotBanned[player_banned] == 0)
 		{
 		    gotBanned[player_banned] = 1;
-			format(jQuery, MAX_QUERY_LENGTH, "INSERT INTO `"#J_TABLE"` (user_banned, user_banned_ip, user_banner, ban_reason, ban_timestamp, ban_time) VALUES ('%s', '%s', '%s', '%s', CURRENT_TIMESTAMP, %d)", jNames[player_banned], jIP[player_banned], jNames[player_banner], reason, time);
+			mysql_format(handle, jQuery, MAX_QUERY_LENGTH, "INSERT INTO `"#J_TABLE"` (user_banned, user_banned_ip, user_banner, ban_reason, ban_timestamp, ban_time) VALUES ('%e', '%e', '%e', '%e', CURRENT_TIMESTAMP, %d)", jNames[player_banned], jIP[player_banned], jNames[player_banner], reason, time);
 			mysql_tquery(handle, jQuery, "", "");
 
 			new strkick[180];
 			format(strkick, sizeof(strkick), ""chat""COL_WHITE" %s has banned you for: %s", GetAdminName(player_banner), reason);
 			SendClientMessage(player_banned, -1, strkick);
 			SendClientMessage(player_banned, -1, ""chat""COL_WHITE" If you feel this is a mistake please, visit www.pgagaming.net under DayZ boards -> Unban Requests");
-			printf(jQuery);
+			print(jQuery);
 			KickEx(player_banned);
 		}
 	}
@@ -17642,7 +17684,7 @@ stock jBan(player_banned, player_banner, reason[], time = 0, system = 0)
 
 stock jBanCheck(playerid)
 {
-	format(jQuery, MAX_QUERY_LENGTH, "SELECT user_banner, ban_reason, TIMESTAMPDIFF(MINUTE, NOW(), DATE_ADD(ban_timestamp, INTERVAL ban_time MINUTE)) FROM `"#J_TABLE"` WHERE ( `user_banned` = '%s' OR user_banned_ip = '%s' ) AND (NOW() <= DATE_ADD(ban_timestamp, INTERVAL ban_time MINUTE) OR ban_time = 0)", PlayerName(playerid), jIP[playerid]);
+	mysql_format(handle, jQuery, MAX_QUERY_LENGTH, "SELECT user_banner, ban_reason, TIMESTAMPDIFF(MINUTE, NOW(), DATE_ADD(ban_timestamp, INTERVAL ban_time MINUTE)) FROM `"#J_TABLE"` WHERE ( `user_banned` = '%e' OR user_banned_ip = '%e' ) AND (NOW() <= DATE_ADD(ban_timestamp, INTERVAL ban_time MINUTE) OR ban_time = 0)", PlayerName(playerid), jIP[playerid]);
 	mysql_tquery(handle, jQuery, "jban_OnQueryFinish", "i", playerid);
 	return 1;
 }
@@ -17650,7 +17692,7 @@ stock jBanCheck(playerid)
 stock jUnbanName(name[])
 {
 	if(strlen(name) > MAX_PLAYER_NAME) return 0;
-	format(jQuery, MAX_QUERY_LENGTH, "DELETE FROM `"#J_TABLE"` WHERE user_banned = '%s'", name);
+	mysql_format(handle, jQuery, MAX_QUERY_LENGTH, "DELETE FROM `"#J_TABLE"` WHERE user_banned = '%e'", name);
 
 	mysql_tquery(handle, jQuery, "", "");
 	return 1;
@@ -17659,7 +17701,7 @@ stock jUnbanName(name[])
 stock jUnbanIP(IP[])
 {
 	if(strlen(IP) > MAX_PLAYER_IP) return 0;
-	format(jQuery, MAX_QUERY_LENGTH, "DELETE FROM `"#J_TABLE"` WHERE user_banned_ip = '%s'", IP);
+	mysql_format(handle, jQuery, MAX_QUERY_LENGTH, "DELETE FROM `"#J_TABLE"` WHERE user_banned_ip = '%e'", IP);
 
 	mysql_tquery(handle, jQuery, "", "");
 	return 1;
@@ -17667,8 +17709,8 @@ stock jUnbanIP(IP[])
 
 function jban_OnQueryFinish(extraid)
 {
-	new rows, fields;
-	cache_get_data(rows, fields, handle);
+	new rows;
+	cache_get_row_count(rows);
 
 	if(rows)
 	{
@@ -17679,27 +17721,17 @@ function jban_OnQueryFinish(extraid)
 	}
 	else
 	{
-		new versionsa[128];
-		GetPlayerVersion(extraid, versionsa, sizeof(versionsa));
-		if(!strcmp(versionsa,"0.3x",true))
-		{
-			ShowPlayerDialog(extraid,5235,DIALOG_STYLE_MSGBOX,"Outdated Version","You need to have the latest SA-MP Version 0.3x R1-2\nDownload it off http://sa-mp.com/download.php","Leave","");
-			Kick(extraid);
-		}
-		else
-		{
-			new query[256];
-			format(query, sizeof(query), "SELECT * FROM `users` WHERE `Username` = '%s'", PlayerName(extraid));
-			mysql_tquery(handle, query, "WhenAccountCheck", "i", extraid);
-		}
+		new query[256];
+		mysql_format(handle, query, sizeof(query), "SELECT * FROM `users` WHERE `Username` = '%e'", PlayerName(extraid));
+		mysql_tquery(handle, query, "WhenAccountCheck", "i", extraid);
 	}
 	return 1;
 }
 
 function MySQLConnect()
 {
-	handle = mysql_connect(mysql_host, mysql_user, mysql_database, mysql_password);
-	if(handle && mysql_errno(handle) == 0)
+	handle = mysql_connect(mysql_host, mysql_user, mysql_password, mysql_database);
+	if(mysql_errno(handle) == 0)
 	{
 		printf("[DayZ MySQL]: Connection to database (%s) was established!", mysql_database);
 	}
@@ -17741,13 +17773,14 @@ function DayZSA_ShowMenuForPlayer(playerid)
 	SetPlayerCameraPos(playerid, -2867.5381,-1556.2440,140.2921);
 	SetPlayerCameraLookAt(playerid,  -2820.2588,-1530.7047,144.9823);
 
-	defer MeowShow(playerid);
+	SetTimerEx("MeowShow", 1800, false, "i", playerid);
 
 	isPlayerInMenu[playerid] = 1;
 	return 1;
 }
 
-timer MeowShow[1800](playerid)
+forward MeowShow(playerid);
+public MeowShow(playerid)
 {
 	SetPlayerPos_Allow(playerid, -2820.2588,-1530.7047,144.9823);
 	SetPlayerFacingAngle(playerid,299.6856);
@@ -17774,7 +17807,8 @@ function DayZSA_HideMenuForPlayer(playerid)
 	return 1;
 }
 
-timer loadingSpawn[2500](playerid)
+forward loadingSpawn(playerid);
+public loadingSpawn(playerid)
 {
     SetSpawnInfo(playerid, 0, 285, 0.0, 0.0, 0.0, 0.0, 0,0,0,0,0,0);
     TogglePlayerSpectating(playerid, 0);
@@ -17809,7 +17843,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 		PlayerTextDrawShow(playerid, DebugInfo[playerid]);
 		
 		
-		defer loadingSpawn(playerid);
+		SetTimerEx("loadingSpawn", 2500, false, "i", playerid);
     }
 
    	else if(playertextid == MenuOptions[playerid])
@@ -17834,7 +17868,8 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
     return 1;
 }
 
-timer ResetAB_Allow[2500](playerid)
+forward ResetAB_Allow(playerid);
+public ResetAB_Allow(playerid)
 {
 	abAllow[playerid] = 0;
 	return 1;
@@ -17842,7 +17877,8 @@ timer ResetAB_Allow[2500](playerid)
 
 stock PreloadAnimLib(playerid, animlib[]) ApplyAnimation(playerid,animlib,"null",0.0,0,0,0,0,0);
 
-timer ResetAction[1450](playerid,actionid)
+forward ResetAction(playerid,actionid);
+public ResetAction(playerid,actionid)
 {
 	if(actionid == ACTION_ANIMATION)
 	{
@@ -17864,7 +17900,7 @@ timer ResetAction[1450](playerid,actionid)
 function SetPlayerPos_Allow(playerid, Float:px_ab, Float:py_ab, Float:pz_ab)
 {
     abAllow[playerid] = 1;
-    defer ResetAB_Allow(playerid);
+    SetTimerEx("ResetAB_Allow", 2500, false, "i", playerid);
     SetPlayerPos(playerid, px_ab, py_ab, pz_ab);
     return 1;
 }
@@ -17884,7 +17920,8 @@ stock SetPlayerLookAt(playerid, Float:x, Float:y)
 
 // Zombies
 
-public FCNPC_OnChangeNode(npcid, newnodeid, oldnodeid)
+forward OnNPCChangeNode(npcid, newnodeid, oldnodeid);
+public OnNPCChangeNode(npcid, newnodeid, oldnodeid)
 {
 	// Validate the node zone
  	return IsValidZone(newnodeid) ? 1 : 0;
@@ -17893,7 +17930,7 @@ public FCNPC_OnChangeNode(npcid, newnodeid, oldnodeid)
 stock IsValidZone(zoneid)
 {
 #if defined SAN_ANDREAS
-	return zoneid > 0 && zoneid < FCNPC_MAX_NODES;
+	return zoneid > 0 && zoneid < NPC_MAX_NODES;
 #elseif defined LOS_SANTOS
 	return (zoneid >= 5 && zoneid <= 7) || (zoneid >= 12 && zoneid <= 15) || (zoneid >= 20 && zoneid <= 23);
 #elseif defined SAN_FIERRO
@@ -17903,6 +17940,14 @@ stock IsValidZone(zoneid)
 #else
 	return false;
 #endif
+}
+
+stock ZombieSpawnAt(npcid, skinid, Float:x, Float:y, Float:z)
+{
+	NPC_SetSkin(npcid, skinid);
+	NPC_SetPos(npcid, x, y, z);
+	if(!NPC_IsSpawned(npcid) || NPC_IsDead(npcid)) NPC_Spawn(npcid);
+	return 1;
 }
 
 stock Float:frandom(Float:max)
@@ -17921,7 +17966,7 @@ public CreateZombies()
 
 		new thenpc_;
 		format(str,sizeof(str),"Zombie[%d]",MAX_PLAYERS-(SpawnedZombies));
-		thenpc_ = FCNPC_Create(str);
+		thenpc_ = NPC_Create(str);
 		/*ZombieLabel[thenpc_] = Create3DTextLabel("Zombie\nHP: 100", -1, 30.0, 40.0, 50.0, 60.0, -1, 0);
 		Attach3DTextLabelToPlayer(ZombieLabel[thenpc_], thenpc_, 0.0, 0.0, 0.4);*/
 
@@ -17931,37 +17976,36 @@ public CreateZombies()
 		    case 0: skinidl = 162;
 		    case 1: skinidl = 29;
 		}
-		FCNPC_ClearAnimations(thenpc_);
-		FCNPC_ApplyAnimation(thenpc_, "PED", "WALK_DRUNK", 4.1, 1, 1,  1,  0,  0);
+		NPC_ClearAnimations(thenpc_);
+		NPC_ApplyAnimation(thenpc_, "PED", "WALK_DRUNK", 4.1, 1, 1,  1,  0,  0);
 		
 		
 
 		do
 		{
-			nodeid = random(FCNPC_MAX_NODES);
+			nodeid = random(NPC_MAX_NODES);
 		} while (!IsValidZone(nodeid));
-        FCNPC_GetNodeInfo(nodeid, vehnodes, pednodes, navinodes);
+        NPC_GetNodeInfo(nodeid, vehnodes, pednodes, navinodes);
         new Float:posNodes[3];
         if (random(2) == 1 && pednodes != 0)
 		{
 			point = random(pednodes - 1) + vehnodes + 1;
-			FCNPC_SetNodePoint(nodeid, point);
-			FCNPC_GetNodePointPosition(nodeid, posNodes[0], posNodes[1], posNodes[2]);
-			FCNPC_Spawn(thenpc_, skinidl, posNodes[0], posNodes[1], posNodes[2]);
+			NPC_SetNodePoint(nodeid, point);
+			NPC_GetNodePointPosition(nodeid, posNodes[0], posNodes[1], posNodes[2]);
+			ZombieSpawnAt(thenpc_, skinidl, posNodes[0], posNodes[1], posNodes[2]);
 		}
 		else
 		{
 			point = random(vehnodes - 1);
-			FCNPC_SetNodePoint(nodeid, point);
-			FCNPC_GetNodePointPosition(nodeid, posNodes[0], posNodes[1], posNodes[2]);
-			FCNPC_Spawn(thenpc_, skinidl, posNodes[0], posNodes[1], posNodes[2]);
+			NPC_SetNodePoint(nodeid, point);
+			NPC_GetNodePointPosition(nodeid, posNodes[0], posNodes[1], posNodes[2]);
+			ZombieSpawnAt(thenpc_, skinidl, posNodes[0], posNodes[1], posNodes[2]);
 		}
-		//FCNPC_Spawn(thenpc_,skinidl,ZombieSpawns[Random][0],ZombieSpawns[Random][1],ZombieSpawns[Random][2]);
-		FCNPC_SetWeapon(thenpc_, 1);
-		FCNPC_SetHealth(thenpc_, 100);
-		FCNPC_ClearAnimations(thenpc_);
-		FCNPC_ApplyAnimation(thenpc_, "PED", "WALK_DRUNK", 4.1, 1, 1,  1,  0,  0);
-		ZombieTimer[thenpc_] = repeat ZombieMove(thenpc_);
+		NPC_SetWeapon(thenpc_, 1);
+		NPC_SetHealth(thenpc_, 100);
+		NPC_ClearAnimations(thenpc_);
+		NPC_ApplyAnimation(thenpc_, "PED", "WALK_DRUNK", 4.1, 1, 1,  1,  0,  0);
+		ZombieTimer[thenpc_] = SetTimerEx("ZombieMove", 500, true, "i", thenpc_);
 		SetPlayerColor(thenpc_,0xAA333300);
 		IsAZombie[thenpc_] = 1;
 		SetPlayerAttachedObject( thenpc_, 1, 2908, 2, 0.064999,0.045000,0.000999, 176.500000, 5.699998, 95.000007, 0.941999, 1.082999, 1.075000 );
@@ -17980,56 +18024,60 @@ public CreateZombies()
 	}
 	return 1;
 }
-public FCNPC_OnDeath(npcid, killerid, reason)
+forward OnNPCDeath(npcid, killerid, WEAPON:reason);
+public OnNPCDeath(npcid, killerid, WEAPON:reason)
 {
+	if(!IsAZombie[npcid]) return 1;
 	ZombieAttackPlayer[npcid] = 0;
-	PlayAnim(npcid, "PED", "BIKE_fall_off", 4.1, 0, 1, 1, 1, 0, 1);
+	NPC_ApplyAnimation(npcid, "PED", "BIKE_fall_off", 4.1, false, true, true, true, 0);
 	CallLocalFunction("OnPlayerKillZombie","ii",killerid,npcid);
 
 	new Float:fPos[3];
 
-	FCNPC_GetPosition(npcid,fPos[0],fPos[1],fPos[2]);
+	NPC_GetPos(npcid,fPos[0],fPos[1],fPos[2]);
 	DayZSA_CreateZLoot(fPos[0],fPos[1],fPos[2]);
 
-	if(IsPlayerAimingTargetBodyPart(killerid, npcid, BODY_PART_HEAD))
+	if(0 <= killerid < MAX_PLAYERS && IsPlayerConnected(killerid))
 	{
-		GameTextForPlayer(killerid, "~r~~h~Headshot!", 3000, 3);
-		pInfo[killerid][Headshots]++;
+		if(IsPlayerAimingTargetBodyPart(killerid, npcid, BODY_PART_HEAD))
+		{
+			GameTextForPlayer(killerid, "~r~~h~Headshot!", 3000, 3);
+			pInfo[killerid][Headshots]++;
+		}
+		SendDeathMessage(killerid, npcid, reason);
 	}
-
-	pInfo[killerid][ZombiesKilled]++;
-	SendDeathMessage(killerid, npcid, reason);
-
 	return 1;
 }
 
-public FCNPC_OnTakeDamage(npcid, issuerid, Float:amount, weaponid, bodypart)
+forward OnNPCTakeDamage(npcid, issuerid, Float:amount, WEAPON:weaponid, bodypart);
+public OnNPCTakeDamage(npcid, issuerid, Float:amount, WEAPON:weaponid, bodypart)
 {
- 	new Float:HP = FCNPC_GetHealth(npcid);
-    if(weaponid == 34) FCNPC_SetHealth(npcid, HP-120) ; // Sniper
+	if(weaponid == WEAPON_SNIPER) NPC_SetHealth(npcid, NPC_GetHealth(npcid) - 120.0);
 	return 1;
 }
 
-timer ZombieMove[500](zombieid)
+forward ZombieMove(zombieid);
+public ZombieMove(zombieid)
 {
 	new Float:xa,Float:ya,Float:za;
-	if(FCNPC_IsDead(zombieid)) return 1;
+	if(NPC_IsDead(zombieid)) return 1;
 	foreach (new playerid : Player)
 	{
+		if(IsPlayerNPC(playerid)) continue;
 		GetPlayerPos(playerid,xa,ya,za);
 		MapAndreas_SetZ_For2DCoord(xa,ya,za);
 		if(IsPlayerInRangeOfPoint(zombieid,1.2,xa,ya,za))// here playerid not zombieid
 		{
-		    FCNPC_Stop(zombieid);
+		    NPC_StopMove(zombieid);
 			ZombieAttackPlayer[zombieid] = 2;
-			FCNPC_MeleeAttack(zombieid,100);
+			NPC_MeleeAttack(zombieid,100);
 			pInfo[playerid][pBlood] -= random(35);
 			if(pInfo[playerid][pBlood] <= 0)
 			{
-			    FCNPC_Stop(zombieid);
-			    FCNPC_StopAttack(zombieid);
+			    NPC_StopMove(zombieid);
+			    NPC_StopMeleeAttack(zombieid);
 			    ZombieAttackPlayer[zombieid] = 1;
-			    FCNPC_ResumePlayingNode(zombieid);
+			    NPC_ResumePlayingNode(zombieid);
 			}
 			break;
 		}
@@ -18037,20 +18085,19 @@ timer ZombieMove[500](zombieid)
 		{
 			if(ZombieAttackPlayer[zombieid] == 2)
 			{
-				FCNPC_Stop(zombieid);
-				FCNPC_StopAttack(zombieid);
+				NPC_StopMove(zombieid);
+				NPC_StopMeleeAttack(zombieid);
 			}
 			ZombieAttackPlayer[zombieid] = 1;
-			FCNPC_GoTo(zombieid,xa,ya,za,FCNPC_MOVE_TYPE_AUTO,FCNPC_MOVE_SPEED_AUTO, FCNPC_MOVE_MODE_MAPANDREAS, FCNPC_MOVE_PATHFINDING_AUTO, 0.0, true, 0.0, 250);
-			//FCNPC_GoToPlayer(zombieid, playerid, FCNPC_MOVE_TYPE_RUN, FCNPC_MOVE_TYPE_RUN, FCNPC_MOVE_MODE_MAPANDREAS, FCNPC_MOVE_PATHFINDING_AUTO, 0.0, true, 0.0, 1.5, 250);
+			NPC_Move(zombieid, xa, ya, za);
 			break;
 		}
 		else if(IsPlayerInRangeOfPoint(zombieid,35.0,xa,ya,za))
 		{
 			if(ZombieAttackPlayer[zombieid] == 2)
 			{
-				FCNPC_Stop(zombieid);
-				FCNPC_StopAttack(zombieid);
+				NPC_StopMove(zombieid);
+				NPC_StopMeleeAttack(zombieid);
 			}
 			ZombieAttackPlayer[zombieid] = 1;
 			break;
@@ -18063,34 +18110,24 @@ timer ZombieMove[500](zombieid)
 	return 1;
 }
 
-/*stock FCNPC_GoToPlayerEx(npcid, playerid, Float:dist, Float:rangle, movetype = FCNPC_MOVE_TYPE_RUN)
-{
-	new Float:xa, Float:ya, Float:za, Float:fa;
-	GetPlayerPos(playerid, xa, ya, za);
-	MapAndreas_FindZ_For2DCoord(xa,ya,za);
-	GetPlayerFacingAngle(playerid, fa);
-	rangle += fa;
-	xa = (xa + dist * floatsin(-rangle,degrees));
-	ya = (ya + dist * floatcos(-rangle,degrees));
-	FCNPC_GoTo(npcid,xa,ya,za,movetype,0.5,FCNPC_MOVE_MODE_AUTO,FCNPC_MOVE_PATHFINDING_AUTO, 0.0, true, 0.0, 250);
-    return 1;
-}*/
 forward OnPlayerKillZombie(playerid, zombieid);
 public OnPlayerKillZombie(playerid,zombieid)
 {
-	pInfo[playerid][ZombiesKilled]++;
+	if(0 <= playerid < MAX_PLAYERS && IsPlayerConnected(playerid)) pInfo[playerid][ZombiesKilled]++;
 	ZombiesAlive--;
-	defer RespawnZ(zombieid);
+	SetTimerEx("RespawnZ", 45000, false, "i", zombieid);
 	return 1;
 }
 
-timer RespawnZ[45000](zombieid)
+forward RespawnZ(zombieid);
+public RespawnZ(zombieid)
 {
-    FCNPC_Respawn(zombieid);
+    NPC_Respawn(zombieid);
 	return 1;
 }
 
-public FCNPC_OnRespawn(npcid)
+forward OnNPCRespawn(npcid);
+public OnNPCRespawn(npcid)
 {
     new nodeid, point, pednodes, vehnodes, navinodes;
 	new skinidl;
@@ -18103,28 +18140,28 @@ public FCNPC_OnRespawn(npcid)
 
 	do
 	{
-		nodeid = random(FCNPC_MAX_NODES);
+		nodeid = random(NPC_MAX_NODES);
 	} while (!IsValidZone(nodeid));
-	FCNPC_GetNodeInfo(nodeid, vehnodes, pednodes, navinodes);
+	NPC_GetNodeInfo(nodeid, vehnodes, pednodes, navinodes);
 	new Float:posNodes[3];
 	if (random(2) == 1 && pednodes != 0)
 	{
 		point = random(pednodes - 1) + vehnodes + 1;
-		FCNPC_SetNodePoint(nodeid, point);
-		FCNPC_GetNodePointPosition(nodeid, posNodes[0], posNodes[1], posNodes[2]);
-		FCNPC_Spawn(npcid, skinidl, posNodes[0], posNodes[1], posNodes[2]);
+		NPC_SetNodePoint(nodeid, point);
+		NPC_GetNodePointPosition(nodeid, posNodes[0], posNodes[1], posNodes[2]);
+		ZombieSpawnAt(npcid, skinidl, posNodes[0], posNodes[1], posNodes[2]);
 	}
 	else
 	{
 		point = random(vehnodes - 1);
-		FCNPC_SetNodePoint(nodeid, point);
-		FCNPC_GetNodePointPosition(nodeid, posNodes[0], posNodes[1], posNodes[2]);
-		FCNPC_Spawn(npcid, skinidl, posNodes[0], posNodes[1], posNodes[2]);
+		NPC_SetNodePoint(nodeid, point);
+		NPC_GetNodePointPosition(nodeid, posNodes[0], posNodes[1], posNodes[2]);
+		ZombieSpawnAt(npcid, skinidl, posNodes[0], posNodes[1], posNodes[2]);
 	}
-	FCNPC_StopAttack(npcid);
-	FCNPC_SetWeapon(npcid,1);
-	FCNPC_ApplyAnimation(npcid, "PED", "WALK_DRUNK", 4.1, 1, 1,  1,  0,  0);
-	FCNPC_SetAmmo(npcid,1);
+	NPC_StopMeleeAttack(npcid);
+	NPC_SetWeapon(npcid,1);
+	NPC_ApplyAnimation(npcid, "PED", "WALK_DRUNK", 4.1, 1, 1,  1,  0,  0);
+	NPC_SetAmmo(npcid,1);
 	ZombiesAlive++;
 	return 1;
 }
