@@ -6,6 +6,8 @@
 #define MAX_STRUCTURES_PER_PLAYER 20
 #define GATE_DROP               3.6     // how far an open gate sinks into the ground
 #define STRUCTURE_HEALTH        1500
+#define STRUCTURE_HALF_WIDTH    1.9
+#define ZOMBIE_WALL_DAMAGE      25      // per zombie hit on a structure
 #define NO_BUILD_CRATE          12.0    // around supply and hospital crates
 #define NO_BUILD_PLAYER         8.0     // around players outside the builder's group
 
@@ -101,6 +103,42 @@ stock RemoveStructure(id)
 	return 1;
 }
 
+stock DamageStructure(id, damage)
+{
+	if(!Structure[id][stUsed]) return 0;
+	new before = Structure[id][stHealth], query[96];
+	Structure[id][stHealth] -= damage;
+	if(Structure[id][stHealth] <= 0) return RemoveStructure(id), 2;
+	// written only every 100 points to keep the database quiet
+	if(before / 100 != Structure[id][stHealth] / 100)
+	{
+		mysql_format(handle, query, sizeof(query), "UPDATE `structures` SET `Health`=%d WHERE `ID`=%d", Structure[id][stHealth], id);
+		mysql_tquery(handle, query);
+	}
+	return 1;
+}
+
+// The closed structure standing between two points, or -1
+public FindBlockingStructure(Float:ax, Float:ay, Float:az, Float:bx, Float:by)
+{
+	for(new id; id < MAX_STRUCTURES; id++)
+	{
+		if(!Structure[id][stUsed] || Structure[id][stOpen] || floatabs(az - Structure[id][stZ]) > 3.0) continue;
+		if(VectorSize(ax - Structure[id][stX], ay - Structure[id][stY], 0.0) > 60.0) continue;
+		// the wall runs along the object's own Y axis
+		new Float:wx = -floatsin(Structure[id][stAngle], degrees) * STRUCTURE_HALF_WIDTH;
+		new Float:wy = floatcos(Structure[id][stAngle], degrees) * STRUCTURE_HALF_WIDTH;
+		new Float:cx = Structure[id][stX] - wx, Float:cy = Structure[id][stY] - wy;
+		new Float:rx = bx - ax, Float:ry = by - ay, Float:sx = 2.0 * wx, Float:sy = 2.0 * wy;
+		new Float:cross = rx * sy - ry * sx;
+		if(floatabs(cross) < 0.0001) continue;
+		new Float:t = ((cx - ax) * sy - (cy - ay) * sx) / cross;
+		new Float:u = ((cx - ax) * ry - (cy - ay) * rx) / cross;
+		if(0.0 <= t <= 1.0 && 0.0 <= u <= 1.0) return id;
+	}
+	return -1;
+}
+
 // Gunfire wears walls and gates down
 public OnPlayerShootDynamicObject(playerid, weaponid, STREAMER_TAG_OBJECT:objectid, Float:x, Float:y, Float:z)
 {
@@ -117,21 +155,10 @@ public OnPlayerShootDynamicObject(playerid, weaponid, STREAMER_TAG_OBJECT:object
 			case 33, 34: damage = 30;
 			default: return 1;
 		}
-		new before = Structure[id][stHealth], msg[64], query[96];
-		Structure[id][stHealth] -= damage;
-		if(Structure[id][stHealth] <= 0)
-		{
-			RemoveStructure(id);
-			return SendClientMessage(playerid, -1, ""chat" The structure collapsed."), 1;
-		}
+		new msg[64];
+		if(DamageStructure(id, damage) == 2) return SendClientMessage(playerid, -1, ""chat" The structure collapsed."), 1;
 		format(msg, sizeof(msg), "~w~structure %d%%", Structure[id][stHealth] * 100 / STRUCTURE_HEALTH);
 		GameTextForPlayer(playerid, msg, 1000, 4);
-		// written only every 100 points to keep the database quiet
-		if(before / 100 != Structure[id][stHealth] / 100)
-		{
-			mysql_format(handle, query, sizeof(query), "UPDATE `structures` SET `Health`=%d WHERE `ID`=%d", Structure[id][stHealth], id);
-			mysql_tquery(handle, query);
-		}
 		return 1;
 	}
 	return 1;

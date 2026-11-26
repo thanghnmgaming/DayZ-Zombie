@@ -382,6 +382,7 @@ new LootHigh, LootFreeCount, LootRecycle;
 new LootFree[20000], bool:LootUsed[20000];
 new CampObject[500][2];
 forward FreeLoot(id);
+forward FindBlockingStructure(Float:ax, Float:ay, Float:az, Float:bx, Float:by);
 new bool:PlayerDying[MAX_PLAYERS];
 new HighPingCount[MAX_PLAYERS];
 #define MAX_DEATH_DROPS 60

@@ -187,6 +187,9 @@ stock bool:ZombieSenses(npcid, playerid, Float:distance, Float:zx, Float:zy, Flo
 	new Float:sight = ZOMBIE_SIGHT_STANDING;
 	if(GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_DUCK) sight = ZOMBIE_SIGHT_CROUCHED;
 	if(distance > sight) return false;
+	new Float:nx, Float:ny, Float:eyeZ;
+	NPC_GetPos(npcid, nx, ny, eyeZ);
+	if(FindBlockingStructure(zx, zy, eyeZ, px, py) != -1) return false;
 	if(Zombie[npcid][zTarget] == playerid) return true;
 
 	new Float:facing;
@@ -232,6 +235,21 @@ stock ZombieStepTowards(npcid, Float:zx, Float:zy, Float:zz, Float:gx, Float:gy,
 	// MapAndreas reports the highest surface; ignore it under roofs, bridges and indoors
 	if(ground > 0.0 && floatabs(ground + 1.0 - z) < 3.0) z = ground + 1.0;
 
+	// look a little past the step so the body does not poke through
+	new wall = FindBlockingStructure(zx, zy, zz, x + dx / length * 0.7, y + dy / length * 0.7);
+	if(wall != -1)
+	{
+		NPC_StopMove(npcid);
+		new tick = GetTickCount();
+		if(tick >= Zombie[npcid][zNextAttack])
+		{
+			Zombie[npcid][zNextAttack] = tick + ZombieTypes[Zombie[npcid][zType]][ztAttackMs];
+			NPC_MeleeAttack(npcid, 600);
+			DamageStructure(wall, ZOMBIE_WALL_DAMAGE);
+		}
+		return 1;
+	}
+
 	// Do not restart an almost identical move
 	if(NPC_IsMoving(npcid) && floatabs(x - Zombie[npcid][zStepX]) < 1.0 && floatabs(y - Zombie[npcid][zStepY]) < 1.0) return 1;
 	Zombie[npcid][zStepX] = x;
@@ -273,7 +291,7 @@ stock ZombieThink(npcid, const prey[], preyCount, tick)
 		Zombie[npcid][zGoalY] = py;
 		Zombie[npcid][zGoalZ] = pz;
 
-		if(VectorSize(px - zx, py - zy, 0.0) <= ZOMBIE_ATTACK_RANGE && floatabs(pz - zz) <= 1.5)
+		if(VectorSize(px - zx, py - zy, 0.0) <= ZOMBIE_ATTACK_RANGE && floatabs(pz - zz) <= 1.5 && FindBlockingStructure(zx, zy, zz, px, py) == -1)
 			return ZombieAttack(npcid, target, tick);
 
 		NPC_StopMeleeAttack(npcid);
@@ -302,7 +320,7 @@ stock ZombieThink(npcid, const prey[], preyCount, tick)
 			{
 				new Float:x = zx + float(random(17) - 8), Float:y = zy + float(random(17) - 8), Float:ground;
 				MapAndreas_FindZ_For2DCoord(x, y, ground);
-				if(ground > 0.5 && floatabs(ground + 1.0 - zz) < 3.0) NPC_Move(npcid, x, y, ground + 1.0, NPC_MOVE_TYPE_WALK);
+				if(ground > 0.5 && floatabs(ground + 1.0 - zz) < 3.0 && FindBlockingStructure(zx, zy, zz, x, y) == -1) NPC_Move(npcid, x, y, ground + 1.0, NPC_MOVE_TYPE_WALK);
 			}
 		}
 	}
