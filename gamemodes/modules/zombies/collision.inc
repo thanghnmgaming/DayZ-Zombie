@@ -51,3 +51,40 @@ stock bool:FindFloor(Float:x, Float:y, Float:fromZ, &Float:floorZ)
 	floorZ = hz;
 	return true;
 }
+
+#define ZOMBIE_MAX_CLIMB   1.3     // highest rise a zombie takes in one step (kerbs, stairs, slopes)
+#define ZOMBIE_MAX_DROP    6.0
+
+// Where a zombie standing at height fromZ would be after walking to x,y.
+// The floor is searched from only a little above its feet, so roofs are never picked.
+stock bool:ZombieFloor(Float:x, Float:y, Float:fromZ, &Float:z)
+{
+	new Float:hx, Float:hy, Float:hz;
+	if(CollisionReady)
+	{
+		new Float:feet = fromZ - 1.0;
+		new model = CA_RayCastLine(x, y, feet + ZOMBIE_MAX_CLIMB, x, y, feet - ZOMBIE_MAX_DROP, hx, hy, hz);
+		if(model == 0 || model == CA_WATER_OBJECT) return false;
+	}
+	else
+	{
+		MapAndreas_FindZ_For2DCoord(x, y, hz);
+		if(hz <= 0.0 || hz + 1.0 - fromZ > ZOMBIE_MAX_CLIMB) return false;
+	}
+	z = hz + 1.0;
+	return true;
+}
+
+// True when a zombie can walk straight to x,y; z receives the height there
+stock bool:ZombieCanWalk(Float:zx, Float:zy, Float:zz, Float:x, Float:y, &Float:z)
+{
+	if(!ZombieFloor(x, y, zz, z)) return false;
+	// chest and knee height, so fences, cars and ledges count as obstacles too
+	return !IsWorldBlocked(zx, zy, zz + 0.3, x, y, z + 0.3) && !IsWorldBlocked(zx, zy, zz - 0.3, x, y, z - 0.3);
+}
+
+// True for roofs, balconies and bridge decks: there is something else far below
+stock bool:IsElevatedSpot(Float:x, Float:y, Float:floorZ)
+{
+	return IsWorldBlocked(x, y, floorZ - 0.5, x, y, floorZ - 40.0);
+}
