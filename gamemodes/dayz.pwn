@@ -257,6 +257,9 @@ new jNames[MAX_PLAYERS][MAX_PLAYER_NAME], jIP[MAX_PLAYERS][MAX_PLAYER_IP];
 new gRegistred[MAX_PLAYERS];
 new MySQL:handle;
 new LoginSerial[MAX_PLAYERS];
+new LoginFails[MAX_PLAYERS];
+#define MAX_LOGIN_ATTEMPTS 3
+#define AUTOSAVE_INTERVAL 300000
 new jQuery[MAX_QUERY_LENGTH];
 new ban_reason[MAX_REASON_LENGTH], ban_target, ban_time;
 
@@ -386,7 +389,7 @@ new engine,lights,alarm,doors,bonnet,boot,objective;
 new TeleportAllowed[MAX_PLAYERS];
 new firstperson[MAX_PLAYERS];
 new LastDeath[MAX_PLAYERS];
-new DeathSpam[MAX_PLAYERS char];
+new DeathSpam[MAX_PLAYERS];
 new DLlast[MAX_PLAYERS] = 0;
 new FPS2[MAX_PLAYERS] = 0;
 new bool:PlayerWeapons[MAX_PLAYERS][47],bool:Spawned[MAX_PLAYERS];
@@ -476,10 +479,10 @@ new PlayerText:IndicatorBox1[MAX_PLAYERS];
 // **** FORWARDS ***** //
 forward Kick_Load(playerid);
 forward KickEx(playerid);
-forward WhenAccountCheck(playerid, password[]);
+forward WhenAccountCheck(playerid, serial);
 forward OnPlayerRegister(playerid, password[]);
 forward OnPlayerAccountLogin(playerid, enteredPassword[]);
-forward WhenPlayerLogin(playerid);
+forward WhenPlayerLogin(playerid, serial);
 forward OnPlayerUseItem(playerid,ItemName[]);
 forward ab_OnEnterExitModShop();
 forward OnPlayerKillZombie(playerid,zombieid,WEAPON:weaponid);
@@ -4071,6 +4074,7 @@ public OnGameModeInit()
 
 	startServer();
     Streamer_MaxItems(STREAMER_TYPE_OBJECT,100000);
+	SetTimer("AutoSaveAll", AUTOSAVE_INTERVAL, true);
 	SetTimer("TimeOnServer", 1000, true);
 	SetTimer("CheckPlayerStatusZ", 8000, true);
 	SetTimer("UpdatePlayer", 1000, true);
@@ -4583,8 +4587,23 @@ public UpdatePlayer()
 	return 1;
 }
 
+forward AutoSaveAll();
+public AutoSaveAll()
+{
+	new count;
+	foreach (new i : Player)
+	{
+		if(IsPlayerNPC(i) || pInfo[i][pLogged] != 1) continue;
+		SaveStats(i);
+		count++;
+	}
+	if(count) printf("[SAVE] %d player(s) saved.", count);
+	return 1;
+}
+
 public OnGameModeExit()
 {
+	AutoSaveAll();
     DeleteTDS();
 
     for(new i; i < MAX_PLAYERS; i ++)
@@ -4598,9 +4617,9 @@ public OnGameModeExit()
 		}
 	}
 
+    DestroyAllDynamicObjects();
     for(new i = 0; i < MAX_LOOTING; i++)
     {
-        DestroyAllDynamicObjects();
    		DestroyDynamicObject(Loot[i][LootID]);
 		DestroyDynamic3DTextLabel(Loot[i][TextID]);
 	 	Loot[i][LootID] = 0;
@@ -4613,9 +4632,9 @@ public OnGameModeExit()
 		Loot[i][zLootDeadBodyX] = 0.0;
 		Loot[i][zLootDeadBodyY] = 0.0;
 		Loot[i][zLootDeadBodyZ] = 0.0;
-		DestroyDynamic3DTextLabel(PlayerLabel[i]);
-
 	}
+	for(new i = 0; i < MAX_PLAYERS; i++) DestroyDynamic3DTextLabel(PlayerLabel[i]);
+	mysql_close(handle); // waits for the queued save queries
 	return 1;
 }
 
@@ -4987,8 +5006,9 @@ public OnPlayerConnect(playerid)
 	return 1;
 }
 
-public WhenAccountCheck(playerid, password[])
+public WhenAccountCheck(playerid, serial)
 {
+    if(serial != LoginSerial[playerid]) return 1;
     new rows;
     cache_get_row_count(rows);
 
@@ -5110,6 +5130,11 @@ public OnPasswordVerified(playerid, bool:success, serial)
 
 stock ShowWrongPassword(playerid)
 {
+	if(++LoginFails[playerid] >= MAX_LOGIN_ATTEMPTS)
+	{
+		SendClientMessage(playerid, -1, "*"COL_RED" Too many wrong passwords.");
+		return KickEx(playerid);
+	}
 	ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "DayZ Login", "The passwords don't match!\nType your account's password below:", "Login", "Exit");
 	return 1;
 }
@@ -5118,12 +5143,12 @@ stock LoadAccount(playerid)
 {
 	new query[128];
 	mysql_format(handle, query, sizeof(query), "SELECT * FROM `users` WHERE `Username` = '%e' LIMIT 1", PlayerName(playerid));
-	mysql_tquery(handle, query, "WhenPlayerLogin", "i", playerid);
+	mysql_tquery(handle, query, "WhenPlayerLogin", "ii", playerid, LoginSerial[playerid]);
 	return 1;
 }
-public WhenPlayerLogin(playerid)
+public WhenPlayerLogin(playerid, serial)
 {
-    if(IsPlayerConnected(playerid) && pInfo[playerid][pLogged] == 0)
+    if(IsPlayerConnected(playerid) && serial == LoginSerial[playerid] && pInfo[playerid][pLogged] == 0)
 	{
 	    pInfo[playerid][pHunger] = 2500;
 	 	pInfo[playerid][pThrist] = 1000;
@@ -5147,9 +5172,9 @@ public WhenPlayerLogin(playerid)
 	        cache_get_value_name(0, "BackpackSlotsUsed", tmp), pInfo[playerid][BackpackSlotsUsed] = strval(tmp);
 	        cache_get_value_name(0, "pAdminLevel", tmp), pInfo[playerid][pAdminLevel] = strval(tmp);
 	        cache_get_value_name(0, "pPremium", tmp), pInfo[playerid][pPremium] = strval(tmp);
-	        cache_get_value_name(0, "pX", tmp), pInfo[playerid][pX] = strval(tmp);
-	        cache_get_value_name(0, "pY", tmp), pInfo[playerid][pY] = strval(tmp);
-	        cache_get_value_name(0, "pZ", tmp), pInfo[playerid][pZ] = strval(tmp);
+	        cache_get_value_name_float(0, "pX", pInfo[playerid][pX]);
+	        cache_get_value_name_float(0, "pY", pInfo[playerid][pY]);
+	        cache_get_value_name_float(0, "pZ", pInfo[playerid][pZ]);
 	        cache_get_value_name(0, "pWeap1", tmp), pInfo[playerid][pWeap1] = strval(tmp);
 	        cache_get_value_name(0, "pAmmo1", tmp), pInfo[playerid][pAmmo1] = strval(tmp);
 	        cache_get_value_name(0, "pWeap2", tmp), pInfo[playerid][pWeap2] = strval(tmp);
@@ -5232,8 +5257,8 @@ public OnPlayerDisconnect(playerid, reason)
  		    jBan(playerid, -1, "Bleeding (Ban 5 Minutes)", 5);
  		}*/
 
-  		ResetVars(playerid);
-	    DisconnectVars(playerid);
+		DisconnectVars(playerid);
+		ResetVars(playerid);
         DeletePlayerTD(playerid);
 
   		new log[128];
@@ -8512,9 +8537,10 @@ CMD:destroygroup(playerid,params[])
 			Groups[pInfo[playerid][IsPlayerInGroupID]][GroupName] = gname;
 			Groups[pInfo[playerid][IsPlayerInGroupID]][GroupMembers] = 0;
 
+			new groupid = pInfo[playerid][IsPlayerInGroupID];
 			foreach (new i : Player)
 			{
-			    if(pInfo[i][IsPlayerInGroupID] == pInfo[playerid][IsPlayerInGroupID])
+			    if(pInfo[i][IsPlayerInGroup] == 1 && pInfo[i][IsPlayerInGroupID] == groupid)
 			    {
     				pInfo[i][IsPlayerInGroup] = 0;
 					pInfo[i][IsPlayerInGroupID] = 0;
@@ -9887,25 +9913,24 @@ stock PlayerName(playerid)
 
 stock SaveStats(playerid)
 {
-	new Float:x,Float:y,Float:z;
-	GetPlayerPos(playerid,Float:x,Float:y,Float:z);
+	if(!IsPlayerConnected(playerid) || pInfo[playerid][pLogged] != 1) return 0;
 
-	if(isPlayerInMenu[playerid] == 0)
+	// Position, weapons and skin are only valid while alive in the world (not menu, spectating or dead)
+	new PLAYER_STATE:playerstate = GetPlayerState(playerid);
+	if(pInfo[playerid][pIsSpawned] == 1 && isPlayerInMenu[playerid] == 0 && playerstate != PLAYER_STATE_SPECTATING && playerstate != PLAYER_STATE_WASTED)
 	{
-		pInfo[playerid][pX] = x;
-		pInfo[playerid][pY] = y;
-		pInfo[playerid][pZ] = z;
+		GetPlayerPos(playerid, pInfo[playerid][pX], pInfo[playerid][pY], pInfo[playerid][pZ]);
+		pInfo[playerid][pSkin] = GetPlayerSkin(playerid);
+		GetPlayerWeaponData(playerid, WEAPON_SLOT:1, WEAPON:pInfo[playerid][pWeap1], pInfo[playerid][pAmmo1]);
+		GetPlayerWeaponData(playerid, WEAPON_SLOT:2, WEAPON:pInfo[playerid][pWeap2], pInfo[playerid][pAmmo2]);
+		GetPlayerWeaponData(playerid, WEAPON_SLOT:3, WEAPON:pInfo[playerid][pWeap3], pInfo[playerid][pAmmo3]);
+		GetPlayerWeaponData(playerid, WEAPON_SLOT:4, WEAPON:pInfo[playerid][pWeap4], pInfo[playerid][pAmmo4]);
+		GetPlayerWeaponData(playerid, WEAPON_SLOT:5, WEAPON:pInfo[playerid][pWeap5], pInfo[playerid][pAmmo5]);
+		GetPlayerWeaponData(playerid, WEAPON_SLOT:6, WEAPON:pInfo[playerid][pWeap6], pInfo[playerid][pAmmo6]);
+		GetPlayerWeaponData(playerid, WEAPON_SLOT:7, WEAPON:pInfo[playerid][pWeap7], pInfo[playerid][pAmmo7]);
+		GetPlayerWeaponData(playerid, WEAPON_SLOT:8, WEAPON:pInfo[playerid][pWeap8], pInfo[playerid][pAmmo8]);
+		GetPlayerWeaponData(playerid, WEAPON_SLOT:9, WEAPON:pInfo[playerid][pWeap9], pInfo[playerid][pAmmo9]);
 	}
-
-	GetPlayerWeaponData(playerid, 1, pInfo[playerid][pWeap1], pInfo[playerid][pAmmo1]);
-	GetPlayerWeaponData(playerid, 2, pInfo[playerid][pWeap2], pInfo[playerid][pAmmo2]);
-	GetPlayerWeaponData(playerid, 3, pInfo[playerid][pWeap3], pInfo[playerid][pAmmo3]);
-	GetPlayerWeaponData(playerid, 4, pInfo[playerid][pWeap4], pInfo[playerid][pAmmo4]);
-	GetPlayerWeaponData(playerid, 5, pInfo[playerid][pWeap5], pInfo[playerid][pAmmo5]);
-	GetPlayerWeaponData(playerid, 6, pInfo[playerid][pWeap6], pInfo[playerid][pAmmo6]);
-	GetPlayerWeaponData(playerid, 7, pInfo[playerid][pWeap7], pInfo[playerid][pAmmo7]);
-	GetPlayerWeaponData(playerid, 8, pInfo[playerid][pWeap8], pInfo[playerid][pAmmo8]);
-	GetPlayerWeaponData(playerid, 9, pInfo[playerid][pWeap9], pInfo[playerid][pAmmo9]);
 
 	new Query[1100];
 	strcat(Query,"UPDATE `users` SET `Headshots` = '%i', `Murders` = '%i', `BanditsKilled` = '%i', `ZombiesKilled` = '%i', `Backpack` = '%i', `BackpackSlots` = '%i', `BackpackSlotsUsed` = '%i', `pAdminLevel` = '%i',");
@@ -9953,7 +9978,7 @@ stock SaveStats(playerid)
 	pInfo[playerid][pFirstSpawn],
 	pInfo[playerid][pAliveTime],
 	pInfo[playerid][pIsMapOpened],
-	GetPlayerSkin(playerid),
+	pInfo[playerid][pSkin],
 	pInfo[playerid][Helper],
 	pInfo[playerid][IsPlayerBleeding],
 	pInfo[playerid][IsPlayerLegBroken],
@@ -9962,7 +9987,6 @@ stock SaveStats(playerid)
 	PlayerName(playerid));
 	mysql_tquery(handle, Query, "", "");
 	SaveInventory(playerid);
-	printf("%s", Query);
 	return 1;
 }
 
@@ -10016,6 +10040,21 @@ stock ClearChat()
 
 stock ResetVars(playerid)
 {
+	pInfo[playerid][IsPlayerGroupOwner] = 0;
+	pInfo[playerid][IsPlayerInvited] = 0;
+	pInfo[playerid][IsPlayerInvitedGroupID] = 0;
+	pInfo[playerid][IsPlayerMuted] = 0;
+	pInfo[playerid][pWarnings] = 0;
+	pInfo[playerid][pPM] = 0;
+	pInfo[playerid][pAmbientEnable] = 0;
+	pInfo[playerid][DefaultGender] = 0;
+	pInfo[playerid][pUserID] = 0;
+	isPlayerInMenu[playerid] = 0;
+	gRegistred[playerid] = 0;
+	DeathSpam[playerid] = 0;
+	LastDeath[playerid] = 0;
+	OPRF_Processed[playerid] = false;
+	LoginFails[playerid] = 0;
     pInfo[playerid][pTentCreated] = 0;
 	IsSpecing[playerid] = 0;
     gotBanned[playerid] = 0;
@@ -11001,7 +11040,6 @@ stock CheckBars(playerid)
 
 stock DisconnectVars(playerid)
 {
- 	SaveInventory(playerid);
    	if(IsPlayerAttachedObjectSlotUsed(playerid, 1)) RemovePlayerAttachedObject(playerid, 0);
 
     if(pInfo[playerid][IsPlayerGroupOwner] == 1)
@@ -11016,9 +11054,10 @@ stock DisconnectVars(playerid)
 		Groups[pInfo[playerid][IsPlayerInGroupID]][GroupName] = gname;
 		Groups[pInfo[playerid][IsPlayerInGroupID]][GroupMembers] = 0;
 
+		new groupid = pInfo[playerid][IsPlayerInGroupID];
 		foreach (new i : Player)
 		{
-			if(pInfo[i][IsPlayerInGroupID] == pInfo[playerid][IsPlayerInGroupID])
+			if(pInfo[i][IsPlayerInGroup] == 1 && pInfo[i][IsPlayerInGroupID] == groupid)
 			{
 				pInfo[i][IsPlayerInGroup] = 0;
 				pInfo[i][IsPlayerInGroupID] = 0;
@@ -11670,7 +11709,7 @@ stock ShowInventory(playerid)
 
 stock SaveInventory(playerid)
 {
-    if(!IsPlayerNPC(playerid))
+    if(!IsPlayerNPC(playerid) && pInfo[playerid][pLogged] == 1)
     {
 		gItemList="";
 		new filename[64];
@@ -17682,7 +17721,7 @@ stock jBan(player_banned, player_banner, reason[], time = 0, system = 0)
 stock jBanCheck(playerid)
 {
 	mysql_format(handle, jQuery, MAX_QUERY_LENGTH, "SELECT user_banner, ban_reason, TIMESTAMPDIFF(MINUTE, NOW(), DATE_ADD(ban_timestamp, INTERVAL ban_time MINUTE)) FROM `"#J_TABLE"` WHERE ( `user_banned` = '%e' OR user_banned_ip = '%e' ) AND (NOW() <= DATE_ADD(ban_timestamp, INTERVAL ban_time MINUTE) OR ban_time = 0)", PlayerName(playerid), jIP[playerid]);
-	mysql_tquery(handle, jQuery, "jban_OnQueryFinish", "i", playerid);
+	mysql_tquery(handle, jQuery, "jban_OnQueryFinish", "ii", playerid, LoginSerial[playerid]);
 	return 1;
 }
 
@@ -17704,8 +17743,9 @@ stock jUnbanIP(IP[])
 	return 1;
 }
 
-function jban_OnQueryFinish(extraid)
+function jban_OnQueryFinish(extraid, serial)
 {
+	if(serial != LoginSerial[extraid]) return 1;
 	new rows;
 	cache_get_row_count(rows);
 
@@ -17720,7 +17760,7 @@ function jban_OnQueryFinish(extraid)
 	{
 		new query[256];
 		mysql_format(handle, query, sizeof(query), "SELECT * FROM `users` WHERE `Username` = '%e'", PlayerName(extraid));
-		mysql_tquery(handle, query, "WhenAccountCheck", "i", extraid);
+		mysql_tquery(handle, query, "WhenAccountCheck", "ii", extraid, serial);
 	}
 	return 1;
 }
