@@ -561,95 +561,24 @@ stock GetWeaponModel(weaponid)
 
 function DayZSA_LootModelDropWeapon(const objectname[])
 {
-	new dayzsaid, Float:rotx, Float:roty, Float:rotz;
-    if(strfind(objectname, "Binoculars", true) != -1) dayzsaid = 3070, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "AK-47", true) != -1) dayzsaid = 355, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	if(strfind(objectname, "M4", true) != -1) dayzsaid = 356, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	if(strfind(objectname, "Silenced Pistol", true) != -1) dayzsaid =  347, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	if(strfind(objectname, "Pistol", true) != -1) dayzsaid = 346, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	if(strfind(objectname, "Shotgun", true) != -1) dayzsaid = 349, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	if(strfind(objectname, "SPAZ-12 Shotgun", true) != -1) dayzsaid = 351, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	if(strfind(objectname, "Country Rifle", true) != -1) dayzsaid = 357, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	if(strfind(objectname, "Sniper Rifle", true) != -1) dayzsaid = 358, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	if(strfind(objectname, "MP5", true) != -1) dayzsaid = 353, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	if(strfind(objectname, "Katana", true) != -1) dayzsaid = 339, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	if(strfind(objectname, "Baseball Bat", true) != -1) dayzsaid = 336, rotx = 276.0, roty = 90.0, rotz = 90.0;
-
-	Loot[lootCount][DropGunID] = dayzsaid;
-	Loot[lootCount][DropGunXR] = rotx, Loot[lootCount][DropGunYR] = roty, Loot[lootCount][DropGunZR] = rotz;
-    return 1;
+	new id = FindItem(objectname);
+	if(id == -1) return 0;
+	Loot[lootCount][DropGunID] = ItemCatalog[id][itemModel];
+	Loot[lootCount][DropGunXR] = ItemCatalog[id][itemRotX];
+	Loot[lootCount][DropGunYR] = ItemCatalog[id][itemRotY];
+	Loot[lootCount][DropGunZR] = ItemCatalog[id][itemRotZ];
+	return 1;
 }
 
 function DayZSA_LootModelDrop(const objectname[])
 {
-	new dayzsaid, Float:rotx, Float:roty, Float:rotz;
-    if(strfind(objectname, "Binoculars", true) != -1) dayzsaid = 3070, rotx = 0.0, roty = 0.0, rotz = 0.0;
-    if(strfind(objectname, "Road Flare", true) != -1) dayzsaid = 1904, rotx = 0.0, roty = 0.0, rotz = 0.0;
-    if(strfind(objectname, "Map", true) != -1) dayzsaid = 3017, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "GPS", true) != -1) dayzsaid = 19042, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Sniper Skin", true) != -1) dayzsaid = 1275, rotx = 272.828125, roty = 134.98297119141, rotz = 135.01782226563;
-	if(strfind(objectname, "Civilian Skin", true) != -1) dayzsaid = 1275, rotx = 272.828125, roty = 134.98297119141, rotz = 135.01782226563;
-	if(strfind(objectname, "Army Skin", true) != -1) dayzsaid = 1275, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Tent", true) != -1) dayzsaid = 1279, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Radio Device", true) != -1) dayzsaid = 330, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Bandage", true) != -1) dayzsaid = 1578, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Painkiller", true) != -1) dayzsaid = 1579, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Morphine", true) != -1) dayzsaid = 11736, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Medical Kit", true) != -1) dayzsaid = 11738, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Blood Bag", true) != -1) dayzsaid = 1575, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Can of Beans", true) != -1) dayzsaid = 2769, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Burger", true) != -1) dayzsaid = 2663, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Dirty Pizza Slice", true) != -1) dayzsaid = 2814, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Orange", true) != -1) dayzsaid = 19574, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Apple", true) != -1) dayzsaid = 19576, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Rum", true) != -1) dayzsaid = 1512, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Banana", true) != -1) dayzsaid = 19578, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Gin", true) != -1) dayzsaid = 19823, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Packet Of Cereals", true) != -1) dayzsaid = 19561, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Fresh Juice", true) != -1) dayzsaid = 19563, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Tomato", true) != -1) dayzsaid = 19577, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Full Water Bottle", true) != -1) dayzsaid = 2683, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Milk", true) != -1) dayzsaid = 2856, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Soda Bottle", true) != -1) dayzsaid = 2647, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Tire", true) != -1) dayzsaid = 1025, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Empty Jerry Can", true) != -1) dayzsaid = 1650, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Full Jerry Can", true) != -1) dayzsaid = 1650, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Engine", true) != -1) dayzsaid = 2891, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Toolbox", true) != -1) dayzsaid = 3052, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "AK-47", true) != -1) dayzsaid = 355, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	if(strfind(objectname, "M4", true) != -1) dayzsaid = 356, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	if(strfind(objectname, "Silenced Pistol", true) != -1) dayzsaid =  347, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	if(strfind(objectname, "Pistol", true) != -1) dayzsaid = 346, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	if(strfind(objectname, "Shotgun", true) != -1) dayzsaid = 349, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	if(strfind(objectname, "SPAZ-12 Shotgun", true) != -1) dayzsaid = 351, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	if(strfind(objectname, "Country Rifle", true) != -1) dayzsaid = 357, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	if(strfind(objectname, "Sniper Rifle", true) != -1) dayzsaid = 358, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	if(strfind(objectname, "MP5", true) != -1) dayzsaid = 353, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	if(strfind(objectname, "Katana", true) != -1) dayzsaid = 339, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	if(strfind(objectname, "Baseball Bat", true) != -1) dayzsaid = 336, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	if(strfind(objectname, "Pistol Ammo", true) != -1) dayzsaid = 3013, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Shotgun Ammo", true) != -1) dayzsaid = 3013, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Sniper Ammo", true) != -1) dayzsaid = 3013, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Assault Ammo", true) != -1) dayzsaid = 3013, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "SMG Ammo", true) != -1) dayzsaid = 3013, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Heat Pack", true) != -1) dayzsaid = 2058, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Heat Pack Basic", true) != -1) dayzsaid = 2058, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Whiskey Bottle", true) != -1) dayzsaid = 2683, rotx = 0.0, roty = 0.0, rotz = 0.0;
-    if(strfind(objectname, "Coyote Patrol Pack", true) != -1) dayzsaid = 3026, rotx = 272.828125, roty = 45.0169677734380, rotz = 314.98205566406;
-    if(strfind(objectname, "Czech Vest Pouch", true) != -1) dayzsaid = 371, rotx = 274.0, roty = 180.0, rotz = 180.0;
-    if(strfind(objectname, "Alice Pack", true) != -1) dayzsaid = 1310, rotx = 271.99987792969, roty = 270.00048828125, rotz = 270.00036621094;
-    if(strfind(objectname, "Coyote Backpack", true) != -1) dayzsaid = 1550, rotx = 79.237274169922, roty = 68.415649414063, rotz = 107.93438720703;
-    if(strfind(objectname, "Raw Meat", true) != -1) dayzsaid =  2804, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-    if(strfind(objectname, "Cooked Meat", true) != -1) dayzsaid =  2804, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-    if(strfind(objectname, "Wood", true) != -1) dayzsaid = 1463, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-    if(strfind(objectname, "Lighter", true) != -1) dayzsaid = 2751, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-    if(strfind(objectname, "Antibiotics", true) != -1) dayzsaid = 1577, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	if(strfind(objectname, "Flashlight", true) != -1) dayzsaid = 18641, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-    if(strfind(objectname, "Dirty Water Bottle", true) != -1) dayzsaid = 2683, rotx = 0.0, roty = 0.0, rotz = 0.0;
-
-	Loot[lootCount][dropID] = dayzsaid;
-	Loot[lootCount][dLootRotX] = rotx, Loot[lootCount][dLootRotY] = roty, Loot[lootCount][dLootRotZ] = rotz;
-    return 1;
+	new id = FindItem(objectname);
+	if(id == -1) return 0;
+	Loot[lootCount][dropID] = ItemCatalog[id][itemModel];
+	Loot[lootCount][dLootRotX] = ItemCatalog[id][itemRotX];
+	Loot[lootCount][dLootRotY] = ItemCatalog[id][itemRotY];
+	Loot[lootCount][dLootRotZ] = ItemCatalog[id][itemRotZ];
+	return 1;
 }
 
 stock GetPlayerGroupName(playerid)

@@ -341,57 +341,31 @@ stock AddSlotToInventoryLoot(playerid, const addItem[], amount) return AddSlotTo
 
 CMD:dropgun(playerid)
 {
-	new WEAPON:weaponid = GetPlayerWeapon(playerid), name[32];
-	switch(_:weaponid)
-	{
-		case 25: name = "Shotgun";
-		case 30: name = "AK-47";
-		case 31: name = "M4";
-		case 34: name = "Sniper Rifle";
-		case 33: name = "Country Rifle";
-		case 22: name = "Pistol";
-		case 27: name = "SPAZ-12 Shotgun";
-		case 29: name = "MP5";
-		case 23: name = "Silenced Pistol";
-		case 43: name = "Binoculars";
-		case 8: name = "Katana";
-		case 5: name = "Baseball Bat";
-		default: return SendClientMessage(playerid, -1, ""chat" You have no weapon you can drop");
-	}
+	new WEAPON:weaponid = GetPlayerWeapon(playerid), id = FindWeaponItem(_:weaponid);
+	if(id == -1) return SendClientMessage(playerid, -1, ""chat" You have no weapon you can drop");
+
 	new Float:pos[3], msg[128], ammo = GetPlayerAmmo(playerid);
 	GetPlayerPos(playerid, pos[0], pos[1], pos[2]);
 	RemovePlayerWeapon(playerid, weaponid);
-	DayZSA_DropWeapon(name, ammo, pos[0], pos[1], pos[2]);
-	format(msg, sizeof(msg), ""chat" You have dropped %s with %i ammo!", name, ammo);
+	DayZSA_DropWeapon(ItemCatalog[id][itemName], ammo, pos[0], pos[1], pos[2]);
+	format(msg, sizeof(msg), ""chat" You have dropped %s with %i ammo!", ItemCatalog[id][itemName], ammo);
 	SendClientMessage(playerid, -1, msg);
 	return 1;
 }
 
+
 CMD:pickupgun(playerid)
 {
 	if(IsPlayerInAnyVehicle(playerid)) return 1;
-	new id = GetLootW_ID(playerid), weaponid;
+	new id = GetLootW_ID(playerid);
 	if(id <= 0 || Loot[id][AntiDup] != 1) return SendClientMessage(playerid, -1, ""chat" There is no weapon here");
-	switch(Loot[id][DropGunID])
-	{
-		case 355: weaponid = 30;
-		case 356: weaponid = 31;
-		case 347: weaponid = 23;
-		case 346: weaponid = 22;
-		case 349: weaponid = 25;
-		case 351: weaponid = 27;
-		case 357: weaponid = 33;
-		case 358: weaponid = 34;
-		case 353: weaponid = 29;
-		case 339: weaponid = 8;
-		case 336: weaponid = 5;
-		case 3070: weaponid = 43;
-		default: return 1;
-	}
+	new item = FindWeaponModel(Loot[id][DropGunID]);
+	if(item == -1) return 1;
 	// The weapon itself is picked up; no inventory copy is created
 	Loot[id][AntiDup] = 0;
-	GivePlayerWeaponEx(playerid, weaponid, Loot[id][DropGunAmmo]);
+	GivePlayerWeaponEx(playerid, ItemCatalog[item][itemWeapon], Loot[id][DropGunAmmo]);
 	DayZSA_DestroyLoot(id);
 	return 1;
 }
+
 

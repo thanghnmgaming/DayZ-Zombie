@@ -73,7 +73,7 @@ stock DayZSA_GetLootNameLow()
 	    case 5: str = "SMG Ammo";
 	    case 6: str = "Empty Jerry Can";
 	    case 7: str = "Soda Bottle";
-	    case 8: str = "ToolBox";
+	    case 8: str = "Toolbox";
 	    case 9: str = "Silenced Pistol";
 	    case 10: str = "Pistol";
 		case 11: str = "Burger";
@@ -237,219 +237,17 @@ function DayZSA_DisplayLootForPlayer(playerid)
 	return 1;
 }
 
-function DayZSA_LootSetupMarket()
-{
-	new str[64],dayzmodel, Float:rotx, Float:roty, Float:rotz;
-	switch(random(14))
-	{
-		case 0: format(str,sizeof(str),"Soda Bottle"),dayzmodel = 2647, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 1: format(str,sizeof(str),"Burger"),dayzmodel = 2663, rotx = 0.0, roty = 0.0, rotz = 0.0;
-    	case 2: format(str,sizeof(str),"Whiskey Bottle"),dayzmodel = 2683, rotx = 0.0, roty = 0.0, rotz = 0.0;
-    	case 3: format(str,sizeof(str),"Milk"),dayzmodel = 2856, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 4: format(str,sizeof(str),"Dirty Pizza Slice"),dayzmodel = 2814, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 5: format(str,sizeof(str),"Full Water Bottle"),dayzmodel = 2814, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 6: format(str,sizeof(str),"Can of Beans"),dayzmodel = 2769, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 7: format(str,sizeof(str),"Civilian Skin"),dayzmodel = 1275, rotx = 272.828125, roty = 134.98297119141, rotz = 135.01782226563;
-		case 8: format(str,sizeof(str),"Raw Meat"),dayzmodel = 2804, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 9: format(str,sizeof(str),"Lighter"),dayzmodel = 2751, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 10: format(str,sizeof(str),"Antibiotics"),dayzmodel = 1577, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 11: format(str,sizeof(str),"Orange"), dayzmodel = 19574, rotx= 0.0, roty = 0.0, rotz = 0.0;
-		case 12: format(str,sizeof(str),"Dirty Water Bottle"),dayzmodel = 2683, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 13: format(str,sizeof(str),"Rope"),dayzmodel = 19088, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	}
-	Loot[lootCount][ModelID] = dayzmodel;
-	Loot[lootCount][LootName] = str;
-	Loot[lootCount][LootRotX] = rotx;
-	Loot[lootCount][LootRotY] = roty;
-	Loot[lootCount][LootRotZ] = rotz;
-	return 1;
-}
+function DayZSA_LootSetupMarket() return SetupGroundLoot(LootPoolMarket[random(sizeof(LootPoolMarket))]);
 
-function DayZSA_LootSetupFarm()
-{
-	new str[64],dayzmodel, Float:rotx, Float:roty, Float:rotz;
-	switch(random(20))
-	{
-	    case 0: format(str,sizeof(str),"Empty Jerry Can"),dayzmodel = 1650, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 1: format(str,sizeof(str),"Soda Bottle"),dayzmodel = 2647, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 2: format(str,sizeof(str),"Toolbox"),dayzmodel = 3052, rotx = 0.0, roty = 0.0, rotz = 0.0;
-   		case 3: format(str,sizeof(str),"Can of Beans"),dayzmodel = 2769, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 4: format(str,sizeof(str),"Dirty Pizza Slice"),dayzmodel = 2814, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 5: format(str,sizeof(str),"Full Water Bottle"),dayzmodel = 2683, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 6: format(str,sizeof(str),"Country Rifle"),dayzmodel = 357, rotx = 276.0, roty = 90.0, rotz = 90.0;
-		case 7: format(str,sizeof(str),"Sniper Ammo"),dayzmodel = 3013, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 8: format(str,sizeof(str),"Alice Pack"),dayzmodel = 1310, rotx = 271.99987792969, roty = 270.00048828125, rotz = 270.00036621094;
-		case 9: format(str,sizeof(str),"Burger"),dayzmodel = 2663, rotx = 0.0, roty = 0.0, rotz = 0.0;
-    	case 10: format(str,sizeof(str),"Whiskey Bottle"),dayzmodel = 2683, rotx = 0.0, roty = 0.0, rotz = 0.0;
-    	case 11: format(str,sizeof(str),"Milk"),dayzmodel = 2856, rotx = 0.0, roty = 0.0, rotz = 0.0;
-    	case 12: format(str,sizeof(str),"Czech Vest Pouch"),dayzmodel = 371, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-    	case 13: format(str,sizeof(str),"Full Water Bottle"),dayzmodel = 2683, rotx = 0.0, roty = 0.0, rotz = 0.0;
-    	case 14: format(str,sizeof(str),"Army Skin"),dayzmodel = 19106, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-    	case 15: format(str,sizeof(str),"Raw Meat"),dayzmodel = 2804, rotx = 0.0, roty = 0.0, rotz = 0.0;
-    	case 16: format(str,sizeof(str),"Wood"),dayzmodel = 1463, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-    	case 17: format(str,sizeof(str),"Orange"),dayzmodel = 19574, rotx = 0.0, roty = 0.0, rotz = 0.0;
-   		case 18: format(str,sizeof(str),"Flashlight"),dayzmodel = 18641, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-    	case 19: format(str,sizeof(str),"Rope"),dayzmodel = 19088, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	}
-	Loot[lootCount][ModelID] = dayzmodel;
-	Loot[lootCount][LootName] = str;
-	Loot[lootCount][LootRotX] = rotx;
-	Loot[lootCount][LootRotY] = roty;
-	Loot[lootCount][LootRotZ] = rotz;
-	return 1;
-}
+function DayZSA_LootSetupFarm() return SetupGroundLoot(LootPoolFarm[random(sizeof(LootPoolFarm))]);
 
-function DayZSA_LootSetupLow()
-{
-	new str[64],dayzmodel, Float:rotx, Float:roty, Float:rotz;
-	switch(random(25))
-	{
-	    case 0: format(str,sizeof(str),"Pistol Ammo"),dayzmodel = 3013, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 1: format(str,sizeof(str),"Shotgun Ammo"),dayzmodel = 3013, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 2: format(str,sizeof(str),"Dirty Pizza Slice"),dayzmodel = 2814, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 3: format(str,sizeof(str),"SMG Ammo"),dayzmodel = 3013, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 4: format(str,sizeof(str),"Empty Jerry Can"),dayzmodel = 1650, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 5: format(str,sizeof(str),"Soda Bottle"),dayzmodel = 2647, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 6: format(str,sizeof(str),"Toolbox"),dayzmodel = 3052, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 7: format(str,sizeof(str),"Silenced Pistol"),dayzmodel = 347, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	    case 8: format(str,sizeof(str),"Pistol"),dayzmodel = 346, rotx = 276.0, roty = 90.0, rotz = 90.0;
-		case 9: format(str,sizeof(str),"Burger"),dayzmodel = 2663, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 10: format(str,sizeof(str),"Full Water Bottle"),dayzmodel = 2683, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 11: format(str,sizeof(str),"Empty Water Bottle"),dayzmodel = 2683, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 12: format(str,sizeof(str),"Can of Beans"),dayzmodel = 2769, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 13: format(str,sizeof(str),"Dirty Pizza Slice"),dayzmodel = 2814, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 14: format(str,sizeof(str),"Baseball Bat"),dayzmodel = 336, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-		case 15: format(str,sizeof(str),"Katana"),dayzmodel = 339, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-		case 16: format(str,sizeof(str),"Heat Pack"),dayzmodel = 2058, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 17: format(str,sizeof(str),"Whiskey Bottle"),dayzmodel = 2683, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 18: format(str,sizeof(str),"Lighter"),dayzmodel = 2751, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 19: format(str,sizeof(str),"Antibiotics"),dayzmodel = 1577, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 20: format(str,sizeof(str),"Wood"),dayzmodel = 1463, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-		case 21: format(str,sizeof(str),"Orange"),dayzmodel = 19574, rotx= 0.0 , roty= 0.0, rotz= 0.0;
-		case 22: format(str,sizeof(str),"Flashlight"),dayzmodel = 18641, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-	 	case 23: format(str,sizeof(str),"Dirty Water Bottle"),dayzmodel = 2683, rotx = 0.0, roty = 0.0, rotz = 0.0;
-       	case 24: format(str,sizeof(str),"Rope"),dayzmodel = 19088, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	}
-	Loot[lootCount][ModelID] = dayzmodel;
-	Loot[lootCount][LootName] = str;
-	Loot[lootCount][LootRotX] = rotx;
-	Loot[lootCount][LootRotY] = roty;
-	Loot[lootCount][LootRotZ] = rotz;
-	return 1;
-}
+function DayZSA_LootSetupLow() return SetupGroundLoot(LootPoolLow[random(sizeof(LootPoolLow))]);
 
-function DayZSA_LootSetupMedium()
-{
-	new str[64],dayzmodel, Float:rotx, Float:roty, Float:rotz;
-	switch(random(35))
-	{
-	    case 0: format(str,sizeof(str),"MP5"),dayzmodel = 353, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	    case 1: format(str,sizeof(str),"Morphine"),dayzmodel = 11736, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 2: format(str,sizeof(str),"Bandage"),dayzmodel = 1578, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 3: format(str,sizeof(str),"Shotgun"),dayzmodel = 349, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	    case 4: format(str,sizeof(str),"Map"),dayzmodel = 3017, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 5: format(str,sizeof(str),"GPS"),dayzmodel = 19042, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 6: format(str,sizeof(str),"Milk"),dayzmodel = 2856, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 7: format(str,sizeof(str),"Can of Beans"),dayzmodel = 2769, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 8: format(str,sizeof(str),"Tire"),dayzmodel = 1025, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 9: format(str,sizeof(str),"Blood Bag"),dayzmodel = 1575, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 10: format(str,sizeof(str),"Country Rifle"),dayzmodel = 357, rotx = 276.0, roty = 90.0, rotz = 90.0;
-		case 11: format(str,sizeof(str),"SPAZ-12 Shotgun"),dayzmodel = 351, rotx = 276.0, roty = 90.0, rotz = 90.0;
-		case 12: format(str,sizeof(str),"Czech Vest Pouch"),dayzmodel = 371, rotx = 274.0, roty = 180.0, rotz = 180.0;
-		case 13: format(str,sizeof(str),"Army Skin"),dayzmodel = 19106, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-		case 14: format(str,sizeof(str),"Road Flare"),dayzmodel = 1904, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 15: format(str,sizeof(str),"Burger"),dayzmodel = 2663, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 16: format(str,sizeof(str),"Full Water Bottle"),dayzmodel = 2683, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 17: format(str,sizeof(str),"Can of Beans"),dayzmodel = 2769, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 18: format(str,sizeof(str),"Dirty Pizza Slice"),dayzmodel = 2814, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 19: format(str,sizeof(str),"Radio Device"),dayzmodel = 330, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-		case 20: format(str,sizeof(str),"Civilian Skin"),dayzmodel = 1275, rotx = 272.828125, roty = 134.98297119141, rotz = 135.01782226563;
-		case 21: format(str,sizeof(str),"Binoculars"),dayzmodel = 3070, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 22: format(str,sizeof(str),"Antibiotics"),dayzmodel = 1577, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 23: format(str,sizeof(str),"Heat Pack"),dayzmodel = 2058, rotx = 0.0, roty = 0.0, rotz = 0.0;
-		case 24: format(str,sizeof(str),"Sniper Rifle"),dayzmodel = 358, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-		case 25: format(str,sizeof(str),"Orange"),dayzmodel = 19574, rotx= 0.0 , roty= 0.0, rotz= 0.0;
-		case 26: format(str,sizeof(str),"Apple"),dayzmodel = 19576, rotx= 0.0 , roty= 0.0, rotz= 0.0;
-		case 27: format(str,sizeof(str),"Tomato"),dayzmodel = 19577, rotx= 0.0 , roty= 0.0, rotz= 0.0;
-		case 28: format(str,sizeof(str),"Banana"),dayzmodel = 19578, rotx= 0.0 , roty= 0.0, rotz= 0.0;
-		case 29: format(str,sizeof(str),"Packet Of Cereals"),dayzmodel = 19561, rotx= 0.0 , roty= 0.0, rotz= 0.0;
-		case 30: format(str,sizeof(str),"Fresh Juice"),dayzmodel = 19563, rotx= 0.0 , roty= 0.0, rotz= 0.0;
-		case 31: format(str,sizeof(str),"Gin"),dayzmodel = 19823, rotx= 0.0 , roty= 0.0, rotz= 0.0;
-		case 32: format(str,sizeof(str),"Rum"),dayzmodel = 1512, rotx= 0.0 , roty= 0.0, rotz= 0.0;
- 		case 33: format(str,sizeof(str),"Dirty Water Bottle"),dayzmodel = 2683, rotx = 0.0, roty = 0.0, rotz = 0.0;
-    	case 34: format(str,sizeof(str),"Rope"),dayzmodel = 19088, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	}
-	Loot[lootCount][ModelID] = dayzmodel;
-	Loot[lootCount][LootName] = str;
-	Loot[lootCount][LootRotX] = rotx;
-	Loot[lootCount][LootRotY] = roty;
-	Loot[lootCount][LootRotZ] = rotz;
-	return 1;
-}
+function DayZSA_LootSetupMedium() return SetupGroundLoot(LootPoolMedium[random(sizeof(LootPoolMedium))]);
 
-function DayZSA_LootSetupHigh()
-{
-	new str[64],dayzmodel, Float:rotx, Float:roty, Float:rotz;
-	switch(random(12))
-	{
-	    case 0: format(str,sizeof(str),"AK-47"),dayzmodel = 355, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	    case 1: format(str,sizeof(str),"Sniper Rifle"),dayzmodel = 358, rotx = 276.0, roty = 90.0, rotz = 90.0;
-	    case 2: format(str,sizeof(str),"Medical Kit"),dayzmodel = 11738, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 3: format(str,sizeof(str),"Engine"),dayzmodel = 2891, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 4: format(str,sizeof(str),"Alice Pack"),dayzmodel = 1310, rotx = 271.99987792969, roty = 270.00048828125, rotz = 270.00036621094;
-	    case 5: format(str,sizeof(str),"Coyote Backpack"),dayzmodel = 1550, rotx = 79.237274169922, roty = 68.415649414063, rotz = 107.93438720703;
-	    case 6: format(str,sizeof(str),"Tent"),dayzmodel = 1279, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 7: format(str,sizeof(str),"Radio Device"),dayzmodel = 330, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 8: format(str,sizeof(str),"Sniper Skin"),dayzmodel = 1275, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-	    case 9: format(str,sizeof(str),"Antibiotics"),dayzmodel = 1577, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 10: format(str,sizeof(str),"Heat Pack"),dayzmodel = 2058, rotx = 0.0, roty = 0.0, rotz = 0.0;
-       	case 11: format(str,sizeof(str),"Rope"),dayzmodel = 19088, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	}
-	Loot[lootCount][ModelID] = dayzmodel;
-	Loot[lootCount][LootName] = str;
-	Loot[lootCount][LootRotX] = rotx;
-	Loot[lootCount][LootRotY] = roty;
-	Loot[lootCount][LootRotZ] = rotz;
-	return 1;
-}
+function DayZSA_LootSetupHigh() return SetupGroundLoot(LootPoolHigh[random(sizeof(LootPoolHigh))]);
 
-function DayZSA_LootSetupMilitary()
-{
-	new str[64],dayzmodel, Float:rotx, Float:roty, Float:rotz;
-	switch(random(24))
-	{
-	    case 0: format(str,sizeof(str),"AK-47"),dayzmodel = 355, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-	    case 1: format(str,sizeof(str),"M4"),dayzmodel = 356, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-	    case 2: format(str,sizeof(str),"Sniper Rifle"),dayzmodel = 358, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-	    case 3: format(str,sizeof(str),"Sniper Ammo"),dayzmodel = 3013, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 4: format(str,sizeof(str),"Engine"),dayzmodel = 2891, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 5: format(str,sizeof(str),"Alice Pack"),dayzmodel = 1310, rotx = 271.99987792969, roty = 270.00048828125, rotz = 270.00036621094;
-	    case 6: format(str,sizeof(str),"Coyote Backpack"),dayzmodel = 1550, rotx = 79.237274169922, roty = 68.415649414063, rotz = 107.93438720703;
-	    case 7: format(str,sizeof(str),"Tent"),dayzmodel = 1279, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 8: format(str,sizeof(str),"Radio Device"),dayzmodel = 330, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 9: format(str,sizeof(str),"Sniper Skin"),dayzmodel = 1275, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-	    case 10: format(str,sizeof(str),"Army Skin"),dayzmodel = 1275, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-	    case 11: format(str,sizeof(str),"Assault Ammo"),dayzmodel = 3013, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 12: format(str,sizeof(str),"Tire"),dayzmodel = 1025, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 13: format(str,sizeof(str),"Toolbox"),dayzmodel = 3052, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 14: format(str,sizeof(str),"Pistol Ammo"),dayzmodel = 3013, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 15: format(str,sizeof(str),"Shotgun Ammo"),dayzmodel = 3013, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 16: format(str,sizeof(str),"Assault Ammo"),dayzmodel = 3013, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 17: format(str,sizeof(str),"Sniper Ammo"),dayzmodel = 3013, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 18: format(str,sizeof(str),"Dirty Pizza Slice"),dayzmodel = 2814, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 19: format(str,sizeof(str),"SMG Ammo"),dayzmodel = 3013, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 20: format(str,sizeof(str),"Full Jerry Can"),dayzmodel = 1650, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	    case 21: format(str,sizeof(str),"Shotgun"),dayzmodel = 349, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-      	case 22: format(str,sizeof(str),"Flashlight"),dayzmodel = 18641, rotx = 82.7929077, roty = 236.4282684, rotz = 123.7814941;
-     	case 23: format(str,sizeof(str),"Rope"),dayzmodel = 19088, rotx = 0.0, roty = 0.0, rotz = 0.0;
-	}
-	Loot[lootCount][ModelID] = dayzmodel;
-	Loot[lootCount][LootName] = str;
-	Loot[lootCount][LootRotX] = rotx;
-	Loot[lootCount][LootRotY] = roty;
-	Loot[lootCount][LootRotZ] = rotz;
-	return 1;
-}
+function DayZSA_LootSetupMilitary() return SetupGroundLoot(LootPoolMilitary[random(sizeof(LootPoolMilitary))]);
 
 function DayZSA_CreateVehicleStorage()
 {
@@ -627,63 +425,12 @@ function DayZSA_CreateLootsDeadBody(playerid,Float:pXX,Float:pYX,Float:pZX)
 	Loot[lootCount][zLootDeadBodyY] = pYX;
 	Loot[lootCount][zLootDeadBodyZ] = pZX;
 
-    if(PlayerHasItem(playerid, "Binoculars")) DayZSA_CreateLootsFunction("Binoculars",pXX+random(2),pYX+random(4),pZX);
-    if(PlayerHasItem(playerid, "Road Flare")) DayZSA_CreateLootsFunction("Road Flare",pXX+random(2),pYX+random(4),pZX);
-    if(PlayerHasItem(playerid, "Map")) DayZSA_CreateLootsFunction("Map",pXX+random(2),pYX+random(2),pZX);
-	if(PlayerHasItem(playerid, "GPS")) DayZSA_CreateLootsFunction("GPS",pXX+random(2),pYX+random(7),pZX);
-	if(PlayerHasItem(playerid, "Sniper Skin")) DayZSA_CreateLootsFunction("Sniper Skin",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Civilian Skin")) DayZSA_CreateLootsFunction("Civilian Skin",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Army Skin")) DayZSA_CreateLootsFunction("Army Skin",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Tent")) DayZSA_CreateLootsFunction("Tent",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Radio Device")) DayZSA_CreateLootsFunction("Radio Device",pXX+random(2),pYX+random(5),pZX);
-	if(PlayerHasItem(playerid, "Bandage")) DayZSA_CreateLootsFunction("Bandage",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Painkiller")) DayZSA_CreateLootsFunction("Painkiller",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Morphine")) DayZSA_CreateLootsFunction("Morphine",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Medical Kit")) DayZSA_CreateLootsFunction("Medical Kit",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Blood Bag")) DayZSA_CreateLootsFunction("Blood Bag",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Can of Beans")) DayZSA_CreateLootsFunction("Can of Beans",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Burger")) DayZSA_CreateLootsFunction("Burger",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Dirty Pizza Slice")) DayZSA_CreateLootsFunction("Dirty Pizza Slice",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Orange")) DayZSA_CreateLootsFunction("Orange",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Rum")) DayZSA_CreateLootsFunction("Rum",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Gin")) DayZSA_CreateLootsFunction("Gin",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Apple")) DayZSA_CreateLootsFunction("Apple",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Packet Of Cereals")) DayZSA_CreateLootsFunction("Packet Of Cereals",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Tomato")) DayZSA_CreateLootsFunction("Tomato",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Banana")) DayZSA_CreateLootsFunction("Banana",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Fresh Juice")) DayZSA_CreateLootsFunction("Fresh Juice",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Full Water Bottle")) DayZSA_CreateLootsFunction("Full Water Bottle",pXX+random(2),pYX+random(8),pZX);
-	if(PlayerHasItem(playerid, "Milk")) DayZSA_CreateLootsFunction("Milk",pXX+random(2),pYX+random(5),pZX);
-	if(PlayerHasItem(playerid, "Soda Bottle")) DayZSA_CreateLootsFunction("Soda Bottle",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Tire")) DayZSA_CreateLootsFunction("Tire",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Empty Jerry Can")) DayZSA_CreateLootsFunction("Empty Jerry Can",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Full Jerry Can")) DayZSA_CreateLootsFunction("Full Jerry Can",pXX+random(1),pYX+random(8),pZX);
-	if(PlayerHasItem(playerid, "Engine")) DayZSA_CreateLootsFunction("Engine",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Toolbox")) DayZSA_CreateLootsFunction("Toolbox",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "AK-47")) DayZSA_CreateLootsFunction("AK-47",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "M4")) DayZSA_CreateLootsFunction("M4",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Silenced Pistol")) DayZSA_CreateLootsFunction("Silenced Pistol",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Pistol")) DayZSA_CreateLootsFunction("Pistol",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Shotgun")) DayZSA_CreateLootsFunction("Shotgun",pXX+random(8),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "SPAZ-12 Shotgun")) DayZSA_CreateLootsFunction("SPAZ-12 Shotgun",pXX+random(2),pYX+random(1),pZX);
-	if(PlayerHasItem(playerid, "Country Rifle")) DayZSA_CreateLootsFunction("Country Rifle",pXX+random(6),pYX+random(8),pZX);
-	if(PlayerHasItem(playerid, "Sniper Rifle")) DayZSA_CreateLootsFunction("Sniper Rifle",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "MP5")) DayZSA_CreateLootsFunction("MP5",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Katana")) DayZSA_CreateLootsFunction("Katana",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Baseball Bat")) DayZSA_CreateLootsFunction("Baseball Bat",pXX+random(3),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Pistol Ammo")) DayZSA_CreateLootsFunction("Pistol Ammo",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Shotgun Ammo")) DayZSA_CreateLootsFunction("Shotgun Ammo",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Sniper Ammo")) DayZSA_CreateLootsFunction("Sniper Ammo",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Assault Ammo")) DayZSA_CreateLootsFunction("Assault Ammo",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "SMG Ammo")) DayZSA_CreateLootsFunction("SMG Ammo",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Heat Pack")) DayZSA_CreateLootsFunction("Heat Pack",pXX+random(2),pYX+random(4),pZX);
-	if(PlayerHasItem(playerid, "Whiskey Bottle")) DayZSA_CreateLootsFunction("Whiskey Bottle",pXX+random(2),pYX+random(4),pZX);
-    if(PlayerHasItem(playerid, "Raw Meat")) DayZSA_CreateLootsFunction("Raw Meat",pXX+random(2),pYX+random(4),pZX);
-    if(PlayerHasItem(playerid, "Cooked Meat")) DayZSA_CreateLootsFunction("Cooked Meat",pXX+random(2),pYX+random(4),pZX);
-    if(PlayerHasItem(playerid, "Wood")) DayZSA_CreateLootsFunction("Wood",pXX+random(2),pYX+random(4),pZX);
-    if(PlayerHasItem(playerid, "Lighter")) DayZSA_CreateLootsFunction("Lighter",pXX+random(2),pYX+random(4),pZX);
-    if(PlayerHasItem(playerid, "Antibiotics")) DayZSA_CreateLootsFunction("Antibiotics",pXX+random(2),pYX+random(4),pZX);
-   	if(PlayerHasItem(playerid, "Dirty Water Bottle")) DayZSA_CreateLootsFunction("Dirty Water Bottle",pXX+random(2),pYX+random(8),pZX);
+	for(new i; i < sizeof(ItemCatalog); i++)
+	{
+		if(ItemCatalog[i][itemDeathDrop] && PlayerHasItem(playerid, ItemCatalog[i][itemName]))
+			DayZSA_CreateLootsFunction(ItemCatalog[i][itemName], pXX + random(2), pYX + random(4), pZX);
+	}
+
 
 	if(GetPlayerSkin(playerid) == CIVSKIN) DayZSA_CreateLootsFunction("Civilian Skin",pXX+random(7),pYX+random(3),pZX);
 	if(GetPlayerSkin(playerid) == CIV) DayZSA_CreateLootsFunction("Army Skin",pXX+random(7),pYX+random(3),pZX);

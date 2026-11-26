@@ -1,831 +1,304 @@
 public OnPlayerUseItem(playerid,ItemName[])
 {
-    if(!PlayerHasItem(playerid, ItemName)) return 0;
-    if(!IsPlayerNPC(playerid))
-    {
-        if(!strcmp(ItemName,"Empty Water Bottle",true))
-        {
-            SendClientMessage(playerid,-1,"*"COL_RED" This item is not useable enter an area that is swimmable to refill the water bottle!");
-		}
-  		if(!strcmp(ItemName,"Rope",true))
-        {
-            SendClientMessage(playerid,-1,"*"COL_RED" Write /kidnap when you're near a player.");
-		}
+	if(IsPlayerNPC(playerid) || !PlayerHasItem(playerid, ItemName)) return 0;
+	new id = FindItem(ItemName);
+	if(id == -1) return 0;
 
-        if(!strcmp(ItemName,"Raw Meat",true))
-        {
-			SendClientMessage(playerid, -1, ""chat" You cannot eat raw food. Find some wood and Lighter to cook this!");
-		}
-
-		if(!strcmp(ItemName, "Cooked Meat",true))
+	switch(ItemCatalog[id][itemType])
+	{
+		case ITEM_FOOD: return EatItem(playerid, id);
+		case ITEM_DRINK: return DrinkItem(playerid, id);
+		case ITEM_GUN: return LoadGunItem(playerid, id);
+		case ITEM_AMMO: return UseAmmoItem(playerid, id);
+		case ITEM_TOOL:
 		{
-	 	    if(pInfo[playerid][pHunger] >= 2350) return SendClientMessage(playerid,-1,""chat" You are not hungry!");
-			pInfo[playerid][pHunger] += 1250;
-			pInfo[playerid][pBlood] += 2500;
-			RemoveSlotToInventory(playerid,"Cooked Meat",1);
-			if(!IsPlayerInAnyVehicle(playerid))
-			{
-				ApplyAnimation(playerid, "FOOD", "EAT_Chicken",4.1,false,true,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
+			GivePlayerWeaponEx(playerid, ItemCatalog[id][itemWeapon], ItemCatalog[id][itemLoadAmmo]);
+			RemoveSlotToInventory(playerid, ItemCatalog[id][itemName], 1);
+			PlayItemAnim(playerid, "BASEBALL", "BAT_PART");
 		}
-		if(!strcmp(ItemName,"Dirty Water Bottle",true))
-	 	{
-	 	    if(pInfo[playerid][pThrist] >= 98) return SendClientMessage(playerid,-1,"*"COL_GREY" You are not thirsty!");
-			pInfo[playerid][pThrist] -= 30;
-
-			RemoveSlotToInventory(playerid,"Dirty Water Bottle",1);
-			SendClientMessage(playerid, COLOR_RED, "You lost thirst while drinking dirty water");
-			AddSlotToInventoryWorld(playerid,"Empty Water Bottle",1);
-			if(!IsPlayerInAnyVehicle(playerid))
-	    	{
-				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,false,true,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-	  	}
-        if(!strcmp(ItemName,"Antibiotics",true))
-        {
-            if(pInfo[playerid][pInfection] == 0)
-            {
-				SendClientMessage(playerid, -1, "*"COL_RED" You are not infected of any sort!");
-			}
-			else
-			{
-				PlayerTextDrawSetString(playerid, LegBroken[playerid], "Broken Leg");
-				PlayerTextDrawHide(playerid, LegBroken[playerid]);
-				SetPlayerDrunkLevel(playerid, 0);
-				KillTimer(pInfo[playerid][Bleeding]);
-			    SendClientMessage(playerid, -1, ""chat" You have sucessfully used antibiotics. You have been cured. If screen still dark use painkiller!");
-			}
-		}
-
-        if(!strcmp(ItemName,"Wood",true))
-        {
-        	if(PlayerHasItem(playerid, "Lighter"))
-         	{
-                DayZSA_CreateCampFire(playerid);
-				if(!IsPlayerInAnyVehicle(playerid))
-				{
-					ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			}
-			else SendClientMessage(playerid, -1, ""chat" You need Lighter to start a camp fire!");
-		}
-
-        if(!strcmp(ItemName,"Lighter",true))
+		case ITEM_SKIN:
 		{
-        	if(PlayerHasItem(playerid, "Wood"))
-         	{
-                DayZSA_CreateCampFire(playerid);
-       			if(!IsPlayerInAnyVehicle(playerid))
-				{
-					ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			}
-			else SendClientMessage(playerid, -1, ""chat" You need some wood to start a camp fire!");
-		}
-
-		if(!strcmp(ItemName,"Bandage",true))
-	 	{
-	 	    if(pInfo[playerid][IsPlayerBleeding] == 0) return SendClientMessage(playerid,-1,""chat" You are not bleeding!");
-			RemovePlayerAttachedObject(playerid, 2);
-	 		KillTimer(pInfo[playerid][Bleeding]);
-	 		pInfo[playerid][IsPlayerBleeding] = 0;
-			RemoveSlotToInventory(playerid,"Bandage",1);
-			if(!IsPlayerInAnyVehicle(playerid))
-			{
-				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-	  	}
-
-		if(!strcmp(ItemName,"Morphine",true))
-	 	{
-	 	    if(pInfo[playerid][IsPlayerLegBroken] == 0) return SendClientMessage(playerid,-1,""chat" Your leg is not broken!");
-			PlayerTextDrawHide(playerid, LegBroken[playerid]);
-	    	pInfo[playerid][IsPlayerLegBroken] = 0;
-			RemoveSlotToInventory(playerid,"Morphine",1);
-			if(!IsPlayerInAnyVehicle(playerid))
-			{
-				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-	  	}
-
-		if(!strcmp(ItemName,"Can of Beans",true))
-	 	{
-	 	    if(pInfo[playerid][pHunger] >= 2350) return SendClientMessage(playerid,-1,""chat" You are not hungry!");
-			pInfo[playerid][pHunger] += 750;
-			pInfo[playerid][pBlood] += random(350);
-			RemoveSlotToInventory(playerid,"Can of Beans",1);
-			if(!IsPlayerInAnyVehicle(playerid))
-	    	{
-				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,false,false,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-	  	}
-
-		if(!strcmp(ItemName,"Dirty Pizza Slice",true))
-	 	{
-	 	    if(pInfo[playerid][pHunger] >= 2350) return SendClientMessage(playerid,-1,""chat" You are not hungry!");
-			pInfo[playerid][pHunger] += 950;
-			pInfo[playerid][pBlood] += random(350);
-			RemoveSlotToInventory(playerid,"Dirty Pizza Slice",1);
-  			if(!IsPlayerInAnyVehicle(playerid))
-	    	{
-				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,false,false,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-	  	}
-  		if(!strcmp(ItemName,"Flashlight",true))
-        {
-			if(pInfo[playerid][pFlashlight] == 0)
-			{
-	   			if(IsPlayerAttachedObjectSlotUsed(playerid,3)) RemovePlayerAttachedObject(playerid,3);
-				if(IsPlayerAttachedObjectSlotUsed(playerid,4)) RemovePlayerAttachedObject(playerid,4);
-				SetPlayerAttachedObject(playerid, 3,18656, 5, 0.1, 0.038, -0.1, -90, 180, 0, 0.03, 0.03, 0.03);
-				SetPlayerAttachedObject(playerid, 4,18641, 5, 0.1, 0.02, -0.05, 0, 0, 0, 1, 1, 1);
-				SendClientMessage(playerid, -1, "*"COL_GREEN" Flashlight sucessfully equipped, to turn it off /flashoff");
-				pInfo[playerid][pFlashlight] = 1;
-			}
-			else
-			{
-			    SendClientMessage(playerid, -1, "*"COL_RED" Flashlight is currently on to turn it off, /flashoff");
-			}
-		}
-
-
-        if(!strcmp(ItemName,"Orange",true))
-	 	{
-	 	    if(pInfo[playerid][pHunger] >= 2350) return SendClientMessage(playerid,-1,""chat" You are not hungry!");
-			pInfo[playerid][pHunger] += 400;
-			pInfo[playerid][pBlood] += random(350);
-			RemoveSlotToInventory(playerid,"Orange",1);
-  			if(!IsPlayerInAnyVehicle(playerid))
-	    	{
-				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,false,false,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-	  	}
- 		if(!strcmp(ItemName,"Banana",true))
-	 	{
-	 	    if(pInfo[playerid][pHunger] >= 2350) return SendClientMessage(playerid,-1,""chat" You are not hungry!");
-			pInfo[playerid][pHunger] += 300;
-			pInfo[playerid][pBlood] += random(350);
-			RemoveSlotToInventory(playerid,"Banana",1);
-  			if(!IsPlayerInAnyVehicle(playerid))
-	    	{
-				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,false,false,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-	  	}
-  		if(!strcmp(ItemName,"Tomato",true))
-	 	{
-	 	    if(pInfo[playerid][pHunger] >= 2350) return SendClientMessage(playerid,-1,""chat" You are not hungry!");
-			pInfo[playerid][pHunger] += 400;
-			pInfo[playerid][pBlood] += random(350);
-			RemoveSlotToInventory(playerid,"Tomato",1);
-  			if(!IsPlayerInAnyVehicle(playerid))
-	    	{
-				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,false,false,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-	  	}
-	  	if(!strcmp(ItemName,"Apple",true))
-	 	{
-	 	    if(pInfo[playerid][pHunger] >= 2350) return SendClientMessage(playerid,-1,""chat" You are not hungry!");
-			pInfo[playerid][pHunger] += 400;
-			pInfo[playerid][pBlood] += random(350);
-			RemoveSlotToInventory(playerid,"Apple",1);
-  			if(!IsPlayerInAnyVehicle(playerid))
-	    	{
-				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,false,false,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-	  	}
-	  	if(!strcmp(ItemName,"Packet Of Cereals",true))
-	 	{
-	 	    if(pInfo[playerid][pHunger] >= 2350) return SendClientMessage(playerid,-1,""chat" You are not hungry!");
-			pInfo[playerid][pHunger] += 290;
-			pInfo[playerid][pBlood] += random(350);
-			RemoveSlotToInventory(playerid,"Packet Of Cereals",1);
-  			if(!IsPlayerInAnyVehicle(playerid))
-	    	{
-				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,false,false,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-	  	}
-		if(!strcmp(ItemName,"Burger",true))
-	 	{
-	 	    if(pInfo[playerid][pHunger] >= 2350) return SendClientMessage(playerid,-1,""chat" You are not hungry!");
-			pInfo[playerid][pHunger] += 600;
-			pInfo[playerid][pBlood] += random(350);
-			RemoveSlotToInventory(playerid,"Burger",1);
-			if(!IsPlayerInAnyVehicle(playerid))
-	    	{
-				ApplyAnimation(playerid, "FOOD", "EAT_Burger",4.1,false,false,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-	  	}
-
-		if(!strcmp(ItemName,"Blood Bag",true))
-	 	{
-	 	    if(pInfo[playerid][pBlood] == 12000) return SendClientMessage(playerid,-1,""chat" You already have enough blood injected!");
-			pInfo[playerid][pBlood] = 12000;
-			RemoveSlotToInventory(playerid,"Blood Bag",1);
-			if(!IsPlayerInAnyVehicle(playerid))
-			{
-				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-	  	}
-
-		if(!strcmp(ItemName,"Painkiller",true))
-	 	{
-	 	    if(pInfo[playerid][IsPlayerDrunk] == 1)
-	 	    {
-				SetPlayerDrunkLevel(playerid,0);
-			}
-
-			if(pInfo[playerid][pFade] == 1)
-			{
-  				PlayerTextDrawHide(playerid, PlayerFade[playerid]);
-				pInfo[playerid][pFade] = -1;
-			}
-			RemoveSlotToInventory(playerid,"Painkiller",1);
-			if(!IsPlayerInAnyVehicle(playerid))
-			{
-				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-	  	}
-
-		if(!strcmp(ItemName,"Medical Kit",true))
-	 	{
-			pInfo[playerid][pBlood] = 12000;
-			SetPlayerDrunkLevel(playerid,0);
-			if(pInfo[playerid][IsPlayerLegBroken] == 1)
-			{
-				PlayerTextDrawHide(playerid, LegBroken[playerid]);
-	    		pInfo[playerid][IsPlayerLegBroken] = 0;
-			}
-
-			if(pInfo[playerid][IsPlayerBleeding] == 1)
-			{
-				RemovePlayerAttachedObject(playerid, 2);
-		 		KillTimer(pInfo[playerid][Bleeding]);
-		 		pInfo[playerid][IsPlayerBleeding] = 0;
-			}
-			RemoveSlotToInventory(playerid,"Medical Kit",1);
-			if(!IsPlayerInAnyVehicle(playerid))
-			{
-				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-	  	}
-
-	  	if(!strcmp(ItemName,"Road Flare",true))
-	  	{
-			//ApplyAnimation(playerid,"GRENADE","WEAPON_throwu",4.0,false,true,true,false,1,1);
-			ApplyAnimation(playerid, "GRENADE", "WEAPON_throw", 4.5, false, true, true, true, 1, 1);
-			SetTimerEx("ThrowFlare",4000,false,"i",playerid);
-			SetTimerEx("DestroyRoadFlare",480000,false,"i",playerid);
-			RemoveSlotToInventory(playerid,"Road Flare",1);
-		}
-
-		if(!strcmp(ItemName,"Whiskey Bottle",true))
-		{
-		    if(pInfo[playerid][IsPlayerDrunk] == 0)
-		    {
-		    	KillTimer(pInfo[playerid][IsPlayerDrunkTimer]);
-		    	pInfo[playerid][IsPlayerDrunkTimer] = SetTimerEx("VodkaStop",60000,false,"i",playerid);
-				SetPlayerDrunkLevel(playerid,8000);
-				pInfo[playerid][IsPlayerDrunk] = 1;
-            	//ApplyAnimation(playerid,"PED","WALK_DRUNK",4.0,true,true,true,true,1);
-            	ApplyAnimation(playerid, "PED", "WALK_DRUNK", 4.0, true, true, true, true, 1, 1);
-            	pInfo[playerid][pThrist] += 800;
-            	pInfo[playerid][pBlood] += 800;
-            	RemoveSlotToInventory(playerid,"Whiskey Bottle",1);
-			}
-			else return SendClientMessage(playerid,-1,"*"COL_RED" No just no.");
-		}
-
-		if(!strcmp(ItemName,"Soda Bottle",true))
-	 	{
-	 	    if(pInfo[playerid][pThrist] >= 980) return SendClientMessage(playerid,-1,""chat" You are not thirsty!");
-			pInfo[playerid][pThrist] += 580;
-			RemoveSlotToInventory(playerid,"Soda Bottle",1);
-			if(!IsPlayerInAnyVehicle(playerid))
-	    	{
-				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,false,true,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-	  	}
-
-		if(!strcmp(ItemName,"Milk",true))
-	 	{
-	 	    if(pInfo[playerid][pThrist] >= 980) return SendClientMessage(playerid,-1,""chat" You are not thirsty!");
-			pInfo[playerid][pThrist] += 780;
-			RemoveSlotToInventory(playerid,"Milk",1);
-	  	}
-
-		if(!strcmp(ItemName,"Full Water Bottle",true))
-	 	{
-	 	    if(pInfo[playerid][pThrist] >= 980) return SendClientMessage(playerid,-1,""chat" You are not thirsty!");
-			pInfo[playerid][pThrist] += 850;
-			RemoveSlotToInventory(playerid,"Full Water Bottle",1);
-			AddSlotToInventoryWorld(playerid,"Empty Water Bottle",1);
-			if(!IsPlayerInAnyVehicle(playerid))
-	    	{
-				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,false,true,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-	  	}
-	    if(!strcmp(ItemName,"Fresh Juice",true))
-	 	{
-	 	    if(pInfo[playerid][pThrist] >= 980) return SendClientMessage(playerid,-1,""chat" You are not thirsty!");
-			pInfo[playerid][pThrist] += 850;
-			RemoveSlotToInventory(playerid,"Fresh Juice",1);
-			if(!IsPlayerInAnyVehicle(playerid))
-	    	{
-				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,false,true,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-	  	}
-		if(!strcmp(ItemName,"Rum",true))
-	 	{
-	 	    if(pInfo[playerid][pThrist] >= 980) return SendClientMessage(playerid,-1,""chat" You are not thirsty!");
-			pInfo[playerid][pThrist] += 850;
-			RemoveSlotToInventory(playerid,"Rum",1);
-			if(!IsPlayerInAnyVehicle(playerid))
-	    	{
-				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,false,true,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-	  	}
-		if(!strcmp(ItemName,"Gin",true))
-	 	{
-	 	    if(pInfo[playerid][pThrist] >= 980) return SendClientMessage(playerid,-1,""chat" You are not thirsty!");
-			pInfo[playerid][pThrist] += 850;
-			RemoveSlotToInventory(playerid,"Gin",1);
-			if(!IsPlayerInAnyVehicle(playerid))
-	    	{
-				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,false,true,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-	  	}
-
-	  	if(!strcmp(ItemName,"SPAZ-12 Shotgun",true))
-	 	{
-			if(PlayerHasItem(playerid,"Shotgun Ammo"))
-			{
-				GivePlayerWeaponEx(playerid, 27, 15);
-				RemoveSlotToInventory(playerid,"SPAZ-12 Shotgun",1);
-				RemoveSlotToInventory(playerid,"Shotgun Ammo",1);
-				if(!IsPlayerInAnyVehicle(playerid))
-		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			}
-			else return SendClientMessage(playerid,-1,""chat" You don't have any shotgun ammo on you!");
-		}
-
-	  	if(!strcmp(ItemName,"Pistol",true))
-	 	{
-	 	    if(PlayerHasItem(playerid,"Pistol Ammo"))
-	 	    {
-				GivePlayerWeaponEx(playerid, 22, 30);
-				RemoveSlotToInventory(playerid,"Pistol",1);
-				RemoveSlotToInventory(playerid,"Pistol Ammo",1);
-				if(!IsPlayerInAnyVehicle(playerid))
-		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			}
-			else return SendClientMessage(playerid,-1,""chat" You don't have any pistol ammo on you!");
-	  	}
-
-		if(!strcmp(ItemName,"AK-47",true))
-	 	{
-			if(PlayerHasItem(playerid,"Assault Ammo"))
-			{
-				GivePlayerWeaponEx(playerid, 30, 35);
-				RemoveSlotToInventory(playerid,"AK-47",1);
-				RemoveSlotToInventory(playerid,"Assault Ammo",1);
-				if(!IsPlayerInAnyVehicle(playerid))
-		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			}
-			else return SendClientMessage(playerid,-1,""chat" You don't have any assault ammo on you!");
-	  	}
-
-		if(!strcmp(ItemName,"M4",true))
-	 	{
-			if(PlayerHasItem(playerid,"Assault Ammo"))
-			{
-				GivePlayerWeaponEx(playerid, 31,60);
-				RemoveSlotToInventory(playerid,"M4",1);
-				RemoveSlotToInventory(playerid,"Assault Ammo",1);
-				if(!IsPlayerInAnyVehicle(playerid))
-		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			}
-			else return SendClientMessage(playerid,-1,""chat" You don't have any assault ammo on you!");
-		}
-
-		if(!strcmp(ItemName,"Sniper Rifle",true))
-	 	{
-			if(PlayerHasItem(playerid,"Sniper Ammo"))
-			{
-				GivePlayerWeaponEx(playerid, 34, 15);
-				RemoveSlotToInventory(playerid,"Sniper Rifle",1);
-				RemoveSlotToInventory(playerid,"Sniper Ammo",1);
-				if(!IsPlayerInAnyVehicle(playerid))
-		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			}
-			else return SendClientMessage(playerid,-1,""chat" You don't have any sniper ammo on you!");
-		}
-
-		if(!strcmp(ItemName,"Country Rifle",true))
-	 	{
-			if(PlayerHasItem(playerid,"Sniper Ammo"))
-			{
-				GivePlayerWeaponEx(playerid, 33, 10);
-				RemoveSlotToInventory(playerid,"Country Rifle",1);
-				RemoveSlotToInventory(playerid,"Sniper Ammo",1);
- 				if(!IsPlayerInAnyVehicle(playerid))
-		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			}
-			else return SendClientMessage(playerid,-1,""chat" You don't have any sniper ammo on you!");
-		}
-
-		if(!strcmp(ItemName,"Shotgun",true))
-	 	{
-	 	    if(PlayerHasItem(playerid,"Shotgun Ammo"))
-	 	    {
-				GivePlayerWeaponEx(playerid, 25, 10);
-				RemoveSlotToInventory(playerid,"Shotgun",1);
-				RemoveSlotToInventory(playerid,"Shotgun Ammo",1);
- 				if(!IsPlayerInAnyVehicle(playerid))
-		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			}
-			else return SendClientMessage(playerid,-1,""chat" You don't have any shotgun ammo on you!");
-	  	}
-
-		if(!strcmp(ItemName,"MP5",true))
-	 	{
-			if(PlayerHasItem(playerid,"SMG Ammo"))
-			{
-				GivePlayerWeaponEx(playerid, 29, 35);
-				RemoveSlotToInventory(playerid,"MP5",1);
-				RemoveSlotToInventory(playerid,"SMG Ammo",1);
-				if(!IsPlayerInAnyVehicle(playerid))
-		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			}
-			else return SendClientMessage(playerid,-1,""chat" You don't have any SMG ammo on you!");
-	  	}
-
-		if(!strcmp(ItemName,"Silenced Pistol",true))
-		{
-			if(PlayerHasItem(playerid,"Pistol Ammo"))
-			{
-				GivePlayerWeaponEx(playerid, 23, 15);
-				RemoveSlotToInventory(playerid,"Silenced Pistol",1);
-				RemoveSlotToInventory(playerid,"Pistol Ammo",1);
-				if(!IsPlayerInAnyVehicle(playerid))
-		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			}
-			else return SendClientMessage(playerid,-1,""chat" You don't have any pistol ammo on you!");
-		}
-
-		if(!strcmp(ItemName,"Toolbox",true))
-		{
-		    if(!IsPlayerInAnyVehicle(playerid))
-		    {
-		        if(IsPlayerInRangeOfPoint(playerid,10.0,vInfo[GetVehicleNearID(playerid)][vX],vInfo[GetVehicleNearID(playerid)][vY],vInfo[GetVehicleNearID(playerid)][vZ]))
-		        {
-					RepairVehicle(GetVehicleNearID(playerid));
-					SetVehicleHealth(GetVehicleNearID(playerid),800.0);
-					if(!IsPlayerInAnyVehicle(playerid))
-					{
-						ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
-						SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-					}
-				}
-				else return SendClientMessage(playerid,-1,""chat" You must be near a vehicle to repair!");
-			}
-			else return SendClientMessage(playerid,-1,""chat" You cannot be in a vehicle to repair!");
-		}
-
-		if(!strcmp(ItemName,"Map",true))
-	 	{
-	 	    SendClientMessage(playerid, -1, "*"COL_RED" Press 'middle mouse button' to open/close map. A GPS unlocks the Mini-map");
-	  	}
-
-		if(!strcmp(ItemName,"GPS",true))
-	 	{
-   			if(pInfo[playerid][pIsMapOpened] == 1)
-   			{
-   				PlayerTextDrawShow(playerid, blockMap[playerid]);
-				GangZoneShowForPlayer(playerid,BlockMap,0x000000FF);
-	    		pInfo[playerid][pIsMapOpened] = 0;
-    		}
-			else
-			{
-				PlayerTextDrawHide(playerid, blockMap[playerid]);
-	    		GangZoneHideForPlayer(playerid,BlockMap);
-	    		pInfo[playerid][pIsMapOpened] = 1;
-			}
-		}
-
-	  	if(!strcmp(ItemName,"Sniper Ammo",true))
-	  	{
-	  	    if(GetPlayerWeapon(playerid) == 34)
-	  	    {
-				GivePlayerWeaponEx(playerid,34,10);
-				SendClientMessage(playerid,-1,""chat" Added ammo to your 'Sniper Rifle'");
-				RemoveSlotToInventory(playerid,"Sniper Ammo",1);
-				if(!IsPlayerInAnyVehicle(playerid))
-		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			}
-
-			if(GetPlayerWeapon(playerid) == 33)
-			{
-			    GivePlayerWeaponEx(playerid,33,15);
-				SendClientMessage(playerid,-1,""chat" Added ammo to your 'Country Rifle'");
-				RemoveSlotToInventory(playerid,"Sniper Ammo",1);
-				if(!IsPlayerInAnyVehicle(playerid))
-		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			}
-		}
-
-		if(!strcmp(ItemName,"Shotgun Ammo",true))
-	  	{
-	  	    if(GetPlayerWeapon(playerid) == 25)
-	  	    {
-				GivePlayerWeaponEx(playerid,25,10);
-				SendClientMessage(playerid,-1,""chat" Added ammo to your 'Shotgun'");
-				RemoveSlotToInventory(playerid,"Shotgun Ammo",1);
-				if(!IsPlayerInAnyVehicle(playerid))
-		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			}
-
-			if(GetPlayerWeapon(playerid) == 27)
-			{
-			    GivePlayerWeaponEx(playerid,27,15);
-				SendClientMessage(playerid,-1,""chat" Added ammo to your 'SPAZ-12 Shotgun'");
-				RemoveSlotToInventory(playerid,"Shotgun Ammo",1);
-				if(!IsPlayerInAnyVehicle(playerid))
-		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			}
-		}
-
-		if(!strcmp(ItemName,"Pistol Ammo",true))
-	  	{
-	  	    if(GetPlayerWeapon(playerid) == 22)
-	  	    {
-				GivePlayerWeaponEx(playerid,22,30);
-				SendClientMessage(playerid,-1,""chat" Added ammo to your 'Pistol'");
-				RemoveSlotToInventory(playerid,"Pistol Ammo",1);
-				if(!IsPlayerInAnyVehicle(playerid))
-		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			}
-
-			if(GetPlayerWeapon(playerid) == 23)
-			{
-			    GivePlayerWeaponEx(playerid,23,10);
-				SendClientMessage(playerid,-1,""chat" Added ammo to your 'Silenced Pistol'");
-				RemoveSlotToInventory(playerid,"Pistol Ammo",1);
-				if(!IsPlayerInAnyVehicle(playerid))
-		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			}
-		}
-
-		if(!strcmp(ItemName,"Assault Ammo",true))
-	  	{
-	  	    if(GetPlayerWeapon(playerid) == 30)
-	  	    {
-				GivePlayerWeaponEx(playerid,30,28);
-				SendClientMessage(playerid,-1,""chat" Added ammo to your 'AK-47'");
-				RemoveSlotToInventory(playerid,"Assault Ammo",1);
-				if(!IsPlayerInAnyVehicle(playerid))
-		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			}
-
-			if(GetPlayerWeapon(playerid) == 31)
-			{
-			    GivePlayerWeaponEx(playerid,31,25);
-				SendClientMessage(playerid,-1,""chat" Added ammo to your 'M4'");
-				RemoveSlotToInventory(playerid,"Assault Ammo",1);
-				if(!IsPlayerInAnyVehicle(playerid))
-		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			}
-		}
-
-		if(!strcmp(ItemName,"SMG Ammo",true))
-	  	{
-	  	    if(GetPlayerWeapon(playerid) == 29)
-	  	    {
-				GivePlayerWeaponEx(playerid,29,15);
-				SendClientMessage(playerid,-1,""chat" Added ammo to your 'MP5'");
-				RemoveSlotToInventory(playerid,"SMG Ammo",1);
-				if(!IsPlayerInAnyVehicle(playerid))
-		    	{
-					ApplyAnimation(playerid, "RIFLE", "RIFLE_load",4.1,false,true,false,1000,1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			}
-		}
-
-		if(!strcmp(ItemName,"Tent",true))
-		{
-			if(pInfo[playerid][pTentCreated] == 0)
-			{
-		    	if(!DayZSA_CreateTent(playerid)) return 0;
-		    	SendClientMessage(playerid,-1,"*"COL_GREEN" Placed a tent!");
-            	RemoveSlotToInventory(playerid,"Tent",1);
-   				if(!IsPlayerInAnyVehicle(playerid))
-				{
-					ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			}
-			else return SendClientMessage(playerid, -1, ""chat" Cannot place tent, you've already created one please destroy your old one.");
-		}
-
-		if(!strcmp(ItemName,"Army Skin",true))
-		{
-		    SetPlayerSkin(playerid,CIV);
-			RemoveSlotToInventory(playerid,"Army Skin",1);
+			SetPlayerSkin(playerid, ItemCatalog[id][itemSkin]);
+			RemoveSlotToInventory(playerid, ItemCatalog[id][itemName], 1);
 			RemovePlayerAttachedObject(playerid, 4);
-			if(!IsPlayerInAnyVehicle(playerid))
+			PlayItemAnim(playerid, "BOMBER", "BOM_Plant");
+		}
+		case ITEM_SPECIAL: return UseSpecialItem(playerid, ItemCatalog[id][itemName]);
+		case ITEM_INFO:
+		{
+			if(ItemCatalog[id][itemText][0])
 			{
-				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-		}
-
-		if(!strcmp(ItemName,"Civilian Skin",true))
-		{
-		    SetPlayerSkin(playerid,CIVSKIN);
-			RemoveSlotToInventory(playerid,"Civilian Skin",1);
-			RemovePlayerAttachedObject(playerid, 4);
-			if(!IsPlayerInAnyVehicle(playerid))
-			{
-				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-		}
-
-		if(!strcmp(ItemName,"Sniper Skin",true))
-		{
-		    SetPlayerSkin(playerid,SNIP);
-			RemoveSlotToInventory(playerid,"Sniper Skin",1);
-			RemovePlayerAttachedObject(playerid, 4);
-			if(!IsPlayerInAnyVehicle(playerid))
-			{
-				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-		}
-
-		if(!strcmp(ItemName,"Katana",true))
-		{
-		    GivePlayerWeaponEx(playerid,8,1);
-			RemoveSlotToInventory(playerid,"Katana",1);
-			if(!IsPlayerInAnyVehicle(playerid))
-  			{
-				ApplyAnimation(playerid, "BASEBALL", "BAT_PART",4.1,false,true,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-		}
-
-		if(!strcmp(ItemName,"Baseball Bat",true))
-		{
-		    GivePlayerWeaponEx(playerid,5,1);
-			RemoveSlotToInventory(playerid,"Baseball Bat",1);
-			if(!IsPlayerInAnyVehicle(playerid))
-  			{
-				ApplyAnimation(playerid, "BASEBALL", "BAT_PART",4.1,false,true,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-		}
-
-		if(!strcmp(ItemName,"Binoculars",true))
-		{
-  		  	GivePlayerWeaponEx(playerid,43,99);
-			RemoveSlotToInventory(playerid,"Binoculars",1);
-			if(!IsPlayerInAnyVehicle(playerid))
-  			{
-				ApplyAnimation(playerid, "BASEBALL", "BAT_PART",4.1,false,true,false,1000,1);
-				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-			}
-		}
-
-		if(!strcmp(ItemName,"Full Jerry Can",true))
-		{
-		    SendClientMessage(playerid,-1,"*"COL_RED" Add the vehicle part into the vehicle gear!");
-		}
-
-		if(!strcmp(ItemName,"Engine",true))
-		{
-		    SendClientMessage(playerid,-1,"*"COL_RED" Add the vehicle part into the vehicle gear!");
-		}
-
-		if(!strcmp(ItemName,"Tire",true))
-		{
-		    SendClientMessage(playerid,-1,"*"COL_RED" Add the vehicle part into the vehicle gear!");
-		}
-
-		if(!strcmp(ItemName,"Radio Device",true))
-		{
-			ShowPlayerDialog(playerid,DIALOG_RADIO,DIALOG_STYLE_LIST,"DayZ - Radio Frequency","Low Frequency\nMedium Frequency\nNormal Frequency\nHigh Frequency","Change","Cancel");
-		}
-
-  		if(!strcmp(ItemName,"Heat Pack",true))
-        {
-			if(pInfo[playerid][pTemp] >= 99.0)
-			{
-            	SendClientMessage(playerid,-1,"*"COL_RED" You don't need to use any heat packs, your body is warm!");
-			}
-			else
-			{
-			    pInfo[playerid][pTemp] = 91.0;
-   				if(!IsPlayerInAnyVehicle(playerid))
-				{
-					ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
-					RemoveSlotToInventory(playerid,"Heat Pack",1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			}
-		}
-
-		if(!strcmp(ItemName,"Heat Pack Basic",true))
-        {
-			if(pInfo[playerid][pTemp] >= 99.0)
-			{
-            	SendClientMessage(playerid,-1,"*"COL_RED" You don't need to use any heat packs, your body is warm!");
-			}
-			else
-			{
-			    pInfo[playerid][pTemp] = 95.0;
-   				if(!IsPlayerInAnyVehicle(playerid))
-				{
-					ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
-					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-				}
-			    RemoveSlotToInventory(playerid,"Heat Pack Basic",1);
+				new msg[144];
+				format(msg, sizeof(msg), "*"COL_RED" %s", ItemCatalog[id][itemText]);
+				SendClientMessage(playerid, -1, msg);
 			}
 		}
 	}
-  	return 0;
+	return 1;
+}
+
+stock UseSpecialItem(playerid, const ItemName[])
+{
+	if(!strcmp(ItemName,"Antibiotics",true))
+	{
+		if(pInfo[playerid][pInfection] == 0)
+		{
+			SendClientMessage(playerid, -1, "*"COL_RED" You are not infected of any sort!");
+		}
+		else
+		{
+			PlayerTextDrawSetString(playerid, LegBroken[playerid], "Broken Leg");
+			PlayerTextDrawHide(playerid, LegBroken[playerid]);
+			SetPlayerDrunkLevel(playerid, 0);
+			KillTimer(pInfo[playerid][Bleeding]);
+			SendClientMessage(playerid, -1, ""chat" You have sucessfully used antibiotics. You have been cured. If screen still dark use painkiller!");
+		}
+	}
+	if(!strcmp(ItemName,"Wood",true))
+	{
+		if(PlayerHasItem(playerid, "Lighter"))
+		{
+			DayZSA_CreateCampFire(playerid);
+			if(!IsPlayerInAnyVehicle(playerid))
+			{
+				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
+			}
+		}
+		else SendClientMessage(playerid, -1, ""chat" You need Lighter to start a camp fire!");
+	}
+	if(!strcmp(ItemName,"Lighter",true))
+	{
+		if(PlayerHasItem(playerid, "Wood"))
+		{
+			DayZSA_CreateCampFire(playerid);
+			if(!IsPlayerInAnyVehicle(playerid))
+			{
+				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
+			}
+		}
+		else SendClientMessage(playerid, -1, ""chat" You need some wood to start a camp fire!");
+	}
+	if(!strcmp(ItemName,"Bandage",true))
+	{
+		if(pInfo[playerid][IsPlayerBleeding] == 0) return SendClientMessage(playerid,-1,""chat" You are not bleeding!");
+		RemovePlayerAttachedObject(playerid, 2);
+		KillTimer(pInfo[playerid][Bleeding]);
+		pInfo[playerid][IsPlayerBleeding] = 0;
+		RemoveSlotToInventory(playerid,"Bandage",1);
+		if(!IsPlayerInAnyVehicle(playerid))
+		{
+			ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
+			SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
+		}
+	}
+	if(!strcmp(ItemName,"Morphine",true))
+	{
+		if(pInfo[playerid][IsPlayerLegBroken] == 0) return SendClientMessage(playerid,-1,""chat" Your leg is not broken!");
+		PlayerTextDrawHide(playerid, LegBroken[playerid]);
+		pInfo[playerid][IsPlayerLegBroken] = 0;
+		RemoveSlotToInventory(playerid,"Morphine",1);
+		if(!IsPlayerInAnyVehicle(playerid))
+		{
+			ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
+			SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
+		}
+	}
+	if(!strcmp(ItemName,"Flashlight",true))
+	{
+		if(pInfo[playerid][pFlashlight] == 0)
+		{
+			if(IsPlayerAttachedObjectSlotUsed(playerid,3)) RemovePlayerAttachedObject(playerid,3);
+			if(IsPlayerAttachedObjectSlotUsed(playerid,4)) RemovePlayerAttachedObject(playerid,4);
+			SetPlayerAttachedObject(playerid, 3,18656, 5, 0.1, 0.038, -0.1, -90, 180, 0, 0.03, 0.03, 0.03);
+			SetPlayerAttachedObject(playerid, 4,18641, 5, 0.1, 0.02, -0.05, 0, 0, 0, 1, 1, 1);
+			SendClientMessage(playerid, -1, "*"COL_GREEN" Flashlight sucessfully equipped, to turn it off /flashoff");
+			pInfo[playerid][pFlashlight] = 1;
+		}
+		else
+		{
+			SendClientMessage(playerid, -1, "*"COL_RED" Flashlight is currently on to turn it off, /flashoff");
+		}
+	}
+	if(!strcmp(ItemName,"Blood Bag",true))
+	{
+		if(pInfo[playerid][pBlood] == 12000) return SendClientMessage(playerid,-1,""chat" You already have enough blood injected!");
+		pInfo[playerid][pBlood] = 12000;
+		RemoveSlotToInventory(playerid,"Blood Bag",1);
+		if(!IsPlayerInAnyVehicle(playerid))
+		{
+			ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
+			SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
+		}
+	}
+	if(!strcmp(ItemName,"Painkiller",true))
+	{
+		if(pInfo[playerid][IsPlayerDrunk] == 1)
+		{
+			SetPlayerDrunkLevel(playerid,0);
+		}
+
+		if(pInfo[playerid][pFade] == 1)
+		{
+			PlayerTextDrawHide(playerid, PlayerFade[playerid]);
+			pInfo[playerid][pFade] = -1;
+		}
+		RemoveSlotToInventory(playerid,"Painkiller",1);
+		if(!IsPlayerInAnyVehicle(playerid))
+		{
+			ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
+			SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
+		}
+	}
+	if(!strcmp(ItemName,"Medical Kit",true))
+	{
+		pInfo[playerid][pBlood] = 12000;
+		SetPlayerDrunkLevel(playerid,0);
+		if(pInfo[playerid][IsPlayerLegBroken] == 1)
+		{
+			PlayerTextDrawHide(playerid, LegBroken[playerid]);
+			pInfo[playerid][IsPlayerLegBroken] = 0;
+		}
+
+		if(pInfo[playerid][IsPlayerBleeding] == 1)
+		{
+			RemovePlayerAttachedObject(playerid, 2);
+			KillTimer(pInfo[playerid][Bleeding]);
+			pInfo[playerid][IsPlayerBleeding] = 0;
+		}
+		RemoveSlotToInventory(playerid,"Medical Kit",1);
+		if(!IsPlayerInAnyVehicle(playerid))
+		{
+			ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
+			SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
+		}
+	}
+	if(!strcmp(ItemName,"Road Flare",true))
+	{
+		//ApplyAnimation(playerid,"GRENADE","WEAPON_throwu",4.0,false,true,true,false,1,1);
+		ApplyAnimation(playerid, "GRENADE", "WEAPON_throw", 4.5, false, true, true, true, 1, 1);
+		SetTimerEx("ThrowFlare",4000,false,"i",playerid);
+		SetTimerEx("DestroyRoadFlare",480000,false,"i",playerid);
+		RemoveSlotToInventory(playerid,"Road Flare",1);
+	}
+	if(!strcmp(ItemName,"Whiskey Bottle",true))
+	{
+		if(pInfo[playerid][IsPlayerDrunk] == 0)
+		{
+			KillTimer(pInfo[playerid][IsPlayerDrunkTimer]);
+			pInfo[playerid][IsPlayerDrunkTimer] = SetTimerEx("VodkaStop",60000,false,"i",playerid);
+			SetPlayerDrunkLevel(playerid,8000);
+			pInfo[playerid][IsPlayerDrunk] = 1;
+			//ApplyAnimation(playerid,"PED","WALK_DRUNK",4.0,true,true,true,true,1);
+			ApplyAnimation(playerid, "PED", "WALK_DRUNK", 4.0, true, true, true, true, 1, 1);
+			pInfo[playerid][pThrist] += 800;
+			pInfo[playerid][pBlood] += 800;
+			RemoveSlotToInventory(playerid,"Whiskey Bottle",1);
+		}
+		else return SendClientMessage(playerid,-1,"*"COL_RED" No just no.");
+	}
+	if(!strcmp(ItemName,"Dirty Water Bottle",true))
+	{
+		if(pInfo[playerid][pThrist] >= 98) return SendClientMessage(playerid,-1,"*"COL_GREY" You are not thirsty!");
+		pInfo[playerid][pThrist] -= 30;
+
+		RemoveSlotToInventory(playerid,"Dirty Water Bottle",1);
+		SendClientMessage(playerid, COLOR_RED, "You lost thirst while drinking dirty water");
+		AddSlotToInventoryWorld(playerid,"Empty Water Bottle",1);
+		if(!IsPlayerInAnyVehicle(playerid))
+		{
+			ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1,false,true,false,1000,1);
+			SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
+		}
+	}
+	if(!strcmp(ItemName,"Toolbox",true))
+	{
+		if(!IsPlayerInAnyVehicle(playerid))
+		{
+			if(IsPlayerInRangeOfPoint(playerid,10.0,vInfo[GetVehicleNearID(playerid)][vX],vInfo[GetVehicleNearID(playerid)][vY],vInfo[GetVehicleNearID(playerid)][vZ]))
+			{
+				RepairVehicle(GetVehicleNearID(playerid));
+				SetVehicleHealth(GetVehicleNearID(playerid),800.0);
+				if(!IsPlayerInAnyVehicle(playerid))
+				{
+					ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
+					SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
+				}
+			}
+			else return SendClientMessage(playerid,-1,""chat" You must be near a vehicle to repair!");
+		}
+		else return SendClientMessage(playerid,-1,""chat" You cannot be in a vehicle to repair!");
+	}
+	if(!strcmp(ItemName,"GPS",true))
+	{
+		if(pInfo[playerid][pIsMapOpened] == 1)
+		{
+			PlayerTextDrawShow(playerid, blockMap[playerid]);
+			GangZoneShowForPlayer(playerid,BlockMap,0x000000FF);
+			pInfo[playerid][pIsMapOpened] = 0;
+		}
+		else
+		{
+			PlayerTextDrawHide(playerid, blockMap[playerid]);
+			GangZoneHideForPlayer(playerid,BlockMap);
+			pInfo[playerid][pIsMapOpened] = 1;
+		}
+	}
+	if(!strcmp(ItemName,"Tent",true))
+	{
+		if(pInfo[playerid][pTentCreated] == 0)
+		{
+			if(!DayZSA_CreateTent(playerid)) return 0;
+			SendClientMessage(playerid,-1,"*"COL_GREEN" Placed a tent!");
+			RemoveSlotToInventory(playerid,"Tent",1);
+			if(!IsPlayerInAnyVehicle(playerid))
+			{
+				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
+			}
+		}
+		else return SendClientMessage(playerid, -1, ""chat" Cannot place tent, you've already created one please destroy your old one.");
+	}
+	if(!strcmp(ItemName,"Radio Device",true))
+	{
+		ShowPlayerDialog(playerid,DIALOG_RADIO,DIALOG_STYLE_LIST,"DayZ - Radio Frequency","Low Frequency\nMedium Frequency\nNormal Frequency\nHigh Frequency","Change","Cancel");
+	}
+	if(!strcmp(ItemName,"Heat Pack",true))
+	{
+		if(pInfo[playerid][pTemp] >= 99.0)
+		{
+			SendClientMessage(playerid,-1,"*"COL_RED" You don't need to use any heat packs, your body is warm!");
+		}
+		else
+		{
+			pInfo[playerid][pTemp] = 91.0;
+			if(!IsPlayerInAnyVehicle(playerid))
+			{
+				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
+				RemoveSlotToInventory(playerid,"Heat Pack",1);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
+			}
+		}
+	}
+	if(!strcmp(ItemName,"Heat Pack Basic",true))
+	{
+		if(pInfo[playerid][pTemp] >= 99.0)
+		{
+			SendClientMessage(playerid,-1,"*"COL_RED" You don't need to use any heat packs, your body is warm!");
+		}
+		else
+		{
+			pInfo[playerid][pTemp] = 95.0;
+			if(!IsPlayerInAnyVehicle(playerid))
+			{
+				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
+				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
+			}
+			RemoveSlotToInventory(playerid,"Heat Pack Basic",1);
+		}
+	}
+	return 1;
 }
 
 stock DayZSA_CreateAllVehicles()

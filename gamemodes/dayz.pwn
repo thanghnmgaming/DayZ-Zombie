@@ -34,6 +34,7 @@
 
 // Modules (order matters: Pawn compiles them as one script)
 #include "modules/core/data.inc"
+#include "modules/items/catalog.inc"
 #include "modules/core/init.inc"
 #include "modules/core/timers.inc"
 #include "modules/player/combat.inc"
