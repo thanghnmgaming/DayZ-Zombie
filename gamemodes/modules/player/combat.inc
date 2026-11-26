@@ -40,13 +40,7 @@ public OnGameModeExit()
 
 public OnPlayerTakeDamage(playerid, issuerid, Float: amount, WEAPON:weaponid)
 {
-    if(issuerid != INVALID_PLAYER_ID && IsPlayerNPC(issuerid))
-    {
-        if(weaponid == 1)
-        {
-			pInfo[playerid][pBlood] -= random(3500);
-        }
-    }
+    if(issuerid != INVALID_PLAYER_ID && IsPlayerNPC(issuerid)) return 1; // zombie damage: see ZombieAttack
 
     if(issuerid != INVALID_PLAYER_ID)
     {
@@ -332,6 +326,12 @@ public OnPlayerAirbreak(playerid)
 
 public OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hitid, Float:fX, Float:fY, Float:fZ)
 {
+	if(!IsPlayerNPC(playerid))
+	{
+		new Float:sx, Float:sy, Float:sz;
+		GetPlayerPos(playerid, sx, sy, sz);
+		AlertZombies(sx, sy, sz, weaponid == WEAPON_SILENCED ? 15.0 : 90.0);
+	}
 	if(hittype != BULLET_HIT_TYPE_NONE)
   	{
 		if(!(-200.0 <= fX <= 200.0 ) || !(-200.0 <= fY <= 200.0) || !(-200.0 <= fZ <= 200.0))

@@ -174,12 +174,14 @@ stock PlayAnim(playerid, const animlib[], const animname[], Float:fDelta, loop, 
 }
 
 
-#define MAX_ZOMBIES 400
-new SpawnedZombies = 0;
+#define MAX_ZOMBIES 200
+forward AlertZombies(Float:x, Float:y, Float:z, Float:radius);
+#if defined ZOMBIE_TEST
+new ZombieProbe = INVALID_PLAYER_ID;
+new ProbeBlood = 12000;
+#endif
 new ZombiesTimer;
 new IsAZombie[MAX_PLAYERS];
-new ZombieTimer[MAX_PLAYERS];
-new ZombieAttackPlayer[MAX_PLAYERS];
 
 
 //END OF ZOMBIES
@@ -423,7 +425,7 @@ new PlayerText:EyeLevel4[MAX_PLAYERS];
 new PlayerText:PlayerIntroBox[MAX_PLAYERS];
 new PlayerText:PlayerIntroVersion[MAX_PLAYERS];
 new PlayerText:PlayerIntroNote[MAX_PLAYERS];
-new ZombiesAlive = MAX_ZOMBIES;
+new ZombiesAlive;
 new Text3D:PlayerLabel[MAX_PLAYERS];
 new Float:SpecX[MAX_PLAYERS];
 new Float:SpecY[MAX_PLAYERS];

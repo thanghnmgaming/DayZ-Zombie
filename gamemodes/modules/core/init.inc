@@ -30,6 +30,9 @@ public OnGameModeInit()
 	
 
 	ZombiesTimer = SetTimer("CreateZombies", 50, true);
+#if defined ZOMBIE_TEST
+	SetTimer("ZombieProbeStart", 15000, false);
+#endif
 	new querystr[1700];
 
 	strcat(querystr,"CREATE TABLE IF NOT EXISTS `users` (`Username` varchar(24) NOT NULL,`Password` varchar(128) NOT NULL,`Headshots` int(11) NOT NULL,`Murders` int(11) NOT NULL,`BanditsKilled` int(11) NOT NULL,`ZombiesKilled` int(11) NOT NULL, `Backpack` int(11) NOT NULL,`BackpackSlots` int(11) NOT NULL,");
