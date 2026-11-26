@@ -258,6 +258,8 @@ new gRegistred[MAX_PLAYERS];
 new MySQL:handle;
 new LoginSerial[MAX_PLAYERS];
 new LoginFails[MAX_PLAYERS];
+new ViewId[MAX_PLAYERS];
+new ViewItem[MAX_PLAYERS][64];
 #define MAX_LOGIN_ATTEMPTS 3
 #define AUTOSAVE_INTERVAL 300000
 new jQuery[MAX_QUERY_LENGTH];
@@ -4626,6 +4628,9 @@ public OnGameModeExit()
 		Loot[i][xLoot] = 0.0;
 		Loot[i][yLoot] = 0.0;
 		Loot[i][zLoot] = 0.0;
+		Loot[i][DropGunX] = 0.0;
+		Loot[i][DropGunY] = 0.0;
+		Loot[i][DropGunZ] = 0.0;
 		Loot[i][xLootdrop] = 0.0;
 		Loot[i][yLootdrop] = 0.0;
 		Loot[i][zLootdrop] = 0.0;
@@ -6420,6 +6425,7 @@ public OnVehicleStreamOut(vehicleid, forplayerid)
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
     if(strfind(inputtext, "%") != -1) return SendClientMessage(playerid, -1, "*"COL_RED" Go crash another server douche!"),KickEx(playerid);
+    if(HandleItemDialog(playerid, dialogid, response, listitem, inputtext)) return 1;
     switch(dialogid)
     {
 		case DIALOG_LOGIN:
@@ -6600,993 +6606,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 		}
 
-		case DIALOG_TENT_VIEW:
-		{
-			if(response)
-			{
-			    pInfo[playerid][pTentLink] = listitem;
-				ShowPlayerDialog(playerid,DIALOG_TENT_VIEW_S,DIALOG_STYLE_MSGBOX,""COL_WHITE"Viewing Tent"COL_GREEN" (16 SLOTS)","Please select an option!","Add Item","Take Item");
-			}
-		}
-
-		case DIALOG_TENT_VIEW_S:
-		{
-			if(response)
-			{
-			    ShowInventoryTent(playerid);
-			}
-
-			if(!response)
-			{
-			    new str[64], strv[64];
-				if(pInfo[playerid][pTentLink] == 0)
-				{
-					AddSlotToInventoryWorld(playerid,Tent[GetTentID(playerid)][tentSlot1],1);
-					format(str,sizeof(str),""chat" Taken item '%s' from tent storage slot 1",Tent[GetTentID(playerid)][tentSlot1]);
-					SendClientMessage(playerid,-1,str);
-					format(strv,sizeof(strv),"Empty Slot");
-					Tent[GetTentID(playerid)][tentSlot1] = strv;
-				}
-
-				if(pInfo[playerid][pTentLink] == 1)
-				{
-					AddSlotToInventoryWorld(playerid,Tent[GetTentID(playerid)][tentSlot2],1);
-					format(str,sizeof(str),""chat" Taken item '%s' from tent storage slot 2",Tent[GetTentID(playerid)][tentSlot2]);
-					SendClientMessage(playerid,-1,str);
-					format(strv,sizeof(strv),"Empty Slot");
-					Tent[GetTentID(playerid)][tentSlot2] = strv;
-				}
-
-				if(pInfo[playerid][pTentLink] == 2)
-				{
-					AddSlotToInventoryWorld(playerid,Tent[GetTentID(playerid)][tentSlot3],1);
-					format(str,sizeof(str),""chat" Taken item '%s' from tent storage slot 3",Tent[GetTentID(playerid)][tentSlot3]);
-					SendClientMessage(playerid,-1,str);
-					format(strv,sizeof(strv),"Empty Slot");
-					Tent[GetTentID(playerid)][tentSlot3] = strv;
-				}
-
-				if(pInfo[playerid][pTentLink] == 3)
-				{
-					AddSlotToInventoryWorld(playerid,Tent[GetTentID(playerid)][tentSlot4],1);
-					format(str,sizeof(str),""chat" Taken item '%s' from tent storage slot 4",Tent[GetTentID(playerid)][tentSlot4]);
-					SendClientMessage(playerid,-1,str);
-					format(strv,sizeof(strv),"Empty Slot");
-					Tent[GetTentID(playerid)][tentSlot4] = strv;
-				}
-
-				if(pInfo[playerid][pTentLink] == 4)
-				{
-					AddSlotToInventoryWorld(playerid,Tent[GetTentID(playerid)][tentSlot5],1);
-					format(str,sizeof(str),""chat" Taken item '%s' from tent storage slot 5",Tent[GetTentID(playerid)][tentSlot5]);
-					SendClientMessage(playerid,-1,str);
-					format(strv,sizeof(strv),"Empty Slot");
-					Tent[GetTentID(playerid)][tentSlot5] = strv;
-				}
-
-				if(pInfo[playerid][pTentLink] == 5)
-				{
-					AddSlotToInventoryWorld(playerid,Tent[GetTentID(playerid)][tentSlot6],1);
-					format(str,sizeof(str),""chat" Taken item '%s' from tent storage slot 6",Tent[GetTentID(playerid)][tentSlot6]);
-					SendClientMessage(playerid,-1,str);
-					format(strv,sizeof(strv),"Empty Slot");
-					Tent[GetTentID(playerid)][tentSlot6] = strv;
-				}
-
-				if(pInfo[playerid][pTentLink] == 6)
-				{
-					AddSlotToInventoryWorld(playerid,Tent[GetTentID(playerid)][tentSlot7],1);
-					format(str,sizeof(str),""chat" Taken item '%s' from tent storage slot 7",Tent[GetTentID(playerid)][tentSlot7]);
-					SendClientMessage(playerid,-1,str);
-					format(strv,sizeof(strv),"Empty Slot");
-					Tent[GetTentID(playerid)][tentSlot7] = strv;
-				}
-
-				if(pInfo[playerid][pTentLink] == 7)
-				{
-					AddSlotToInventoryWorld(playerid,Tent[GetTentID(playerid)][tentSlot8],1);
-					format(str,sizeof(str),""chat" Taken item '%s' from tent storage slot 8",Tent[GetTentID(playerid)][tentSlot8]);
-					SendClientMessage(playerid,-1,str);
-					format(strv,sizeof(strv),"Empty Slot");
-					Tent[GetTentID(playerid)][tentSlot8] = strv;
-				}
-
-				if(pInfo[playerid][pTentLink] == 8)
-				{
-					AddSlotToInventoryWorld(playerid,Tent[GetTentID(playerid)][tentSlot9],1);
-					format(str,sizeof(str),""chat" Taken item '%s' from tent storage slot 9",Tent[GetTentID(playerid)][tentSlot9]);
-					SendClientMessage(playerid,-1,str);
-					format(strv,sizeof(strv),"Empty Slot");
-					Tent[GetTentID(playerid)][tentSlot9] = strv;
-				}
-
-				if(pInfo[playerid][pTentLink] == 9)
-				{
-					AddSlotToInventoryWorld(playerid,Tent[GetTentID(playerid)][tentSlot10],1);
-					format(str,sizeof(str),""chat" Taken item '%s' from tent storage slot 10",Tent[GetTentID(playerid)][tentSlot10]);
-					SendClientMessage(playerid,-1,str);
-					format(strv,sizeof(strv),"Empty Slot");
-					Tent[GetTentID(playerid)][tentSlot10] = strv;
-				}
-
-				if(pInfo[playerid][pTentLink] == 10)
-				{
-					AddSlotToInventoryWorld(playerid,Tent[GetTentID(playerid)][tentSlot11],1);
-					format(str,sizeof(str),""chat" Taken item '%s' from tent storage slot 11",Tent[GetTentID(playerid)][tentSlot11]);
-					SendClientMessage(playerid,-1,str);
-					format(strv,sizeof(strv),"Empty Slot");
-					Tent[GetTentID(playerid)][tentSlot11] = strv;
-				}
-
-				if(pInfo[playerid][pTentLink] == 11)
-				{
-					AddSlotToInventoryWorld(playerid,Tent[GetTentID(playerid)][tentSlot12],1);
-					format(str,sizeof(str),""chat" Taken item '%s' from tent storage slot 12",Tent[GetTentID(playerid)][tentSlot12]);
-					SendClientMessage(playerid,-1,str);
-					format(strv,sizeof(strv),"Empty Slot");
-					Tent[GetTentID(playerid)][tentSlot12] = strv;
-				}
-
-				if(pInfo[playerid][pTentLink] == 12)
-				{
-					AddSlotToInventoryWorld(playerid,Tent[GetTentID(playerid)][tentSlot13],1);
-					format(str,sizeof(str),""chat" Taken item '%s' from tent storage slot 13",Tent[GetTentID(playerid)][tentSlot13]);
-					SendClientMessage(playerid,-1,str);
-					format(strv,sizeof(strv),"Empty Slot");
-					Tent[GetTentID(playerid)][tentSlot13] = strv;
-				}
-
-				if(pInfo[playerid][pTentLink] == 13)
-				{
-					AddSlotToInventoryWorld(playerid,Tent[GetTentID(playerid)][tentSlot14],1);
-					format(str,sizeof(str),""chat" Taken item '%s' from tent storage slot 14",Tent[GetTentID(playerid)][tentSlot14]);
-					SendClientMessage(playerid,-1,str);
-					format(strv,sizeof(strv),"Empty Slot");
-					Tent[GetTentID(playerid)][tentSlot14] = strv;
-				}
-
-				if(pInfo[playerid][pTentLink] == 14)
-				{
-					AddSlotToInventoryWorld(playerid,Tent[GetTentID(playerid)][tentSlot15],1);
-					format(str,sizeof(str),""chat" Taken item '%s' from tent storage slot 15",Tent[GetTentID(playerid)][tentSlot15]);
-					SendClientMessage(playerid,-1,str);
-					format(strv,sizeof(strv),"Empty Slot");
-					Tent[GetTentID(playerid)][tentSlot15] = strv;
-				}
-
-				if(pInfo[playerid][pTentLink] == 15)
-				{
-					AddSlotToInventoryWorld(playerid,Tent[GetTentID(playerid)][tentSlot16],1);
-					format(str,sizeof(str),""chat" Taken item '%s' from tent storage slot 16",Tent[GetTentID(playerid)][tentSlot16]);
-					SendClientMessage(playerid,-1,str);
-					format(strv,sizeof(strv),"Empty Slot");
-					Tent[GetTentID(playerid)][tentSlot16] = strv;
-				}
-			}
-		}
-
-
-		case DIALOG_TENT_VIEW_S2:
-		{
-			if(response)
-			{
-			    new str[64],str2[128];
-				if(pInfo[playerid][pTentLink] == 0)
-				{
-				    format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-					RemoveSlotToInventory(playerid,gItemList,1);
-					format(str,sizeof(str),"%s",gItemList);
-					Tent[GetTentID(playerid)][tentSlot1] = str;
-					format(str2,sizeof(str2),""chat" Added the item '%s' to slot 1!",inputtext);
-					SendClientMessage(playerid,-1,str2);
-				}
-
-				if(pInfo[playerid][pTentLink] == 1)
-				{
-				    format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-					RemoveSlotToInventory(playerid,gItemList,1);
-					format(str,sizeof(str),"%s",gItemList);
-					Tent[GetTentID(playerid)][tentSlot2] = str;
-					format(str2,sizeof(str2),""chat" Added the item '%s' to slot 2!",inputtext);
-					SendClientMessage(playerid,-1,str2);
-				}
-
-				if(pInfo[playerid][pTentLink] == 2)
-				{
-				    format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-					RemoveSlotToInventory(playerid,gItemList,1);
-					format(str,sizeof(str),"%s",gItemList);
-                    Tent[GetTentID(playerid)][tentSlot3] = str;
-					format(str2,sizeof(str2),""chat" Added the item '%s' to slot 3!",inputtext);
-					SendClientMessage(playerid,-1,str2);
-				}
-
-				if(pInfo[playerid][pTentLink] == 3)
-				{
-				    format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-					RemoveSlotToInventory(playerid,gItemList,1);
-					format(str,sizeof(str),"%s",gItemList);
-					Tent[GetTentID(playerid)][tentSlot4] = str;
-					format(str2,sizeof(str2),""chat" Added the item '%s' to slot 4!",inputtext);
-					SendClientMessage(playerid,-1,str2);
-				}
-
-				if(pInfo[playerid][pTentLink] == 4)
-				{
-				    format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-					RemoveSlotToInventory(playerid,gItemList,1);
-					format(str,sizeof(str),"%s",gItemList);
-					Tent[GetTentID(playerid)][tentSlot5] = str;
-					format(str2,sizeof(str2),""chat" Added the item '%s' to slot 5!",inputtext);
-					SendClientMessage(playerid,-1,str2);
-				}
-
-				if(pInfo[playerid][pTentLink] == 5)
-				{
-				    format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-					RemoveSlotToInventory(playerid,gItemList,1);
-					format(str,sizeof(str),"%s",gItemList);
-					Tent[GetTentID(playerid)][tentSlot6] = str;
-					format(str2,sizeof(str2),""chat" Added the item '%s' to slot 6!",inputtext);
-					SendClientMessage(playerid,-1,str2);
-				}
-
-				if(pInfo[playerid][pTentLink] == 6)
-				{
-				    format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-					RemoveSlotToInventory(playerid,gItemList,1);
-					format(str,sizeof(str),"%s",gItemList);
-					Tent[GetTentID(playerid)][tentSlot7] = str;
-					format(str2,sizeof(str2),""chat" Added the item '%s' to slot 7!",inputtext);
-					SendClientMessage(playerid,-1,str2);
-				}
-
-				if(pInfo[playerid][pTentLink] == 7)
-				{
-				    format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-					RemoveSlotToInventory(playerid,gItemList,1);
-					format(str,sizeof(str),"%s",gItemList);
-					Tent[GetTentID(playerid)][tentSlot8] = str;
-					format(str2,sizeof(str2),""chat" Added the item '%s' to slot 8!",inputtext);
-					SendClientMessage(playerid,-1,str2);
-				}
-
-				if(pInfo[playerid][pTentLink] == 8)
-				{
-				    format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-					RemoveSlotToInventory(playerid,gItemList,1);
-					format(str,sizeof(str),"%s",gItemList);
-					Tent[GetTentID(playerid)][tentSlot9] = str;
-					format(str2,sizeof(str2),""chat" Added the item '%s' to slot 9!",inputtext);
-					SendClientMessage(playerid,-1,str2);
-				}
-
-				if(pInfo[playerid][pTentLink] == 9)
-				{
-				    format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-					RemoveSlotToInventory(playerid,gItemList,1);
-					format(str,sizeof(str),"%s",gItemList);
-					Tent[GetTentID(playerid)][tentSlot10] = str;
-					format(str2,sizeof(str2),""chat" Added the item '%s' to slot 10!",inputtext);
-					SendClientMessage(playerid,-1,str2);
-				}
-
-				if(pInfo[playerid][pTentLink] == 10)
-				{
-				    format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-					RemoveSlotToInventory(playerid,gItemList,1);
-					format(str,sizeof(str),"%s",gItemList);
-					Tent[GetTentID(playerid)][tentSlot11] = str;
-					format(str2,sizeof(str2),""chat" Added the item '%s' to slot 11!",inputtext);
-					SendClientMessage(playerid,-1,str2);
-				}
-
-				if(pInfo[playerid][pTentLink] == 11)
-				{
-				    format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-					RemoveSlotToInventory(playerid,gItemList,1);
-					format(str,sizeof(str),"%s",gItemList);
-					Tent[GetTentID(playerid)][tentSlot12] = str;
-					format(str2,sizeof(str2),""chat" Added the item '%s' to slot 12!",inputtext);
-					SendClientMessage(playerid,-1,str2);
-				}
-
-				if(pInfo[playerid][pTentLink] == 12)
-				{
-				    format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-					RemoveSlotToInventory(playerid,gItemList,1);
-					format(str,sizeof(str),"%s",gItemList);
-					Tent[GetTentID(playerid)][tentSlot13] = str;
-					format(str2,sizeof(str2),""chat" Added the item '%s' to slot 13!",inputtext);
-					SendClientMessage(playerid,-1,str2);
-				}
-
-				if(pInfo[playerid][pTentLink] == 13)
-				{
-				    format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-					RemoveSlotToInventory(playerid,gItemList,1);
-					format(str,sizeof(str),"%s",gItemList);
-					Tent[GetTentID(playerid)][tentSlot14] = str;
-					format(str2,sizeof(str2),""chat" Added the item '%s' to slot 14!",inputtext);
-					SendClientMessage(playerid,-1,str2);
-				}
-
-				if(pInfo[playerid][pTentLink] == 14)
-				{
-				    format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-					RemoveSlotToInventory(playerid,gItemList,1);
-					format(str,sizeof(str),"%s",gItemList);
-					Tent[GetTentID(playerid)][tentSlot15] = str;
-					format(str2,sizeof(str2),""chat" Added the item '%s' to slot 15!",inputtext);
-					SendClientMessage(playerid,-1,str2);
-				}
-
-				if(pInfo[playerid][pTentLink] == 15)
-				{
-				    format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-					RemoveSlotToInventory(playerid,gItemList,1);
-					format(str,sizeof(str),"%s",gItemList);
-					Tent[GetTentID(playerid)][tentSlot16] = str;
-					format(str2,sizeof(str2),""chat" Added the item '%s' to slot 16!",inputtext);
-					SendClientMessage(playerid,-1,str2);
-				}
-			}
-		}
-
-		case DIALOG_VEHICLE_STORAGE:
-		{
-			if(response)
-			{
-			    pInfo[playerid][pStorageLink] = listitem;
-				ShowPlayerDialog(playerid,DIALOG_VEHICLE_STORAGE_S,DIALOG_STYLE_MSGBOX,""COL_WHITE"Vehicle Storage"COL_GREEN" (4 SLOTS)","Please select an option!","Add Item","Take Item");
-			}
-		}
-
-		case DIALOG_VEHICLE_STORAGE_S:
-		{
-			if(response)
-			{
-			    ShowInventoryStorage(playerid);
-			}
-
-			if(!response)
-			{
-			    new str[64], strv[64];
-				if(pInfo[playerid][pStorageLink] == 0)
-				{
-					AddSlotToInventoryWorld(playerid,vInfo[GetVehicleNearID(playerid)][vSlot1],1);
-					format(str,sizeof(str),""chat" Taken item '%s' from vehicle storage slot 1",vInfo[GetVehicleNearID(playerid)][vSlot1]);
-					SendClientMessage(playerid,-1,str);
-					format(strv,sizeof(strv),"Empty Slot");
-					vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-					if(!IsPlayerInAnyVehicle(playerid))
-		  			{
-						ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-						SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-					}
-				}
-
-				if(pInfo[playerid][pStorageLink] == 1)
-				{
-					AddSlotToInventoryWorld(playerid,vInfo[GetVehicleNearID(playerid)][vSlot2],1);
-					format(str,sizeof(str),""chat" Taken item '%s' from vehicle storage slot 2",vInfo[GetVehicleNearID(playerid)][vSlot2]);
-					SendClientMessage(playerid,-1,str);
-					format(strv,sizeof(strv),"Empty Slot");
-					vInfo[GetVehicleNearID(playerid)][vSlot2] = strv;
-					if(!IsPlayerInAnyVehicle(playerid))
-		  			{
-						ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-						SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-					}
-				}
-
-				if(pInfo[playerid][pStorageLink] == 2)
-				{
-					AddSlotToInventoryWorld(playerid,vInfo[GetVehicleNearID(playerid)][vSlot3],1);
-					format(str,sizeof(str),""chat" Taken item '%s' from vehicle storage slot 3",vInfo[GetVehicleNearID(playerid)][vSlot3]);
-					SendClientMessage(playerid,-1,str);
-					format(strv,sizeof(strv),"Empty Slot");
-					vInfo[GetVehicleNearID(playerid)][vSlot3] = strv;
-					if(!IsPlayerInAnyVehicle(playerid))
-		  			{
-						ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-						SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-					}
-				}
-
-				if(pInfo[playerid][pStorageLink] == 3)
-				{
-					AddSlotToInventoryWorld(playerid,vInfo[GetVehicleNearID(playerid)][vSlot4],1);
-					format(str,sizeof(str),""chat" Taken item '%s' from vehicle storage slot 4",vInfo[GetVehicleNearID(playerid)][vSlot4]);
-					SendClientMessage(playerid,-1,str);
-					format(strv,sizeof(strv),"Empty Slot");
-					vInfo[GetVehicleNearID(playerid)][vSlot4] = strv;
-					if(!IsPlayerInAnyVehicle(playerid))
-		  			{
-						ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-						SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-					}
-				}
-
-				if(pInfo[playerid][pStorageLink] == 4)
-				{
-					AddSlotToInventoryWorld(playerid,vInfo[GetVehicleNearID(playerid)][vSlot6],1);
-					format(str,sizeof(str),""chat" Taken item '%s' from vehicle storage slot 5",vInfo[GetVehicleNearID(playerid)][vSlot6]);
-					SendClientMessage(playerid,-1,str);
-					format(strv,sizeof(strv),"Empty Slot");
-					vInfo[GetVehicleNearID(playerid)][vSlot6] = strv;
-					if(!IsPlayerInAnyVehicle(playerid))
-		  			{
-						ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-						SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-					}
-				}
-
-				if(pInfo[playerid][pStorageLink] == 5)
-				{
-					AddSlotToInventoryWorld(playerid,vInfo[GetVehicleNearID(playerid)][vSlot6],1);
-					format(str,sizeof(str),""chat" Taken item '%s' from vehicle storage slot 6",vInfo[GetVehicleNearID(playerid)][vSlot6]);
-					SendClientMessage(playerid,-1,str);
-					format(strv,sizeof(strv),"Empty Slot");
-					vInfo[GetVehicleNearID(playerid)][vSlot6] = strv;
-					if(!IsPlayerInAnyVehicle(playerid))
-		  			{
-						ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-						SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-					}
-				}
-			}
-		}
-
-
-		case DIALOG_VEHICLE_STORAGE_S2:
-		{
-			if(response)
-			{
-			    new str[64],str2[128],strv[64];
-			    //format(reset,sizeof(reset),"Empty Slot");
-				if(pInfo[playerid][pStorageLink] == 0)
-				{
-				    format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-					RemoveSlotToInventory(playerid,gItemList,1);
-					format(str,sizeof(str),"%s",gItemList);
-					vInfo[GetVehicleNearID(playerid)][vSlot1] = str;
-					format(str2,sizeof(str2),""chat" Added the item '%s' to slot 1!",inputtext);
-					SendClientMessage(playerid,-1,str2);
-	    			if(strfind(str, "Engine", true) != -1)
-				    {
-    					if(vInfo[GetVehicleNearID(playerid)][vehicleEngine] == 1) return SendClientMessage(playerid,-1,""chat" This vehicle already has an engine the engine has been put back into your backpack!"),AddSlotToInventoryWorld(playerid,"Engine",1);
-						vInfo[GetVehicleNearID(playerid)][vehicleEngine] = 1;
-      					format(strv,sizeof(strv),"Empty Slot");
-						vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-						if(!IsPlayerInAnyVehicle(playerid))
-			  			{
-							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-						}
-					}
-
-					if(strfind(str, "Tire", true) != -1)
-					{
-           				if(FOUR_TIRE_ADD1(playerid) || FOUR_TIRE_ADD2(playerid))
-						{
-							if(vInfo[GetVehicleNearID(playerid)][vehicleTires] == 4) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough tires the tire has been put back into your backpack!!"),AddSlotToInventoryWorld(playerid,"Tire",1),format(strv,sizeof(strv),"Empty Slot"),vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-							vInfo[GetVehicleNearID(playerid)][vehicleTires] += 1;
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-				  			{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-
-						if(TWO_TIRE_VEHICLE_ADD)
-						{
-							if(vInfo[GetVehicleNearID(playerid)][vehicleTires] == 2) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough tires the tire has been put back into your backpack!!"),AddSlotToInventoryWorld(playerid,"Tire",1),format(strv,sizeof(strv),"Empty Slot"),vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-							vInfo[GetVehicleNearID(playerid)][vehicleTires] += 1;
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-				  			{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-
-						if(SIX_TIRE_VEHICLE_ADD)
-						{
-							if(vInfo[GetVehicleNearID(playerid)][vehicleTires] == 6) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough tires the tire has been put back into your backpack!!"),AddSlotToInventoryWorld(playerid,"Tire",1),format(strv,sizeof(strv),"Empty Slot"),vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-							vInfo[GetVehicleNearID(playerid)][vehicleTires] += 1;
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-				  			{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-
-						if(NO_TIRE_VEHICLE_ADD || ENGINE_ONLY_VEHICLE_ADD)
-						{
-						    SendClientMessage(playerid,-1,""chat" This vehicle does not require any tires the tire has been put back into your inventory!"), AddSlotToInventoryWorld(playerid,"Tire",1);
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-				  			{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-					}
-
-					if(strfind(str, "Full Jerry Can", true) != -1)
-					{
-    					if(vInfo[GetVehicleNearID(playerid)][vehicleFuel] == 100) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough fuel, full Jerry Can has been added to your backpack!");
-			  	    	vInfo[GetVehicleNearID(playerid)][vehicleFuel] += random(75);
-			  	    	AddSlotToInventoryWorld(playerid,"Empty Jerry Can",1);
-						format(strv,sizeof(strv),"Empty Slot");
-						vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-						if(!IsPlayerInAnyVehicle(playerid))
-	  					{
-							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-						}
-					}
-				}
-
-				if(pInfo[playerid][pStorageLink] == 1)
-				{
-				    format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-					RemoveSlotToInventory(playerid,gItemList,1);
-					format(str,sizeof(str),"%s",gItemList);
-					vInfo[GetVehicleNearID(playerid)][vSlot2] = str;
-					format(str2,sizeof(str2),""chat" Added the item '%s' to slot 2!",inputtext);
-					SendClientMessage(playerid,-1,str2);
-	    			if(strfind(str, "Engine", true) != -1)
-				    {
-    					if(vInfo[GetVehicleNearID(playerid)][vehicleEngine] == 1) return SendClientMessage(playerid,-1,""chat" This vehicle already has an engine the engine has been put back into your backpack!"),AddSlotToInventoryWorld(playerid,"Engine",1);
-						vInfo[GetVehicleNearID(playerid)][vehicleEngine] = 1;
-						format(strv,sizeof(strv),"Empty Slot");
-						vInfo[GetVehicleNearID(playerid)][vSlot2] = strv;
-						if(!IsPlayerInAnyVehicle(playerid))
-  						{
-							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-						}
-					}
-
-					if(strfind(str, "Tire", true) != -1)
-					{
-           				if(FOUR_TIRE_ADD1(playerid) || FOUR_TIRE_ADD2(playerid))
-						{
-							if(vInfo[GetVehicleNearID(playerid)][vehicleTires] == 4) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough tires the tire has been put back into your backpack!!"),AddSlotToInventoryWorld(playerid,"Tire",1),format(strv,sizeof(strv),"Empty Slot"),vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-							vInfo[GetVehicleNearID(playerid)][vehicleTires] += 1;
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot2] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-	  						{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-
-						if(TWO_TIRE_VEHICLE_ADD)
-						{
-							if(vInfo[GetVehicleNearID(playerid)][vehicleTires] == 2) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough tires the tire has been put back into your backpack!!"),AddSlotToInventoryWorld(playerid,"Tire",1),format(strv,sizeof(strv),"Empty Slot"),vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-							vInfo[GetVehicleNearID(playerid)][vehicleTires] += 1;
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot2] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-	  						{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-
-						if(SIX_TIRE_VEHICLE_ADD)
-						{
-							if(vInfo[GetVehicleNearID(playerid)][vehicleTires] == 6) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough tires the tire has been put back into your backpack!!"),AddSlotToInventoryWorld(playerid,"Tire",1),format(strv,sizeof(strv),"Empty Slot"),vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-							vInfo[GetVehicleNearID(playerid)][vehicleTires] += 1;
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot2] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-	  						{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-
-						if(NO_TIRE_VEHICLE_ADD || ENGINE_ONLY_VEHICLE_ADD)
-						{
-						    SendClientMessage(playerid,-1,""chat" This vehicle does not require any tires the tire has been put back into your inventory!"), AddSlotToInventoryWorld(playerid,"Tire",1);
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot2] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-	  						{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-					}
-
-					if(strfind(str, "Full Jerry Can", true) != -1)
-					{
-    					if(vInfo[GetVehicleNearID(playerid)][vehicleFuel] == 100) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough fuel, full Jerry Can has been added to your backpack!");
-			  	    	vInfo[GetVehicleNearID(playerid)][vehicleFuel] += random(75);
-			  	    	AddSlotToInventoryWorld(playerid,"Empty Jerry Can",1);
-						format(strv,sizeof(strv),"Empty Slot");
-						vInfo[GetVehicleNearID(playerid)][vSlot2] = strv;
-						if(!IsPlayerInAnyVehicle(playerid))
-  						{
-							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-						}
-					}
-				}
-
-				if(pInfo[playerid][pStorageLink] == 2)
-				{
-				    format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-					RemoveSlotToInventory(playerid,gItemList,1);
-					format(str,sizeof(str),"%s",gItemList);
-					vInfo[GetVehicleNearID(playerid)][vSlot3] = str;
-					format(str2,sizeof(str2),""chat" Added the item '%s' to slot 3!",inputtext);
-					SendClientMessage(playerid,-1,str2);
-	    			if(strfind(str, "Engine", true) != -1)
-				    {
-    					if(vInfo[GetVehicleNearID(playerid)][vehicleEngine] == 1) return SendClientMessage(playerid,-1,""chat" This vehicle already has an engine the engine has been put back into your backpack!"),AddSlotToInventoryWorld(playerid,"Engine",1);
-						vInfo[GetVehicleNearID(playerid)][vehicleEngine] = 1;
-						format(strv,sizeof(strv),"Empty Slot");
-						vInfo[GetVehicleNearID(playerid)][vSlot3] = strv;
-						if(!IsPlayerInAnyVehicle(playerid))
-  						{
-							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-						}
-					}
-
-					if(strfind(str, "Tire", true) != -1)
-					{
-           				if(FOUR_TIRE_ADD1(playerid) || FOUR_TIRE_ADD2(playerid))
-						{
-							if(vInfo[GetVehicleNearID(playerid)][vehicleTires] == 4) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough tires the tire has been put back into your backpack!!"),AddSlotToInventoryWorld(playerid,"Tire",1),format(strv,sizeof(strv),"Empty Slot"),vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-							vInfo[GetVehicleNearID(playerid)][vehicleTires] += 1;
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot3] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-	  						{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-
-						if(TWO_TIRE_VEHICLE_ADD)
-						{
-							if(vInfo[GetVehicleNearID(playerid)][vehicleTires] == 2) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough tires the tire has been put back into your backpack!!"),AddSlotToInventoryWorld(playerid,"Tire",1),format(strv,sizeof(strv),"Empty Slot"),vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-							vInfo[GetVehicleNearID(playerid)][vehicleTires] += 1;
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot3] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-	  						{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-
-						if(SIX_TIRE_VEHICLE_ADD)
-						{
-							if(vInfo[GetVehicleNearID(playerid)][vehicleTires] == 6) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough tires the tire has been put back into your backpack!!"),AddSlotToInventoryWorld(playerid,"Tire",1),format(strv,sizeof(strv),"Empty Slot"),vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-							vInfo[GetVehicleNearID(playerid)][vehicleTires] += 1;
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot3] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-	  						{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-
-						if(NO_TIRE_VEHICLE_ADD || ENGINE_ONLY_VEHICLE_ADD)
-						{
-						    SendClientMessage(playerid,-1,""chat" This vehicle does not require any tires the tire has been put back into your inventory!"), AddSlotToInventoryWorld(playerid,"Tire",1);
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot3] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-	  						{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-					}
-
-					if(strfind(str, "Full Jerry Can", true) != -1)
-					{
-    					if(vInfo[GetVehicleNearID(playerid)][vehicleFuel] == 100) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough fuel, full Jerry Can has been added to your backpack!");
-			  	    	vInfo[GetVehicleNearID(playerid)][vehicleFuel] += random(75);
-			  	    	AddSlotToInventoryWorld(playerid,"Empty Jerry Can",1);
-						format(strv,sizeof(strv),"Empty Slot");
-						vInfo[GetVehicleNearID(playerid)][vSlot3] = strv;
-						if(!IsPlayerInAnyVehicle(playerid))
-  						{
-							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-						}
-					}
-				}
-
-				if(pInfo[playerid][pStorageLink] == 3)
-				{
-				    format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-					RemoveSlotToInventory(playerid,gItemList,1);
-					format(str,sizeof(str),"%s",gItemList);
-					vInfo[GetVehicleNearID(playerid)][vSlot4] = str;
-					format(str2,sizeof(str2),""chat" Added the item '%s' to slot 4!",inputtext);
-					SendClientMessage(playerid,-1,str2);
-	    			if(strfind(str, "Engine", true) != -1)
-				    {
-    					if(vInfo[GetVehicleNearID(playerid)][vehicleEngine] == 1) return SendClientMessage(playerid,-1,""chat" This vehicle already has an engine the engine has been put back into your backpack!"),AddSlotToInventoryWorld(playerid,"Engine",1);
-						vInfo[GetVehicleNearID(playerid)][vehicleEngine] = 1;
-						format(strv,sizeof(strv),"Empty Slot");
-						vInfo[GetVehicleNearID(playerid)][vSlot4] = strv;
-						if(!IsPlayerInAnyVehicle(playerid))
-  						{
-							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-						}
-					}
-
-					if(strfind(str, "Tire", true) != -1)
-					{
-           				if(FOUR_TIRE_ADD1(playerid) || FOUR_TIRE_ADD2(playerid))
-						{
-							if(vInfo[GetVehicleNearID(playerid)][vehicleTires] == 4) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough tires the tire has been put back into your backpack!!"),AddSlotToInventoryWorld(playerid,"Tire",1),format(strv,sizeof(strv),"Empty Slot"),vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-							vInfo[GetVehicleNearID(playerid)][vehicleTires] += 1;
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot4] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-	  						{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-
-						if(TWO_TIRE_VEHICLE_ADD)
-						{
-							if(vInfo[GetVehicleNearID(playerid)][vehicleTires] == 2) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough tires the tire has been put back into your backpack!!"),AddSlotToInventoryWorld(playerid,"Tire",1),format(strv,sizeof(strv),"Empty Slot"),vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-							vInfo[GetVehicleNearID(playerid)][vehicleTires] += 1;
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot4] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-	  						{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-
-						if(SIX_TIRE_VEHICLE_ADD)
-						{
-							if(vInfo[GetVehicleNearID(playerid)][vehicleTires] == 6) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough tires the tire has been put back into your backpack!!"),AddSlotToInventoryWorld(playerid,"Tire",1),format(strv,sizeof(strv),"Empty Slot"),vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-							vInfo[GetVehicleNearID(playerid)][vehicleTires] += 1;
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot4] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-	  						{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-
-						if(NO_TIRE_VEHICLE_ADD || ENGINE_ONLY_VEHICLE_ADD)
-						{
-						    SendClientMessage(playerid,-1,""chat" This vehicle does not require any tires the tire has been put back into your inventory!"), AddSlotToInventoryWorld(playerid,"Tire",1);
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot4] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-	  						{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-					}
-
-					if(strfind(str, "Full Jerry Can", true) != -1)
-					{
-    					if(vInfo[GetVehicleNearID(playerid)][vehicleFuel] == 100) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough fuel, full Jerry Can has been added to your backpack!");
-			  	    	vInfo[GetVehicleNearID(playerid)][vehicleFuel] += random(75);
-			  	    	AddSlotToInventoryWorld(playerid,"Empty Jerry Can",1);
-						format(strv,sizeof(strv),"Empty Slot");
-						vInfo[GetVehicleNearID(playerid)][vSlot4] = strv;
-						if(!IsPlayerInAnyVehicle(playerid))
-  						{
-							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-						}
-					}
-				}
-
-				if(pInfo[playerid][pStorageLink] == 4)
-				{
-				    format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-					RemoveSlotToInventory(playerid,gItemList,1);
-					format(str,sizeof(str),"%s",gItemList);
-					vInfo[GetVehicleNearID(playerid)][vSlot5] = str;
-					format(str2,sizeof(str2),""chat" Added the item '%s' to slot 5!",inputtext);
-					SendClientMessage(playerid,-1,str2);
-	    			if(strfind(str, "Engine", true) != -1)
-				    {
-    					if(vInfo[GetVehicleNearID(playerid)][vehicleEngine] == 1) return SendClientMessage(playerid,-1,""chat" This vehicle already has an engine the engine has been put back into your backpack!"),AddSlotToInventoryWorld(playerid,"Engine",1);
-						vInfo[GetVehicleNearID(playerid)][vehicleEngine] = 1;
-						format(strv,sizeof(strv),"Empty Slot");
-						vInfo[GetVehicleNearID(playerid)][vSlot5] = strv;
-						if(!IsPlayerInAnyVehicle(playerid))
-  						{
-							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-						}
-					}
-
-					if(strfind(str, "Tire", true) != -1)
-					{
-           				if(FOUR_TIRE_ADD1(playerid) || FOUR_TIRE_ADD2(playerid))
-						{
-							if(vInfo[GetVehicleNearID(playerid)][vehicleTires] == 4) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough tires the tire has been put back into your backpack!!"),AddSlotToInventoryWorld(playerid,"Tire",1),format(strv,sizeof(strv),"Empty Slot"),vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-							vInfo[GetVehicleNearID(playerid)][vehicleTires] += 1;
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot5] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-	  						{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-
-						if(TWO_TIRE_VEHICLE_ADD)
-						{
-							if(vInfo[GetVehicleNearID(playerid)][vehicleTires] == 2) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough tires the tire has been put back into your backpack!!"),AddSlotToInventoryWorld(playerid,"Tire",1),format(strv,sizeof(strv),"Empty Slot"),vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-							vInfo[GetVehicleNearID(playerid)][vehicleTires] += 1;
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot5] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-	  						{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-
-						if(SIX_TIRE_VEHICLE_ADD)
-						{
-							if(vInfo[GetVehicleNearID(playerid)][vehicleTires] == 6) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough tires the tire has been put back into your backpack!!"),AddSlotToInventoryWorld(playerid,"Tire",1),format(strv,sizeof(strv),"Empty Slot"),vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-							vInfo[GetVehicleNearID(playerid)][vehicleTires] += 1;
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot5] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-	  						{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-
-						if(NO_TIRE_VEHICLE_ADD || ENGINE_ONLY_VEHICLE_ADD)
-						{
-						    SendClientMessage(playerid,-1,""chat" This vehicle does not require any tires the tire has been put back into your inventory!"), AddSlotToInventoryWorld(playerid,"Tire",1);
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot5] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-	  						{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-					}
-
-					if(strfind(str, "Full Jerry Can", true) != -1)
-					{
-    					if(vInfo[GetVehicleNearID(playerid)][vehicleFuel] == 100) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough fuel, full Jerry Can has been added to your backpack!");
-			  	    	vInfo[GetVehicleNearID(playerid)][vehicleFuel] += random(75);
-			  	    	AddSlotToInventoryWorld(playerid,"Empty Jerry Can",1);
-						format(strv,sizeof(strv),"Empty Slot");
-						vInfo[GetVehicleNearID(playerid)][vSlot5] = strv;
-						if(!IsPlayerInAnyVehicle(playerid))
-  						{
-							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-						}
-					}
-				}
-
-				if(pInfo[playerid][pStorageLink] == 5)
-				{
-				    format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-					RemoveSlotToInventory(playerid,gItemList,1);
-					format(str,sizeof(str),"%s",gItemList);
-					vInfo[GetVehicleNearID(playerid)][vSlot6] = str;
-					format(str2,sizeof(str2),""chat" Added the item '%s' to slot 6!",inputtext);
-					SendClientMessage(playerid,-1,str2);
-	    			if(strfind(str, "Engine", true) != -1)
-				    {
-    					if(vInfo[GetVehicleNearID(playerid)][vehicleEngine] == 1) return SendClientMessage(playerid,-1,""chat" This vehicle already has an engine the engine has been put back into your backpack!"),AddSlotToInventoryWorld(playerid,"Engine",1);
-						vInfo[GetVehicleNearID(playerid)][vehicleEngine] = 1;
-						format(strv,sizeof(strv),"Empty Slot");
-						vInfo[GetVehicleNearID(playerid)][vSlot6] = strv;
-						if(!IsPlayerInAnyVehicle(playerid))
-  						{
-							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-						}
-					}
-
-					if(strfind(str, "Tire", true) != -1)
-					{
-           				if(FOUR_TIRE_ADD1(playerid) || FOUR_TIRE_ADD2(playerid))
-						{
-							if(vInfo[GetVehicleNearID(playerid)][vehicleTires] == 4) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough tires the tire has been put back into your backpack!!"),AddSlotToInventoryWorld(playerid,"Tire",1),format(strv,sizeof(strv),"Empty Slot"),vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-							vInfo[GetVehicleNearID(playerid)][vehicleTires] += 1;
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot6] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-	  						{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-
-						if(TWO_TIRE_VEHICLE_ADD)
-						{
-							if(vInfo[GetVehicleNearID(playerid)][vehicleTires] == 2) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough tires the tire has been put back into your backpack!!"),AddSlotToInventoryWorld(playerid,"Tire",1),format(strv,sizeof(strv),"Empty Slot"),vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-							vInfo[GetVehicleNearID(playerid)][vehicleTires] += 1;
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot6] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-	  						{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-
-						if(SIX_TIRE_VEHICLE_ADD)
-						{
-							if(vInfo[GetVehicleNearID(playerid)][vehicleTires] == 6) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough tires the tire has been put back into your backpack!!"),AddSlotToInventoryWorld(playerid,"Tire",1),format(strv,sizeof(strv),"Empty Slot"),vInfo[GetVehicleNearID(playerid)][vSlot1] = strv;
-							vInfo[GetVehicleNearID(playerid)][vehicleTires] += 1;
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot6] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-	  						{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-
-						if(NO_TIRE_VEHICLE_ADD || ENGINE_ONLY_VEHICLE_ADD)
-						{
-						    SendClientMessage(playerid,-1,""chat" This vehicle does not require any tires the tire has been put back into your inventory!"), AddSlotToInventoryWorld(playerid,"Tire",1);
-							format(strv,sizeof(strv),"Empty Slot");
-							vInfo[GetVehicleNearID(playerid)][vSlot6] = strv;
-							if(!IsPlayerInAnyVehicle(playerid))
-	  						{
-								ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-								SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-							}
-						}
-					}
-
-					if(strfind(str, "Full Jerry Can", true) != -1)
-					{
-    					if(vInfo[GetVehicleNearID(playerid)][vehicleFuel] == 100) return SendClientMessage(playerid,-1,""chat" Vehicle already has enough fuel, full Jerry Can has been added to your backpack!");
-			  	    	vInfo[GetVehicleNearID(playerid)][vehicleFuel] += random(75);
-			  	    	AddSlotToInventoryWorld(playerid,"Empty Jerry Can",1);
-						format(strv,sizeof(strv),"Empty Slot");
-						vInfo[GetVehicleNearID(playerid)][vSlot6] = strv;
-						if(!IsPlayerInAnyVehicle(playerid))
-  						{
-							ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,0,1,0,1000,1);
-							SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
-						}
-					}
-				}
-			}
-		}
-
 		case DIALOG_SELECT_SKIN:
 		{
 		    if(response)
@@ -7640,392 +6659,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 		}
 
-		case DIALOG_LOOTING:
-		{
-			if(response)
-			{
-				if(IsPlayerInRangeOfPoint(playerid,2.3,Loot[GetLootID(playerid)][xLoot],Loot[GetLootID(playerid)][yLoot],Loot[GetLootID(playerid)][zLoot]))
-				{
-	  				if(pInfo[playerid][Backpack] == 0)
-					{
-					    if(pInfo[playerid][BackpackSlots] == 8)
-					    {
-					    	if(pInfo[playerid][BackpackSlotsUsed] == 8)
-					    	{
-								SendClientMessage(playerid,-1,""chat" Your backpack is full");
-							}
-							else
-							{
-							    if(Loot[GetLootID(playerid)][AntiDup] == 1)
-							    {
-						        	AddSlotToInventoryLoot(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-						        	DayZSA_DestroyLoot(GetLootID(playerid));
-									Loot[GetLootID(playerid)][AntiDup] = 0;
-								}
-								else
-								{
-								    DayZSA_DestroyLoot(GetLootID(playerid));
-								}
-							}
-						}
-					}
 
-					if(pInfo[playerid][Backpack] == 1)
-					{
-					    if(pInfo[playerid][BackpackSlots] == 16)
-					    {
-					    	if(pInfo[playerid][BackpackSlotsUsed] == 16)
-					    	{
-								SendClientMessage(playerid,-1,""chat" Your backpack is full");
-							}
-							else
-							{
-							    if(Loot[GetLootID(playerid)][AntiDup] == 1)
-							    {
-						        	AddSlotToInventoryLoot(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-						        	DayZSA_DestroyLoot(GetLootID(playerid));
-									Loot[GetLootID(playerid)][AntiDup] = 0;
-								}
-								else
-								{
-								    DayZSA_DestroyLoot(GetLootID(playerid));
-								}
-							}
-						}
-					}
-
-					if(pInfo[playerid][Backpack] == 2)
-					{
-					    if(pInfo[playerid][BackpackSlots] == 28)
-					    {
-					    	if(pInfo[playerid][BackpackSlotsUsed] == 28)
-					    	{
-								SendClientMessage(playerid,-1,""chat" Your backpack is full");
-							}
-							else
-							{
-							    if(Loot[GetLootID(playerid)][AntiDup] == 1)
-							    {
-						        	AddSlotToInventoryLoot(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-						        	DayZSA_DestroyLoot(GetLootID(playerid));
-									Loot[GetLootID(playerid)][AntiDup] = 0;
-								}
-								else
-								{
-								    DayZSA_DestroyLoot(GetLootID(playerid));
-								}
-							}
-						}
-					}
-
-					if(pInfo[playerid][Backpack] == 3)
-					{
-					    if(pInfo[playerid][BackpackSlots] == 38)
-					    {
-					    	if(pInfo[playerid][BackpackSlotsUsed] == 38)
-					    	{
-								SendClientMessage(playerid,-1,""chat" Your backpack is full");
-							}
-							else
-							{
-							    if(Loot[GetLootID(playerid)][AntiDup] == 1)
-							    {
-						        	AddSlotToInventoryLoot(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-						        	DayZSA_DestroyLoot(GetLootID(playerid));
-									Loot[GetLootID(playerid)][AntiDup] = 0;
-								}
-								else
-								{
-								    DayZSA_DestroyLoot(GetLootID(playerid));
-								}
-							}
-						}
-					}
-				}
-				else return SendClientMessage(playerid, -1, "*"COL_RED" Read the rules! The server have prevented you to duplicate an item!");
-			}
-		}
-
-		case DIALOG_LOOTING_DROP:
-		{
-			if(response)
-			{
-				if(IsPlayerInRangeOfPoint(playerid, 2.3,Loot[GetLootIDFunction(playerid)][xLootdrop],Loot[GetLootIDFunction(playerid)][yLootdrop],Loot[GetLootIDFunction(playerid)][zLootdrop]))
-				{
-					if(pInfo[playerid][Backpack] == 0)
-					{
-					    if(pInfo[playerid][BackpackSlots] == 8)
-					    {
-					    	if(pInfo[playerid][BackpackSlotsUsed] == 8)
-					    	{
-								SendClientMessage(playerid,-1,""chat" Your backpack is full");
-							}
-							else
-							{
-			    				if(Loot[GetLootIDFunction(playerid)][AntiDup] == 1)
-							    {
-									AddSlotToInventoryLoot(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-									DayZSA_DestroyLootDroped(GetLootIDFunction(playerid));
-									Loot[GetLootIDFunction(playerid)][AntiDup] = 0;
-								}
-								else
-								{
-								    DayZSA_DestroyLootDroped(GetLootIDFunction(playerid));
-								    AddSlotToInventoryLoot(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-								}
-							}
-						}
-					}
-
-					if(pInfo[playerid][Backpack] == 1)
-					{
-					    if(pInfo[playerid][BackpackSlots] == 16)
-					    {
-					    	if(pInfo[playerid][BackpackSlotsUsed] == 16)
-					    	{
-								SendClientMessage(playerid,-1,""chat" Your backpack is full");
-							}
-							else
-							{
-			    				if(Loot[GetLootIDFunction(playerid)][AntiDup] == 1)
-							    {
-									AddSlotToInventoryLoot(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-									DayZSA_DestroyLootDroped(GetLootIDFunction(playerid));
-									Loot[GetLootIDFunction(playerid)][AntiDup] = 0;
-								}
-								else
-								{
-								    DayZSA_DestroyLootDroped(GetLootIDFunction(playerid));
-								    AddSlotToInventoryLoot(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-								}
-							}
-						}
-					}
-
-					if(pInfo[playerid][Backpack] == 2)
-					{
-					    if(pInfo[playerid][BackpackSlots] == 28)
-					    {
-					    	if(pInfo[playerid][BackpackSlotsUsed] == 28)
-					    	{
-								SendClientMessage(playerid,-1,""chat" Your backpack is full");
-							}
-							else
-							{
-			    				if(Loot[GetLootIDFunction(playerid)][AntiDup] == 1)
-							    {
-									AddSlotToInventoryLoot(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-									DayZSA_DestroyLootDroped(GetLootIDFunction(playerid));
-									Loot[GetLootIDFunction(playerid)][AntiDup] = 0;
-								}
-								else
-								{
-								    DayZSA_DestroyLootDroped(GetLootIDFunction(playerid));
-								    AddSlotToInventoryLoot(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-								}
-							}
-						}
-					}
-
-					if(pInfo[playerid][Backpack] == 3)
-					{
-					    if(pInfo[playerid][BackpackSlots] == 38)
-					    {
-					    	if(pInfo[playerid][BackpackSlotsUsed] == 38)
-					    	{
-								SendClientMessage(playerid,-1,""chat" Your backpack is full");
-							}
-							else
-							{
-			    				if(Loot[GetLootIDFunction(playerid)][AntiDup] == 1)
-							    {
-									AddSlotToInventoryLoot(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-									DayZSA_DestroyLootDroped(GetLootIDFunction(playerid));
-									Loot[GetLootIDFunction(playerid)][AntiDup] = 0;
-								}
-								else
-								{
-								    DayZSA_DestroyLootDroped(GetLootIDFunction(playerid));
-								    AddSlotToInventoryLoot(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-								}
-							}
-						}
-					}
-				}
-				else return SendClientMessage(playerid, -1, "*"COL_RED" Read the rules! The server have prevented you to duplicate an item!");
-			}
-		}
-
-		case DIALOG_LOOTING_DROPZ:
-		{
-			if(response)
-			{
-				AddSlotToInventoryLoot(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-				DayZSA_DestroyLootZombie(GetLootIDZombie(playerid));
-			}
-		}
-
-		case INV_DIALOG_ID:
-		{
-		    if(response)
-		    {
-		        new invString[64];
-		        ShowPlayerDialog(playerid,DIALOG_INV_EDIT,DIALOG_STYLE_MSGBOX,""COL_GREEN"GEAR","Please select an option","Use","Drop");
-		        format(gItemList,MAX_ITEM_NAME,inputtext[strfind(inputtext,"\t")+2]);
-		        format(invString,sizeof(invString),"%s",gItemList);
-		        pInfo[playerid][pItemLink] = invString;
-			}
-		}
-
-		case DIALOG_INV_EDIT:
-		{
-		    if(response)
-		    {
-		        OnPlayerUseItem(playerid,pInfo[playerid][pItemLink]);
-				GameTextForPlayer(playerid,"~n~~n~~n~~n~~n~~g~please wait......",800,5);
-			}
-
-			if(!response)
-			{
-   				if(gettime() - 3 < pInfo[playerid][pSpamDrop]) return SendClientMessage(playerid,-1,"*"COL_RED" Wait 3 seconds to drop your item!");
-		    	{
-					RemoveSlotToInventory(playerid,pInfo[playerid][pItemLink],1);
-					new Float:fPos[3];
-					GetPlayerPos(playerid,fPos[0],fPos[1],fPos[2]);
-					DayZSA_CreateLootsFunction(pInfo[playerid][pItemLink],fPos[0]+random(2),fPos[1]+random(2),fPos[2]);
-					pInfo[playerid][pSpamDrop] = gettime();
-				}
-			}
-		}
-		
-		case DIALOG_AIRDROP:
-		{
-			if(response)
-			{
-			    new str[64];
-			    format(str,sizeof(str),"0\tEmpty Slot");
-				switch(listitem)
-				{
-				    case 0:
-				    {
-						AddSlotToInventoryWorld(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-				        Loot[GetAirDropID(playerid)][AirSlot1] = str;
-					}
-
-		   			case 1:
-				    {
-						AddSlotToInventoryWorld(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-				        Loot[GetAirDropID(playerid)][AirSlot2] = str;
-					}
-
-		   			case 2:
-				    {
-						AddSlotToInventoryWorld(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-				        Loot[GetAirDropID(playerid)][AirSlot3] = str;
-					}
-
-		   			case 3:
-				    {
-						AddSlotToInventoryWorld(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-				        Loot[GetAirDropID(playerid)][AirSlot4] = str;
-					}
-
-		   			case 4:
-				    {
-						AddSlotToInventoryWorld(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-      					Loot[GetAirDropID(playerid)][AirSlot5] = str;
-					}
-
-					case 5:
-				    {
-						AddSlotToInventoryWorld(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-      					Loot[GetAirDropID(playerid)][AirSlot6] = str;
-					}
-	    			case 6:
-				    {
-						AddSlotToInventoryWorld(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-				        Loot[GetAirDropID(playerid)][AirSlot7] = str;
-					}
-
-		   			case 7:
-				    {
-						AddSlotToInventoryWorld(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-				        Loot[GetAirDropID(playerid)][AirSlot8] = str;
-					}
-
-		   			case 8:
-				    {
-						AddSlotToInventoryWorld(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-				        Loot[GetAirDropID(playerid)][AirSlot9] = str;
-					}
-
-		   			case 9:
-				    {
-						AddSlotToInventoryWorld(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-				        Loot[GetAirDropID(playerid)][AirSlot10] = str;
-					}
-
-		   			case 10:
-				    {
-						AddSlotToInventoryWorld(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-      					Loot[GetAirDropID(playerid)][AirSlot11] = str;
-					}
-
-					case 11:
-				    {
-						AddSlotToInventoryWorld(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-      					Loot[GetAirDropID(playerid)][AirSlot12] = str;
-					}
-				}
-			}
-		}
-
-		case DIALOG_HOSPITAL:
-		{
-			if(response)
-			{
-			    new str[64];
-			    format(str,sizeof(str),"0\tEmpty Slot");
-				switch(listitem)
-				{
-				    case 0:
-				    {
-						AddSlotToInventoryWorld(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-				        Loot[GetHospitalID(playerid)][HosSlot1] = str;
-					}
-
-		   			case 1:
-				    {
-						AddSlotToInventoryWorld(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-				        Loot[GetHospitalID(playerid)][HosSlot2] = str;
-					}
-
-		   			case 2:
-				    {
-						AddSlotToInventoryWorld(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-				        Loot[GetHospitalID(playerid)][HosSlot3] = str;
-					}
-
-		   			case 3:
-				    {
-						AddSlotToInventoryWorld(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-				        Loot[GetHospitalID(playerid)][HosSlot4] = str;
-					}
-
-		   			case 4:
-				    {
-						AddSlotToInventoryWorld(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-      					Loot[GetHospitalID(playerid)][HosSlot5] = str;
-					}
-
-					case 5:
-				    {
-						AddSlotToInventoryWorld(playerid,inputtext[strfind(inputtext,"\t")+1],1);
-      					Loot[GetHospitalID(playerid)][HosSlot6] = str;
-					}
-				}
-			}
-		}
 	}
 	return 1;
 }
@@ -8060,7 +6694,6 @@ CMD:resetinv(playerid,params[])
 		//	print("reset inv passed");
 			AddSlotToInventoryWorld(targetid,"Bandage",1);
 		//	print("bandage passed");
-			pInfo[targetid][BackpackSlotsUsed] = 1;
 		//	print("info passed");
 			SendClientMessage(targetid,-1,"*"COL_RED" Your inventory has been reset!");
 		//	print("message passed");
@@ -8153,193 +6786,7 @@ CMD:h(playerid,params[])
 	}
 	return 1;
 }
-CMD:dropgun(playerid)
-{
-	if(GetPlayerWeapon(playerid) >= 1)
-	{
-		new wepname[64];
-		new Float:fPos[3];
-		GetPlayerPos(playerid,fPos[0],fPos[1],fPos[2]);
 
-		switch(GetPlayerWeapon(playerid))
-		{
-		    case 25: wepname = "Shotgun", SendClientMessage(playerid, -1, ""chat" You dropped your current weapon/tool!"), DayZSA_DropWeapon("Shotgun", GetPlayerAmmo(playerid), fPos[0],fPos[1],fPos[2]);
-		    case 30: wepname = "AK-47", SendClientMessage(playerid, -1, ""chat" You dropped your current weapon/tool!"), DayZSA_DropWeapon("AK-47", GetPlayerAmmo(playerid),fPos[0],fPos[1],fPos[2]);
-		    case 31: wepname = "M4", SendClientMessage(playerid, -1, ""chat" You dropped your current weapon/tool!"), DayZSA_DropWeapon("M4", GetPlayerAmmo(playerid), fPos[0],fPos[1],fPos[2]);
-		    case 34: wepname = "Sniper Rifle", SendClientMessage(playerid, -1, ""chat" You dropped your current weapon/tool!"), DayZSA_DropWeapon("Sniper Rifle", GetPlayerAmmo(playerid),fPos[0],fPos[1],fPos[2]);
-		    case 33: wepname = "Country Rifle", SendClientMessage(playerid, -1, ""chat" You dropped your current weapon/tool!"), DayZSA_DropWeapon("Country Rifle", GetPlayerAmmo(playerid),fPos[0],fPos[1],fPos[2]);
-		    case 22: wepname = "Pistol", SendClientMessage(playerid, -1, ""chat" You dropped your current weapon/tool!"), DayZSA_DropWeapon("Pistol", GetPlayerAmmo(playerid), fPos[0],fPos[1],fPos[2]);
-		    case 27: wepname = "SPAZ-12 Shotgun", SendClientMessage(playerid, -1, ""chat" You dropped your current weapon/tool!"), DayZSA_DropWeapon("SPAZ-12 Shotgun", GetPlayerAmmo(playerid),fPos[0],fPos[1],fPos[2]);
-		    case 29: wepname = "MP5", SendClientMessage(playerid, -1, ""chat" You dropped your current weapon/tool!"), DayZSA_DropWeapon("MP5", GetPlayerAmmo(playerid),fPos[0],fPos[1],fPos[2]);
-		    case 23: wepname = "Silenced Pistol", SendClientMessage(playerid, -1, ""chat" You dropped your current weapon/tool!"), DayZSA_DropWeapon("Silenced Pistol", GetPlayerAmmo(playerid),fPos[0],fPos[1],fPos[2]);
-		    case 43: wepname = "Binoculars", SendClientMessage(playerid, -1, ""chat" You dropped your current weapon/tool!"), DayZSA_DropWeapon("Binoculars", GetPlayerAmmo(playerid),fPos[0],fPos[1],fPos[2]);
-		    case 8: wepname = "Katana", SendClientMessage(playerid, -1, ""chat" You dropped your current weapon/tool!"), DayZSA_DropWeapon("Katana", GetPlayerAmmo(playerid),fPos[0],fPos[1],fPos[2]);
-		    case 5: wepname = "Baseball Bat", SendClientMessage(playerid, -1, ""chat" You dropped your current weapon/tool!"), DayZSA_DropWeapon("Baseball Bat", GetPlayerAmmo(playerid),fPos[0],fPos[1],fPos[2]);
-		}
-
-		new strdropped[128];
-		format(strdropped, sizeof(strdropped), ""chat" You have dropped %s with %i ammo!", wepname, GetPlayerAmmo(playerid));
-		SendClientMessage(playerid, -1, strdropped);
-		SetPlayerAmmo(playerid, GetPlayerWeapon(playerid), 0);
-	}
-	else return SendClientMessage(playerid, -1, ""chat" You have no weapon equipped");
-	return 1;
-}
-
-CMD:pickupgun(playerid)
-{
-	if(!IsPlayerInAnyVehicle(playerid))
-	{
-		if(IsPlayerInRangeOfPoint(playerid,1.1,Loot[GetLootW_ID(playerid)][DropGunX],Loot[GetLootW_ID(playerid)][DropGunY],Loot[GetLootW_ID(playerid)][DropGunZ]))
-		{
-			if(pInfo[playerid][Backpack] == 0)
-			{
-				if(pInfo[playerid][BackpackSlots] == 8)
-				{
-					if(pInfo[playerid][BackpackSlotsUsed] == 8)
-					{
-						SendClientMessage(playerid,-1,""chat" Your backpack is full");
-					}
-					else
-					{
-						if(Loot[GetLootW_ID(playerid)][AntiDup] == 1)
-						{
-							switch(Loot[GetLootW_ID(playerid)][DropGunID])
-							{
-								case 355: AddSlotToInventoryWorld(playerid, "AK-47", 1), GivePlayerWeaponEx(playerid, 30, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 356: AddSlotToInventoryWorld(playerid, "M4", 1),GivePlayerWeaponEx(playerid, 31, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 347: AddSlotToInventoryWorld(playerid, "Silenced Pistol", 1),GivePlayerWeaponEx(playerid, 23, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 346: AddSlotToInventoryWorld(playerid, "Pistol", 1),GivePlayerWeaponEx(playerid, 22, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 349: AddSlotToInventoryWorld(playerid, "Shotgun", 1),GivePlayerWeaponEx(playerid, 25, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 351: AddSlotToInventoryWorld(playerid, "SPAZ-12 Shotgun", 1),GivePlayerWeaponEx(playerid, 27, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 357: AddSlotToInventoryWorld(playerid, "Country Rifle", 1),GivePlayerWeaponEx(playerid, 33, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 358: AddSlotToInventoryWorld(playerid, "Sniper Rifle", 1),GivePlayerWeaponEx(playerid, 34, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 353: AddSlotToInventoryWorld(playerid, "MP5", 1),GivePlayerWeaponEx(playerid, 29, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 339: AddSlotToInventoryWorld(playerid, "Katana", 1),GivePlayerWeaponEx(playerid, 8, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 336: AddSlotToInventoryWorld(playerid, "Baseball Bat", 1),GivePlayerWeaponEx(playerid, 5, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 3070: AddSlotToInventoryWorld(playerid, "Binoculars", 1),GivePlayerWeaponEx(playerid, 43, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-							}
-						}
-						else
-						{
-							DayZSA_DestroyLoot(GetLootW_ID(playerid));
-						}
-					}
-				}
-			}
-
-			if(pInfo[playerid][Backpack] == 1)
-			{
-				if(pInfo[playerid][BackpackSlots] == 16)
-				{
-					if(pInfo[playerid][BackpackSlotsUsed] == 16)
-					{
-						SendClientMessage(playerid,-1,""chat" Your backpack is full");
-					}
-					else
-					{
-						if(Loot[GetLootW_ID(playerid)][AntiDup] == 1)
-						{
-							switch(Loot[GetLootW_ID(playerid)][DropGunID])
-							{
-								case 355: AddSlotToInventoryWorld(playerid, "AK-47", 1), GivePlayerWeaponEx(playerid, 30, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 356: AddSlotToInventoryWorld(playerid, "M4", 1),GivePlayerWeaponEx(playerid, 31, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 347: AddSlotToInventoryWorld(playerid, "Silenced Pistol", 1),GivePlayerWeaponEx(playerid, 23, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 346: AddSlotToInventoryWorld(playerid, "Pistol", 1),GivePlayerWeaponEx(playerid, 22, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 349: AddSlotToInventoryWorld(playerid, "Shotgun", 1),GivePlayerWeaponEx(playerid, 25, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 351: AddSlotToInventoryWorld(playerid, "SPAZ-12 Shotgun", 1),GivePlayerWeaponEx(playerid, 27, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 357: AddSlotToInventoryWorld(playerid, "Country Rifle", 1),GivePlayerWeaponEx(playerid, 33, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 358: AddSlotToInventoryWorld(playerid, "Sniper Rifle", 1),GivePlayerWeaponEx(playerid, 34, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 353: AddSlotToInventoryWorld(playerid, "MP5", 1),GivePlayerWeaponEx(playerid, 29, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 339: AddSlotToInventoryWorld(playerid, "Katana", 1),GivePlayerWeaponEx(playerid, 8, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 336: AddSlotToInventoryWorld(playerid, "Baseball Bat", 1),GivePlayerWeaponEx(playerid, 5, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 3070: AddSlotToInventoryWorld(playerid, "Binoculars", 1),GivePlayerWeaponEx(playerid, 43, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-							}
-						}
-						else
-						{
-							DayZSA_DestroyLoot(GetLootW_ID(playerid));
-						}
-					}
-				}
-			}
-
-			if(pInfo[playerid][Backpack] == 2)
-			{
-				if(pInfo[playerid][BackpackSlots] == 28)
-				{
-					if(pInfo[playerid][BackpackSlotsUsed] == 28)
-					{
-						SendClientMessage(playerid,-1,""chat" Your backpack is full");
-					}
-					else
-					{
-						if(Loot[GetLootW_ID(playerid)][AntiDup] == 1)
-						{
-							switch(Loot[GetLootW_ID(playerid)][DropGunID])
-							{
-								case 355: AddSlotToInventoryWorld(playerid, "AK-47", 1), GivePlayerWeaponEx(playerid, 30, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 356: AddSlotToInventoryWorld(playerid, "M4", 1),GivePlayerWeaponEx(playerid, 31, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 347: AddSlotToInventoryWorld(playerid, "Silenced Pistol", 1),GivePlayerWeaponEx(playerid, 23, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 346: AddSlotToInventoryWorld(playerid, "Pistol", 1),GivePlayerWeaponEx(playerid, 22, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 349: AddSlotToInventoryWorld(playerid, "Shotgun", 1),GivePlayerWeaponEx(playerid, 25, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 351: AddSlotToInventoryWorld(playerid, "SPAZ-12 Shotgun", 1),GivePlayerWeaponEx(playerid, 27, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 357: AddSlotToInventoryWorld(playerid, "Country Rifle", 1),GivePlayerWeaponEx(playerid, 33, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 358: AddSlotToInventoryWorld(playerid, "Sniper Rifle", 1),GivePlayerWeaponEx(playerid, 34, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 353: AddSlotToInventoryWorld(playerid, "MP5", 1),GivePlayerWeaponEx(playerid, 29, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 339: AddSlotToInventoryWorld(playerid, "Katana", 1),GivePlayerWeaponEx(playerid, 8, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 336: AddSlotToInventoryWorld(playerid, "Baseball Bat", 1),GivePlayerWeaponEx(playerid, 5, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 3070: AddSlotToInventoryWorld(playerid, "Binoculars", 1),GivePlayerWeaponEx(playerid, 43, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-							}
-						}
-						else
-						{
-							DayZSA_DestroyLoot(GetLootW_ID(playerid));
-						}
-					}
-				}
-			}
-
-			if(pInfo[playerid][Backpack] == 3)
-			{
-				if(pInfo[playerid][BackpackSlots] == 38)
-				{
-					if(pInfo[playerid][BackpackSlotsUsed] == 38)
-					{
-						SendClientMessage(playerid,-1,""chat" Your backpack is full");
-					}
-					else
-					{
-						if(Loot[GetLootW_ID(playerid)][AntiDup] == 1)
-						{
-							switch(Loot[GetLootW_ID(playerid)][DropGunID])
-							{
-								case 355: AddSlotToInventoryWorld(playerid, "AK-47", 1), GivePlayerWeaponEx(playerid, 30, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 356: AddSlotToInventoryWorld(playerid, "M4", 1),GivePlayerWeaponEx(playerid, 31, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 347: AddSlotToInventoryWorld(playerid, "Silenced Pistol", 1),GivePlayerWeaponEx(playerid, 23, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 346: AddSlotToInventoryWorld(playerid, "Pistol", 1),GivePlayerWeaponEx(playerid, 22, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 349: AddSlotToInventoryWorld(playerid, "Shotgun", 1),GivePlayerWeaponEx(playerid, 25, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 351: AddSlotToInventoryWorld(playerid, "SPAZ-12 Shotgun", 1),GivePlayerWeaponEx(playerid, 27, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 357: AddSlotToInventoryWorld(playerid, "Country Rifle", 1),GivePlayerWeaponEx(playerid, 33, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 358: AddSlotToInventoryWorld(playerid, "Sniper Rifle", 1),GivePlayerWeaponEx(playerid, 34, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 353: AddSlotToInventoryWorld(playerid, "MP5", 1),GivePlayerWeaponEx(playerid, 29, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 339: AddSlotToInventoryWorld(playerid, "Katana", 1),GivePlayerWeaponEx(playerid, 8, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 336: AddSlotToInventoryWorld(playerid, "Baseball Bat", 1),GivePlayerWeaponEx(playerid, 5, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-								case 3070: AddSlotToInventoryWorld(playerid, "Binoculars", 1),GivePlayerWeaponEx(playerid, 43, Loot[GetLootW_ID(playerid)][DropGunAmmo]), DayZSA_DestroyLoot(GetLootW_ID(playerid)), Loot[GetLootW_ID(playerid)][AntiDup] = 0;
-							}
-						}
-						else
-						{
-							DayZSA_DestroyLoot(GetLootW_ID(playerid));
-						}
-					}
-				}
-			}
-		}
-		else return SendClientMessage(playerid, -1, "*"COL_RED" Read the rules! The server have prevented you to duplicate an item!");
-	}
-	return 1;
-}
 
 CMD:groupinfo(playerid,params[])
 {
@@ -10040,6 +8487,8 @@ stock ClearChat()
 
 stock ResetVars(playerid)
 {
+	ViewId[playerid] = 0;
+	ViewItem[playerid][0] = EOS;
 	pInfo[playerid][IsPlayerGroupOwner] = 0;
 	pInfo[playerid][IsPlayerInvited] = 0;
 	pInfo[playerid][IsPlayerInvitedGroupID] = 0;
@@ -11362,148 +9811,8 @@ function SpawnVars(playerid)
 	return 1;
 }
 
-stock RemoveSlotToInventory(playerid,addItem[],amount)
-{
-    pInfo[playerid][BackpackSlotsUsed]--;
-	RemoveItem(playerid,addItem,amount);
-	return 1;
-}
 
-stock AddSlotToInventoryWorld(playerid,addItem[],amount)
-{
-	if(pInfo[playerid][Backpack] == 0)
-	{
-	    if(pInfo[playerid][BackpackSlots] == 8)
-	    {
-	    	if(pInfo[playerid][BackpackSlotsUsed] == 8)
-	    	{
-				SendClientMessage(playerid,-1,""chat" Your backpack is full");
-			}
-			else
-			{
-				pInfo[playerid][BackpackSlotsUsed] += amount;
-				AddItem(playerid,addItem,amount);
-			}
-		}
-	}
 
-	if(pInfo[playerid][Backpack] == 1)
-	{
-	    if(pInfo[playerid][BackpackSlots] == 16)
-	    {
-	    	if(pInfo[playerid][BackpackSlotsUsed] == 16)
-	    	{
-				SendClientMessage(playerid,-1,""chat" Your backpack is full");
-			}
-			else
-			{
-				pInfo[playerid][BackpackSlotsUsed] += amount;
-				AddItem(playerid,addItem,amount);
-			}
-		}
-	}
-
-	if(pInfo[playerid][Backpack] == 2)
-	{
-	    if(pInfo[playerid][BackpackSlots] == 28)
-	    {
-	    	if(pInfo[playerid][BackpackSlotsUsed] == 28)
-	    	{
-				SendClientMessage(playerid,-1,""chat" Your backpack is full");
-			}
-			else
-			{
-				pInfo[playerid][BackpackSlotsUsed] += amount;
-				AddItem(playerid,addItem,amount);
-			}
-		}
-	}
-
-	if(pInfo[playerid][Backpack] == 3)
-	{
-	    if(pInfo[playerid][BackpackSlots] == 38)
-	    {
-	    	if(pInfo[playerid][BackpackSlotsUsed] == 38)
-	    	{
-				SendClientMessage(playerid,-1,""chat" Your backpack is full");
-			}
-			else
-			{
-				pInfo[playerid][BackpackSlotsUsed] += amount;
-				AddItem(playerid,addItem,amount);
-			}
-		}
-	}
-	return 1;
-}
-
-stock AddSlotToInventoryLoot(playerid,addItem[],amount)
-{
-	if(pInfo[playerid][Backpack] == 0)
-	{
-	    if(pInfo[playerid][BackpackSlots] == 8)
-	    {
-	    	if(pInfo[playerid][BackpackSlotsUsed] == 8)
-	    	{
-				SendClientMessage(playerid,-1,""chat" Your backpack is full");
-			}
-			else
-			{
-				pInfo[playerid][BackpackSlotsUsed]++;
-				AddItem(playerid,addItem,amount);
-			}
-		}
-	}
-
-	if(pInfo[playerid][Backpack] == 1)
-	{
-	    if(pInfo[playerid][BackpackSlots] == 16)
-	    {
-	    	if(pInfo[playerid][BackpackSlotsUsed] == 16)
-	    	{
-				SendClientMessage(playerid,-1,""chat" Your backpack is full");
-			}
-			else
-			{
-				pInfo[playerid][BackpackSlotsUsed]++;
-				AddItem(playerid,addItem,amount);
-			}
-		}
-	}
-
-	if(pInfo[playerid][Backpack] == 2)
-	{
-	    if(pInfo[playerid][BackpackSlots] == 28)
-	    {
-	    	if(pInfo[playerid][BackpackSlotsUsed] == 28)
-	    	{
-				SendClientMessage(playerid,-1,""chat" Your backpack is full");
-			}
-			else
-			{
-				pInfo[playerid][BackpackSlotsUsed]++;
-				AddItem(playerid,addItem,amount);
-			}
-		}
-	}
-
-	if(pInfo[playerid][Backpack] == 3)
-	{
-	    if(pInfo[playerid][BackpackSlots] == 38)
-	    {
-	    	if(pInfo[playerid][BackpackSlotsUsed] == 38)
-	    	{
-				SendClientMessage(playerid,-1,""chat" Your backpack is full");
-			}
-			else
-			{
-				pInfo[playerid][BackpackSlotsUsed]++;
-				AddItem(playerid,addItem,amount);
-			}
-		}
-	}
-	return 1;
-}
 
 function StopAnim(playerid) return ClearAnimations(playerid);
 
@@ -11568,7 +9877,7 @@ stock _GetItemNamePVar(playerid,item)
 	return tmp2;
 }
 
-stock _SetItemNamePVar(playerid,item,ItemName[])
+stock _SetItemNamePVar(playerid,item,const ItemName[])
 {
 	new tmp[MAX_ITEM_NAME];
 	format(tmp,MAX_ITEM_NAME,"PITEMNAME%d",item);
@@ -11589,7 +9898,7 @@ stock _SetItemAmountPVar(playerid,item,Amount)
 	SetPVarInt(playerid,tmp,Amount);
 }
 
-stock AddItem(playerid,ItemName[],Amount)
+stock AddItem(playerid,const ItemName[],Amount)
 {
     if(!IsPlayerNPC(playerid))
     {
@@ -11628,7 +9937,7 @@ stock AddItem(playerid,ItemName[],Amount)
 	return 0;
 }
 
-stock RemoveItem(playerid,ItemName[],Amount)
+stock RemoveItem(playerid,const ItemName[],Amount)
 {
     if(!IsPlayerNPC(playerid))
     {
@@ -11651,7 +9960,7 @@ stock RemoveItem(playerid,ItemName[],Amount)
 	return 0;
 }
 
-stock PlayerHasItem(playerid,ItemName[])
+stock PlayerHasItem(playerid,const ItemName[])
 {
 	for(new item;item<MAX_ITEMS;item++)
 	{
@@ -11673,6 +9982,7 @@ stock GetPlayerItemInfo(playerid,&idx,ItemName[],len=sizeof(ItemName),&Amount)
 stock ResetPlayerInventory(playerid)
 {
 	for(new item;item<MAX_ITEMS;item++)_SetItemAmountPVar(playerid,item,0);
+	pInfo[playerid][BackpackSlotsUsed] = 0;
 }
 
 stock GetBackpackName(playerid)
@@ -11748,6 +10058,7 @@ stock LoadInventory(playerid)
 			fread(file,tstring);
 		}
 		fclose(file);
+		RecountBackpack(playerid);
 		GetPlayerName(playerid,tstring,24);
 		printf("[INV] %s[%d]'s inventory loaded.",tstring,playerid);
 	}
@@ -11773,6 +10084,7 @@ function DestroyRoadFlare(playerid)
 
 public OnPlayerUseItem(playerid,ItemName[])
 {
+    if(!PlayerHasItem(playerid, ItemName)) return 0;
     if(!IsPlayerNPC(playerid))
     {
         if(!strcmp(ItemName,"Empty Water Bottle",true))
@@ -15612,6 +13924,8 @@ stock DayZSA_SelectObj()
 
 function DayZSA_DisplayLootFunction(playerid)
 {
+	ViewId[playerid] = GetLootIDFunction(playerid);
+	format(ViewItem[playerid], 64, "%s", Loot[ViewId[playerid]][lootDrop]);
 	new str[64];
 	format(str,sizeof(str),"1\t%s",Loot[GetLootIDFunction(playerid)][lootDrop]);
 	ShowPlayerDialog(playerid,DIALOG_LOOTING_DROP,DIALOG_STYLE_LIST,""COL_LIGHTBLUE"GEAR Looting",str,"Take","Close");
@@ -15713,6 +14027,7 @@ stock DayZSA_GetLootNameHigh()
 
 function DayZSA_DisplayVehicleStorage(playerid)
 {
+	ViewId[playerid] = GetVehicleNearID(playerid);
 	new str[256];
 
 	if(vInfo[GetVehicleNearID(playerid)][vehicleSlots] == 1)
@@ -15756,6 +14071,7 @@ function DayZSA_DisplayVehicleStorage(playerid)
 
 function DayZSA_DisplayTent(playerid)
 {
+	ViewId[playerid] = GetTentID(playerid);
 	new str[364];
 	format(str,sizeof(str),"%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
 	Tent[GetTentID(playerid)][tentSlot1],
@@ -15781,6 +14097,7 @@ function DayZSA_DisplayTent(playerid)
 
 function DayZSA_DisplayHospital(playerid)
 {
+	ViewId[playerid] = GetHospitalID(playerid);
 	new str[256];
 	format(str,sizeof(str),"%s\n%s\n%s\n%s\n%s\n%s",
 	Loot[GetHospitalID(playerid)][HosSlot1],
@@ -15796,6 +14113,7 @@ function DayZSA_DisplayHospital(playerid)
 
 function DayZSA_DisplayAirdrop(playerid)
 {
+	ViewId[playerid] = GetAirDropID(playerid);
 	new str[500];
 	format(str,sizeof(str),"%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
 	Loot[GetAirDropID(playerid)][AirSlot1],
@@ -15849,6 +14167,8 @@ stock ShowInventoryTent(playerid)
 
 function DayZSA_DisplayLootZombie(playerid)
 {
+	ViewId[playerid] = GetLootIDZombie(playerid);
+	format(ViewItem[playerid], 64, "%s", Loot[ViewId[playerid]][lootDrop]);
 	new str[64];
 	format(str,sizeof(str),"1\t%s",Loot[GetLootIDZombie(playerid)][lootDrop]);
 	ShowPlayerDialog(playerid,DIALOG_LOOTING_DROPZ,DIALOG_STYLE_LIST,""COL_LIGHTBLUE"GEAR Looting",str,"Take","Close");
@@ -15857,6 +14177,8 @@ function DayZSA_DisplayLootZombie(playerid)
 
 function DayZSA_DisplayLootForPlayer(playerid)
 {
+	ViewId[playerid] = GetLootID(playerid);
+	format(ViewItem[playerid], 64, "%s", Loot[ViewId[playerid]][LootName]);
 	new str[64];
 	format(str,sizeof(str),"1\t%s",Loot[GetLootID(playerid)][LootName]);
 	ShowPlayerDialog(playerid,DIALOG_LOOTING,DIALOG_STYLE_LIST,""COL_LIGHTBLUE"GEAR Looting",str,"Take","Cancel");
@@ -16535,6 +14857,9 @@ function DayZSA_RespawnItems()
 		Loot[i][xLoot] = 0.0;
 		Loot[i][yLoot] = 0.0;
 		Loot[i][zLoot] = 0.0;
+		Loot[i][DropGunX] = 0.0;
+		Loot[i][DropGunY] = 0.0;
+		Loot[i][DropGunZ] = 0.0;
 		Loot[i][xLootdrop] = 0.0;
 		Loot[i][yLootdrop] = 0.0;
 		Loot[i][zLootdrop] = 0.0;
@@ -16590,6 +14915,9 @@ CMD:tentres(playerid)
 
 function DayZSA_DestroyLoot(id)
 {
+	Loot[id][DropGunX] = 0.0;
+	Loot[id][DropGunY] = 0.0;
+	Loot[id][DropGunZ] = 0.0;
 	DestroyDynamicObject(Loot[id][LootID]);
 	DestroyDynamic3DTextLabel(Loot[id][TextID]);
 	Loot[id][xLoot] = 0.0;
@@ -17672,6 +16000,421 @@ function FOUR_TIRE_ADD2(playerid)
 {
 	if(GetVehicleModel(GetVehicleNearID(playerid)) == 531 || GetVehicleModel(GetVehicleNearID(playerid)) == 418 ||GetVehicleModel(GetVehicleNearID(playerid)) == 542 || GetVehicleModel(GetVehicleNearID(playerid)) == 470 || GetVehicleModel(GetVehicleNearID(playerid)) == 422) return 1;
 	return 0;
+}
+
+// ---------------------------------------------------------------------------
+// Containers (tents, vehicle storage, loot piles, crates).
+// The server decides what a player takes or stores: the dialog target is fixed
+// when the dialog opens and is re-checked when the answer arrives.
+// ---------------------------------------------------------------------------
+
+#define EMPTY_SLOT "Empty Slot"
+
+stock GetEntryItemName(const entry[], dest[], size = sizeof(dest))
+{
+	// Entries look like "Item" or "1\tItem"
+	new pos = strfind(entry, "\t");
+	while(pos != -1 && entry[pos] == '\t') pos++;
+	strmid(dest, entry, (pos == -1) ? 0 : pos, strlen(entry), size);
+	return 1;
+}
+
+stock bool:IsItemName(const name[])
+{
+	return name[0] != EOS && strcmp(name, EMPTY_SLOT, true) != 0;
+}
+
+#define TENT_CASE(%0,%1) case %0: format(dest, 64, "%s", Tent[tentid][tentSlot%1])
+stock GetTentSlot(tentid, slot, dest[])
+{
+	switch(slot)
+	{
+		TENT_CASE(0,1); TENT_CASE(1,2); TENT_CASE(2,3); TENT_CASE(3,4);
+		TENT_CASE(4,5); TENT_CASE(5,6); TENT_CASE(6,7); TENT_CASE(7,8);
+		TENT_CASE(8,9); TENT_CASE(9,10); TENT_CASE(10,11); TENT_CASE(11,12);
+		TENT_CASE(12,13); TENT_CASE(13,14); TENT_CASE(14,15); TENT_CASE(15,16);
+		default: return 0;
+	}
+	return 1;
+}
+
+#define TENT_SET(%0,%1) case %0: format(Tent[tentid][tentSlot%1], 64, "%s", value)
+stock SetTentSlot(tentid, slot, const value[])
+{
+	switch(slot)
+	{
+		TENT_SET(0,1); TENT_SET(1,2); TENT_SET(2,3); TENT_SET(3,4);
+		TENT_SET(4,5); TENT_SET(5,6); TENT_SET(6,7); TENT_SET(7,8);
+		TENT_SET(8,9); TENT_SET(9,10); TENT_SET(10,11); TENT_SET(11,12);
+		TENT_SET(12,13); TENT_SET(13,14); TENT_SET(14,15); TENT_SET(15,16);
+	}
+	return 1;
+}
+
+#define VEH_CASE(%0,%1) case %0: format(dest, 64, "%s", vInfo[vehicleid][vSlot%1])
+stock GetStorageSlot(vehicleid, slot, dest[])
+{
+	switch(slot)
+	{
+		VEH_CASE(0,1); VEH_CASE(1,2); VEH_CASE(2,3); VEH_CASE(3,4); VEH_CASE(4,5); VEH_CASE(5,6);
+		default: return 0;
+	}
+	return 1;
+}
+
+#define VEH_SET(%0,%1) case %0: format(vInfo[vehicleid][vSlot%1], 64, "%s", value)
+stock SetStorageSlot(vehicleid, slot, const value[])
+{
+	switch(slot)
+	{
+		VEH_SET(0,1); VEH_SET(1,2); VEH_SET(2,3); VEH_SET(3,4); VEH_SET(4,5); VEH_SET(5,6);
+	}
+	return 1;
+}
+
+#define CRATE_CASE(%0,%1,%2) case %0: format(dest, 64, "%s", Loot[id][%1Slot%2])
+#define CRATE_SET(%0,%1,%2) case %0: format(Loot[id][%1Slot%2], 64, "0\t%s", EMPTY_SLOT)
+stock GetAirSlot(id, slot, dest[])
+{
+	switch(slot)
+	{
+		CRATE_CASE(0,Air,1); CRATE_CASE(1,Air,2); CRATE_CASE(2,Air,3); CRATE_CASE(3,Air,4);
+		CRATE_CASE(4,Air,5); CRATE_CASE(5,Air,6); CRATE_CASE(6,Air,7); CRATE_CASE(7,Air,8);
+		CRATE_CASE(8,Air,9); CRATE_CASE(9,Air,10); CRATE_CASE(10,Air,11); CRATE_CASE(11,Air,12);
+		default: return 0;
+	}
+	return 1;
+}
+
+stock ClearAirSlot(id, slot)
+{
+	switch(slot)
+	{
+		CRATE_SET(0,Air,1); CRATE_SET(1,Air,2); CRATE_SET(2,Air,3); CRATE_SET(3,Air,4);
+		CRATE_SET(4,Air,5); CRATE_SET(5,Air,6); CRATE_SET(6,Air,7); CRATE_SET(7,Air,8);
+		CRATE_SET(8,Air,9); CRATE_SET(9,Air,10); CRATE_SET(10,Air,11); CRATE_SET(11,Air,12);
+	}
+	return 1;
+}
+
+stock GetHospitalSlot(id, slot, dest[])
+{
+	switch(slot)
+	{
+		CRATE_CASE(0,Hos,1); CRATE_CASE(1,Hos,2); CRATE_CASE(2,Hos,3);
+		CRATE_CASE(3,Hos,4); CRATE_CASE(4,Hos,5); CRATE_CASE(5,Hos,6);
+		default: return 0;
+	}
+	return 1;
+}
+
+stock ClearHospitalSlot(id, slot)
+{
+	switch(slot)
+	{
+		CRATE_SET(0,Hos,1); CRATE_SET(1,Hos,2); CRATE_SET(2,Hos,3);
+		CRATE_SET(3,Hos,4); CRATE_SET(4,Hos,5); CRATE_SET(5,Hos,6);
+	}
+	return 1;
+}
+
+stock ContainerGone(playerid)
+{
+	SendClientMessage(playerid, -1, ""chat" That is no longer available.");
+	return 1;
+}
+
+stock bool:IsViewingTent(playerid, tentid)
+{
+	return tentid > 0 && tentid < MAX_TENTS && IsPlayerInRangeOfPoint(playerid, 3.5, Tent[tentid][xTent], Tent[tentid][yTent], Tent[tentid][zTent]);
+}
+
+stock bool:IsViewingStorage(playerid, vehicleid)
+{
+	return vehicleid > 0 && vehicleid < MAX_VEHICLES && IsPlayerInRangeOfPoint(playerid, 3.5, vInfo[vehicleid][vX], vInfo[vehicleid][vY], vInfo[vehicleid][vZ]);
+}
+
+stock GetMaxTires(playerid)
+{
+	if(FOUR_TIRE_ADD1(playerid) || FOUR_TIRE_ADD2(playerid)) return 4;
+	if(TWO_TIRE_VEHICLE_ADD) return 2;
+	if(SIX_TIRE_VEHICLE_ADD) return 6;
+	return 0;
+}
+
+stock PlayRepairAnim(playerid)
+{
+	if(!IsPlayerInAnyVehicle(playerid))
+	{
+		ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 4.1, false, true, false, true, 1);
+		SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
+	}
+	return 1;
+}
+
+// Moves one item from the inventory into a vehicle slot; parts and fuel are fitted instead of stored
+stock StoreInVehicle(playerid, vehicleid, slot, const item[])
+{
+	new msg[128];
+	if(!strcmp(item, "Engine", true))
+	{
+		if(vInfo[vehicleid][vehicleEngine] == 1) return SendClientMessage(playerid, -1, ""chat" This vehicle already has an engine!");
+		RemoveSlotToInventory(playerid, item, 1);
+		vInfo[vehicleid][vehicleEngine] = 1;
+		return PlayRepairAnim(playerid);
+	}
+	if(!strcmp(item, "Tire", true) && GetMaxTires(playerid) > 0)
+	{
+		if(vInfo[vehicleid][vehicleTires] >= GetMaxTires(playerid)) return SendClientMessage(playerid, -1, ""chat" Vehicle already has enough tires!");
+		RemoveSlotToInventory(playerid, item, 1);
+		vInfo[vehicleid][vehicleTires]++;
+		return PlayRepairAnim(playerid);
+	}
+	if(!strcmp(item, "Full Jerry Can", true))
+	{
+		if(vInfo[vehicleid][vehicleFuel] >= 100) return SendClientMessage(playerid, -1, ""chat" Vehicle already has enough fuel!");
+		RemoveSlotToInventory(playerid, item, 1);
+		vInfo[vehicleid][vehicleFuel] += random(75);
+		if(vInfo[vehicleid][vehicleFuel] > 100) vInfo[vehicleid][vehicleFuel] = 100;
+		AddSlotToInventoryWorld(playerid, "Empty Jerry Can", 1);
+		return PlayRepairAnim(playerid);
+	}
+	RemoveSlotToInventory(playerid, item, 1);
+	SetStorageSlot(vehicleid, slot, item);
+	format(msg, sizeof(msg), ""chat" Added the item '%s' to slot %d!", item, slot + 1);
+	SendClientMessage(playerid, -1, msg);
+	return 1;
+}
+
+// Returns 1 when the dialog belongs to this module
+stock HandleItemDialog(playerid, dialogid, response, listitem, const inputtext[])
+{
+	new item[64], msg[128];
+	new id = ViewId[playerid];
+
+	switch(dialogid)
+	{
+		case DIALOG_TENT_VIEW:
+		{
+			if(!response) return 1;
+			pInfo[playerid][pTentLink] = listitem;
+			ShowPlayerDialog(playerid, DIALOG_TENT_VIEW_S, DIALOG_STYLE_MSGBOX, ""COL_WHITE"Viewing Tent"COL_GREEN" (16 SLOTS)", "Please select an option!", "Add Item", "Take Item");
+		}
+		case DIALOG_TENT_VIEW_S:
+		{
+			if(!IsViewingTent(playerid, id)) return ContainerGone(playerid);
+			if(response) return ShowInventoryTent(playerid), 1;
+			if(!GetTentSlot(id, pInfo[playerid][pTentLink], item) || !IsItemName(item)) return 1;
+			if(!AddSlotToInventoryWorld(playerid, item, 1)) return 1;
+			SetTentSlot(id, pInfo[playerid][pTentLink], EMPTY_SLOT);
+			format(msg, sizeof(msg), ""chat" Taken item '%s' from tent storage slot %d", item, pInfo[playerid][pTentLink] + 1);
+			SendClientMessage(playerid, -1, msg);
+		}
+		case DIALOG_TENT_VIEW_S2:
+		{
+			if(!response) return 1;
+			if(!IsViewingTent(playerid, id)) return ContainerGone(playerid);
+			new current[64];
+			GetEntryItemName(inputtext, item);
+			if(!IsItemName(item) || !PlayerHasItem(playerid, item)) return 1;
+			if(!GetTentSlot(id, pInfo[playerid][pTentLink], current)) return 1;
+			if(IsItemName(current)) return SendClientMessage(playerid, -1, ""chat" That slot is not empty!");
+			RemoveSlotToInventory(playerid, item, 1);
+			SetTentSlot(id, pInfo[playerid][pTentLink], item);
+			format(msg, sizeof(msg), ""chat" Added the item '%s' to slot %d!", item, pInfo[playerid][pTentLink] + 1);
+			SendClientMessage(playerid, -1, msg);
+		}
+		case DIALOG_VEHICLE_STORAGE:
+		{
+			if(!response) return 1;
+			pInfo[playerid][pStorageLink] = listitem;
+			ShowPlayerDialog(playerid, DIALOG_VEHICLE_STORAGE_S, DIALOG_STYLE_MSGBOX, ""COL_WHITE"Vehicle Storage", "Please select an option!", "Add Item", "Take Item");
+		}
+		case DIALOG_VEHICLE_STORAGE_S:
+		{
+			if(!IsViewingStorage(playerid, id)) return ContainerGone(playerid);
+			if(response) return ShowInventoryStorage(playerid), 1;
+			if(pInfo[playerid][pStorageLink] >= vInfo[id][vehicleSlots]) return 1;
+			if(!GetStorageSlot(id, pInfo[playerid][pStorageLink], item) || !IsItemName(item)) return 1;
+			if(!AddSlotToInventoryWorld(playerid, item, 1)) return 1;
+			SetStorageSlot(id, pInfo[playerid][pStorageLink], EMPTY_SLOT);
+			format(msg, sizeof(msg), ""chat" Taken item '%s' from vehicle storage slot %d", item, pInfo[playerid][pStorageLink] + 1);
+			SendClientMessage(playerid, -1, msg);
+			PlayRepairAnim(playerid);
+		}
+		case DIALOG_VEHICLE_STORAGE_S2:
+		{
+			if(!response) return 1;
+			if(!IsViewingStorage(playerid, id) || GetVehicleNearID(playerid) != id) return ContainerGone(playerid);
+			new current[64];
+			GetEntryItemName(inputtext, item);
+			if(!IsItemName(item) || !PlayerHasItem(playerid, item)) return 1;
+			if(pInfo[playerid][pStorageLink] >= vInfo[id][vehicleSlots]) return 1;
+			if(!GetStorageSlot(id, pInfo[playerid][pStorageLink], current)) return 1;
+			if(IsItemName(current)) return SendClientMessage(playerid, -1, ""chat" That slot is not empty!");
+			StoreInVehicle(playerid, id, pInfo[playerid][pStorageLink], item);
+		}
+		case DIALOG_LOOTING:
+		{
+			if(!response) return 1;
+			if(id <= 0 || Loot[id][AntiDup] != 1 || strcmp(ViewItem[playerid], Loot[id][LootName]) || !IsPlayerInRangeOfPoint(playerid, 2.3, Loot[id][xLoot], Loot[id][yLoot], Loot[id][zLoot])) return ContainerGone(playerid);
+			GetEntryItemName(Loot[id][LootName], item);
+			if(!AddSlotToInventoryLoot(playerid, item, 1)) return 1;
+			Loot[id][AntiDup] = 0;
+			DayZSA_DestroyLoot(id);
+		}
+		case DIALOG_LOOTING_DROP:
+		{
+			if(!response) return 1;
+			if(id <= 0 || Loot[id][AntiDup] != 1 || strcmp(ViewItem[playerid], Loot[id][lootDrop]) || !IsPlayerInRangeOfPoint(playerid, 2.3, Loot[id][xLootdrop], Loot[id][yLootdrop], Loot[id][zLootdrop])) return ContainerGone(playerid);
+			GetEntryItemName(Loot[id][lootDrop], item);
+			if(!AddSlotToInventoryLoot(playerid, item, 1)) return 1;
+			Loot[id][AntiDup] = 0;
+			DayZSA_DestroyLootDroped(id);
+		}
+		case DIALOG_LOOTING_DROPZ:
+		{
+			if(!response) return 1;
+			if(id <= 0 || Loot[id][AntiDup] != 1 || strcmp(ViewItem[playerid], Loot[id][lootDrop]) || !IsPlayerInRangeOfPoint(playerid, 2.3, Loot[id][xLootdropZ], Loot[id][yLootdropZ], Loot[id][zLootdropZ])) return ContainerGone(playerid);
+			GetEntryItemName(Loot[id][lootDrop], item);
+			if(!AddSlotToInventoryLoot(playerid, item, 1)) return 1;
+			Loot[id][AntiDup] = 0;
+			DayZSA_DestroyLootZombie(id);
+		}
+		case DIALOG_AIRDROP:
+		{
+			if(!response) return 1;
+			if(id <= 0 || !IsPlayerInRangeOfPoint(playerid, 3.5, Loot[id][xAir], Loot[id][yAir], Loot[id][zAir])) return ContainerGone(playerid);
+			new entry[64];
+			if(!GetAirSlot(id, listitem, entry)) return 1;
+			GetEntryItemName(entry, item);
+			if(IsItemName(item) && AddSlotToInventoryWorld(playerid, item, 1)) ClearAirSlot(id, listitem);
+		}
+		case DIALOG_HOSPITAL:
+		{
+			if(!response) return 1;
+			if(id <= 0 || !IsPlayerInRangeOfPoint(playerid, 3.5, Loot[id][xHos], Loot[id][yHos], Loot[id][zHos])) return ContainerGone(playerid);
+			new entry[64];
+			if(!GetHospitalSlot(id, listitem, entry)) return 1;
+			GetEntryItemName(entry, item);
+			if(IsItemName(item) && AddSlotToInventoryWorld(playerid, item, 1)) ClearHospitalSlot(id, listitem);
+		}
+		case INV_DIALOG_ID:
+		{
+			if(!response) return 1;
+			GetEntryItemName(inputtext, item);
+			if(!IsItemName(item) || !PlayerHasItem(playerid, item)) return 1;
+			format(pInfo[playerid][pItemLink], 64, "%s", item);
+			ShowPlayerDialog(playerid, DIALOG_INV_EDIT, DIALOG_STYLE_MSGBOX, ""COL_GREEN"GEAR", "Please select an option", "Use", "Drop");
+		}
+		case DIALOG_INV_EDIT:
+		{
+			format(item, sizeof(item), "%s", pInfo[playerid][pItemLink]);
+			if(!IsItemName(item) || !PlayerHasItem(playerid, item)) return 1;
+			if(response)
+			{
+				OnPlayerUseItem(playerid, item);
+				GameTextForPlayer(playerid, "~n~~n~~n~~n~~n~~g~please wait......", 800, 5);
+			}
+			else
+			{
+				if(gettime() - 3 < pInfo[playerid][pSpamDrop]) return SendClientMessage(playerid, -1, "*"COL_RED" Wait 3 seconds to drop your item!");
+				new Float:pos[3];
+				GetPlayerPos(playerid, pos[0], pos[1], pos[2]);
+				RemoveSlotToInventory(playerid, item, 1);
+				DayZSA_CreateLootsFunction(item, pos[0] + random(2), pos[1] + random(2), pos[2]);
+				pInfo[playerid][pSpamDrop] = gettime();
+			}
+		}
+		default: return 0;
+	}
+	return 1;
+}
+
+// Backpack usage is always derived from what is really in the inventory
+stock RecountBackpack(playerid)
+{
+	new used;
+	for(new i; i < MAX_ITEMS; i++) used += _GetItemAmountPVar(playerid, i);
+	pInfo[playerid][BackpackSlotsUsed] = used;
+	return used;
+}
+
+stock RemoveSlotToInventory(playerid, const addItem[], amount)
+{
+	new removed = RemoveItem(playerid, addItem, amount);
+	RecountBackpack(playerid);
+	return removed;
+}
+
+stock AddSlotToInventoryWorld(playerid, const addItem[], amount)
+{
+	if(RecountBackpack(playerid) + amount > pInfo[playerid][BackpackSlots])
+	{
+		SendClientMessage(playerid, -1, ""chat" Your backpack is full");
+		return 0;
+	}
+	new added = AddItem(playerid, addItem, amount);
+	RecountBackpack(playerid);
+	return added;
+}
+
+stock AddSlotToInventoryLoot(playerid, const addItem[], amount) return AddSlotToInventoryWorld(playerid, addItem, amount);
+
+CMD:dropgun(playerid)
+{
+	new WEAPON:weaponid = GetPlayerWeapon(playerid), name[32];
+	switch(_:weaponid)
+	{
+		case 25: name = "Shotgun";
+		case 30: name = "AK-47";
+		case 31: name = "M4";
+		case 34: name = "Sniper Rifle";
+		case 33: name = "Country Rifle";
+		case 22: name = "Pistol";
+		case 27: name = "SPAZ-12 Shotgun";
+		case 29: name = "MP5";
+		case 23: name = "Silenced Pistol";
+		case 43: name = "Binoculars";
+		case 8: name = "Katana";
+		case 5: name = "Baseball Bat";
+		default: return SendClientMessage(playerid, -1, ""chat" You have no weapon you can drop");
+	}
+	new Float:pos[3], msg[128], ammo = GetPlayerAmmo(playerid);
+	GetPlayerPos(playerid, pos[0], pos[1], pos[2]);
+	RemovePlayerWeapon(playerid, weaponid);
+	DayZSA_DropWeapon(name, ammo, pos[0], pos[1], pos[2]);
+	format(msg, sizeof(msg), ""chat" You have dropped %s with %i ammo!", name, ammo);
+	SendClientMessage(playerid, -1, msg);
+	return 1;
+}
+
+CMD:pickupgun(playerid)
+{
+	if(IsPlayerInAnyVehicle(playerid)) return 1;
+	new id = GetLootW_ID(playerid), weaponid;
+	if(id <= 0 || Loot[id][AntiDup] != 1) return SendClientMessage(playerid, -1, ""chat" There is no weapon here");
+	switch(Loot[id][DropGunID])
+	{
+		case 355: weaponid = 30;
+		case 356: weaponid = 31;
+		case 347: weaponid = 23;
+		case 346: weaponid = 22;
+		case 349: weaponid = 25;
+		case 351: weaponid = 27;
+		case 357: weaponid = 33;
+		case 358: weaponid = 34;
+		case 353: weaponid = 29;
+		case 339: weaponid = 8;
+		case 336: weaponid = 5;
+		case 3070: weaponid = 43;
+		default: return 1;
+	}
+	// The weapon itself is picked up; no inventory copy is created
+	Loot[id][AntiDup] = 0;
+	GivePlayerWeaponEx(playerid, weaponid, Loot[id][DropGunAmmo]);
+	DayZSA_DestroyLoot(id);
+	return 1;
 }
 
 /* Ban System */
