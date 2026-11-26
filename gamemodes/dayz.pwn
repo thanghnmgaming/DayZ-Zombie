@@ -13,6 +13,7 @@
 	All credits going to AaronN, and also plugins developer.
 */
 
+#pragma dynamic 65536    // stack and heap in cells; the default 4096 overflows during start-up
 #define MIXED_SPELLINGS
 #define NO_TAGS // legacy code passes plain numbers for weapons, fonts and flags
 #include <open.mp>

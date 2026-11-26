@@ -83,7 +83,7 @@ CREATE USER '$DbUser'@'127.0.0.1' IDENTIFIED BY '$DbPassword';
 GRANT ALL ON ``$DbName``.* TO '$DbUser'@'127.0.0.1';
 FLUSH PRIVILEGES;
 "@
-    $sql | & "$bin\mariadb.exe" --no-defaults -h127.0.0.1 "-P$DbPort" -uroot
+    $sql | & "$bin\mariadb.exe" --no-defaults "--host=127.0.0.1" "--port=$DbPort" "--user=root"
     if ($LASTEXITCODE -ne 0) { Stop-Process -Id $server.Id; throw "Creating the database users failed" }
     Write-Text "$root\database\root.cnf" "[client]`nhost=127.0.0.1`nport=$DbPort`nuser=root`npassword=$rootPassword`n"
     Write-Host "[done] private database created on port $DbPort and left running"
