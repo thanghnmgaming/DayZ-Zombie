@@ -40,6 +40,7 @@ public OnGameModeExit()
 
 public OnPlayerTakeDamage(playerid, issuerid, Float: amount, WEAPON:weaponid)
 {
+	if(GodMode[playerid]) return SetPlayerHealth(playerid, 100.0), 1;
     if(issuerid != INVALID_PLAYER_ID && IsPlayerNPC(issuerid))
     {
     	// blood is taken in ZombieAttack; the melee animation must not drain engine health

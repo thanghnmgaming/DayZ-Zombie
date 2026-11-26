@@ -181,6 +181,8 @@ forward AlertZombies(Float:x, Float:y, Float:z, Float:radius);
 new PlayerZone[MAX_PLAYERS];    // danger zone index + 1, 0 outside
 new MissionGoal[MAX_PLAYERS], MissionNext[MAX_PLAYERS];
 new TeleportGrace[MAX_PLAYERS];
+new bool:GodMode[MAX_PLAYERS];
+new bool:AdminVehicle[MAX_VEHICLES];
 new CommandWindow[MAX_PLAYERS], CommandsInWindow[MAX_PLAYERS], LastAlert[MAX_PLAYERS], bool:HasLastPos[MAX_PLAYERS];
 forward bool:CheckShot(playerid, weaponid, BULLET_HIT_TYPE:hittype, hitid);
 #if defined ZOMBIE_TEST

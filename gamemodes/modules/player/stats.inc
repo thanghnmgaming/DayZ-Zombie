@@ -145,6 +145,7 @@ stock ClearChat()
 
 stock ResetVars(playerid)
 {
+	GodMode[playerid] = false;
 	LastAlert[playerid] = 0;
 	CommandWindow[playerid] = 0;
 	HasLastPos[playerid] = false;

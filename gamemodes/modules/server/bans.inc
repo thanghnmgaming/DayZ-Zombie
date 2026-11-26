@@ -3,6 +3,8 @@
 stock jBan(player_banned, player_banner, const reason[], time = 0, system = 0)
 {
 	if(IsPlayerNPC(player_banned)) return 0;
+	// automatic checks never ban administrators
+	if(system == 0 && pInfo[player_banned][pAdminLevel] > 0) return 0;
 	if(system == 0)
 	{
 		if(strlen(reason) > MAX_REASON_LENGTH) return SendClientMessage(player_banner, 0xFFFFFF, ""chat" Sorry, the maximum reason length is "#MAX_REASON_LENGTH" characters!");

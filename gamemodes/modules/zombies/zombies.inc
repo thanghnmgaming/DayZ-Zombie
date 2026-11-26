@@ -328,6 +328,7 @@ stock ZombieAttack(npcid, playerid, tick)
 		return 1;
 	}
 #endif
+	if(GodMode[playerid]) return 1;
 	// This is the only place where a zombie takes blood
 	pInfo[playerid][pBlood] -= damage;
 	TryInfect(playerid, (type == sizeof(ZombieTypes) - 1) ? INFECTION_CHANCE_BRUTE : INFECTION_CHANCE);

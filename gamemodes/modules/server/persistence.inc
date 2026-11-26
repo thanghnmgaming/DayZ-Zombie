@@ -108,7 +108,7 @@ stock DeleteTentRecord(id)
 stock SaveVehicleState(id)
 {
 	new query[256], model = GetVehicleModel(id);
-	if(model < 400) return 0;
+	if(model < 400 || AdminVehicle[id]) return 0;
 	mysql_format(handle, query, sizeof(query), "REPLACE INTO `vehicle_state` VALUES (%d,%d,%d,%d,%d)", id, model, vInfo[id][vehicleFuel], vInfo[id][vehicleEngine], vInfo[id][vehicleTires]);
 	mysql_tquery(handle, query);
 	return 1;
