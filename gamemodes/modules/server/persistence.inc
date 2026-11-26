@@ -80,6 +80,7 @@ stock LoadStorageItems()
 
 stock SaveStorageSlot(kind, container, slot, const item[])
 {
+	if(kind == STORAGE_VEHICLE && AdminVehicle[container]) return 0;
 	new query[256];
 	if(IsItemName(item)) mysql_format(handle, query, sizeof(query), "REPLACE INTO `storage_items` VALUES (%d,%d,%d,'%e')", kind, container, slot, item);
 	else mysql_format(handle, query, sizeof(query), "DELETE FROM `storage_items` WHERE `Kind`=%d AND `Container`=%d AND `Slot`=%d", kind, container, slot);

@@ -461,7 +461,7 @@ public OnNPCTakeDamage(npcid, issuerid, Float:amount, WEAPON:weaponid, bodypart)
 
 function DayZSA_CreateZLoot(Float:pXX,Float:pYX,Float:pZX)
 {
-	lootCount += 1;
+	AllocLoot();
 	Loot[lootCount][xLoot] = pXX;
 	Loot[lootCount][yLoot] = pYX;
 	Loot[lootCount][zLoot] = pZX;

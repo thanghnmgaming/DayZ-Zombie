@@ -814,43 +814,24 @@ stock DecreaseBars(playerid)
 
 stock CheckBars(playerid)
 {
-	if(pInfo[playerid][pIsSpawned] == 1)
-	{
-	    if(isPlayerInMenu[playerid] == 0)
-	    {
-			if(pInfo[playerid][pHunger] <= 0)
-			{
-				new str2[128];
-				SetPlayerHealth(playerid, 0);
-				format(str2,sizeof(str2),"*"COL_RED" %s(%i) has starved to death!",PlayerName(playerid),playerid);
-				ProxDetector(60.0, playerid, str2, COLOR_GREY);
-				pInfo[playerid][pHunger] = 2500;
-				SendClientMessage(playerid,-1,"*"COL_RED" You starved to death!");
-			}
+	if(pInfo[playerid][pIsSpawned] != 1 || isPlayerInMenu[playerid] != 0) return 1;
+	// already dying: keep the health at zero until the death arrives
+	if(PlayerDying[playerid]) return SetPlayerHealth(playerid, 0.0), 1;
 
-			if(pInfo[playerid][pThrist] <= 0)
-			{
-				new str2[128];
-				SetPlayerHealth(playerid, 0);
-				format(str2,sizeof(str2),"*"COL_RED" %s(%i) has died of thirst!",PlayerName(playerid),playerid);
-				ProxDetector(60.0, playerid, str2, COLOR_GREY);
-				pInfo[playerid][pThrist] = 1000;
-				SendClientMessage(playerid,-1,"*"COL_RED" You died of thirst!");
-			}
+	new cause[24];
+	if(pInfo[playerid][pHunger] <= 0) cause = "starved to death";
+	else if(pInfo[playerid][pThrist] <= 0) cause = "died of thirst";
+	else if(pInfo[playerid][pBlood] <= 0) cause = "died of blood loss";
+	else return 1;
 
-			if(pInfo[playerid][pBlood] <= 0)
-			{
-				new str2[128];
-				SetPlayerHealth(playerid, 0);
-				format(str2,sizeof(str2),"*"COL_RED" %s(%i) has died of blood loss!",PlayerName(playerid),playerid);
-				ProxDetector(60.0, playerid, str2, COLOR_GREY);
-				pInfo[playerid][pBlood] = 12000;
-				SendClientMessage(playerid,-1,"*"COL_RED" You died of blood loss!");
-			}
-		}
-	}
+	new msg[128];
+	PlayerDying[playerid] = true;
+	SetPlayerHealth(playerid, 0.0);
+	format(msg, sizeof(msg), "*"COL_RED" %s(%i) has %s!", PlayerName(playerid), playerid, cause);
+	ProxDetector(60.0, playerid, msg, COLOR_GREY);
 	return 1;
 }
+
 
 stock DisconnectVars(playerid)
 {
@@ -985,6 +966,7 @@ function SpawnVars(playerid)
 		RemovePlayerAttachedObject(playerid, 2);
 		KillTimer(pInfo[playerid][Bleeding]);
 		pInfo[playerid][pIsSpawned] = 1;
+		if(pInfo[playerid][IsPlayerBleeding] == 1) pInfo[playerid][Bleeding] = SetTimerEx("LoosingBlood", 5000, true, "i", playerid);
 		SetPlayerSkillLevel(playerid, WEAPONSKILL_PISTOL, 1);
 
 		if(pInfo[playerid][pIsMapOpened] == 0)

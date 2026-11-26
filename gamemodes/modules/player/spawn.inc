@@ -62,6 +62,8 @@ public OnPlayerSpawn(playerid)
 
 public OnPlayerDeath(playerid, killerid, WEAPON:reason)
 {
+	if(IsPlayerNPC(playerid)) return 1;    // zombie deaths are handled in OnNPCDeath
+	PlayerDying[playerid] = false;
 	if(killerid != INVALID_PLAYER_ID)
 	{
 	    if(!IsPlayerNPC(playerid))
@@ -233,6 +235,25 @@ public OnPlayerDeath(playerid, killerid, WEAPON:reason)
 		ClearChatPlayer(playerid);
 		ResetPlayerInventory(playerid);
 		pInfo[playerid][pIsSpawned] = 0;
+		pInfo[playerid][pWeap1] = 0;
+		pInfo[playerid][pAmmo1] = 0;
+		pInfo[playerid][pWeap2] = 0;
+		pInfo[playerid][pAmmo2] = 0;
+		pInfo[playerid][pWeap3] = 0;
+		pInfo[playerid][pAmmo3] = 0;
+		pInfo[playerid][pWeap4] = 0;
+		pInfo[playerid][pAmmo4] = 0;
+		pInfo[playerid][pWeap5] = 0;
+		pInfo[playerid][pAmmo5] = 0;
+		pInfo[playerid][pWeap6] = 0;
+		pInfo[playerid][pAmmo6] = 0;
+		pInfo[playerid][pWeap7] = 0;
+		pInfo[playerid][pAmmo7] = 0;
+		pInfo[playerid][pWeap8] = 0;
+		pInfo[playerid][pAmmo8] = 0;
+		pInfo[playerid][pWeap9] = 0;
+		pInfo[playerid][pAmmo9] = 0;
+		SaveStats(playerid);    // a death must survive a crash or a quick quit
 
 		RemovePlayerAttachedObject(playerid, 2);
 		KillTimer(pInfo[playerid][Bleeding]);
@@ -456,7 +477,7 @@ public OnPlayerStateChange(playerid, PLAYER_STATE:newstate, PLAYER_STATE:oldstat
         {
             if(p_CarWarpTime[ playerid ] > gettime())
             {
-				jBan(playerid, -1, "Vehicle Teleport Hack", 0);
+				ReportSuspect(playerid, "fast vehicle switching");
                 return 1;
             }
             p_CarWarpTime[playerid] = gettime() + 1;

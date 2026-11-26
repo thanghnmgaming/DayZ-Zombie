@@ -30,7 +30,7 @@ stock GetVehicleNearID(playerid)
 
 stock GetHospitalID(playerid)
 {
-	for(new i=0; i<MAX_LOOTING; i++)
+	for(new i=0; i<=LootHigh; i++)
  	{
   		if(IsPlayerInRangeOfPoint(playerid,3.5, Loot[i][xHos],Loot[i][yHos],Loot[i][zHos]))
     	{
@@ -42,7 +42,7 @@ stock GetHospitalID(playerid)
 
 stock GetAirDropID(playerid)
 {
-	for(new i=0; i<MAX_LOOTING; i++)
+	for(new i=0; i<=LootHigh; i++)
  	{
   		if(IsPlayerInRangeOfPoint(playerid,3.5, Loot[i][xAir],Loot[i][yAir],Loot[i][zAir]))
     	{
@@ -66,7 +66,7 @@ stock GetTentID(playerid)
 
 stock GetCampID(playerid)
 {
-	for(new i=0; i<MAX_TENTS; i++)
+	for(new i=1; i<MAX_TENTS; i++)
  	{
   		if(IsPlayerInRangeOfPoint(playerid,2.1, CampFire[i][xTent],CampFire[i][yTent],CampFire[i][zTent]))
     	{
@@ -78,7 +78,7 @@ stock GetCampID(playerid)
 
 stock GetLootW_ID(playerid)
 {
-	for(new i=0; i<MAX_LOOTING; i++)
+	for(new i=0; i<=LootHigh; i++)
  	{
   		if(IsPlayerInRangeOfPoint(playerid,1.1, Loot[i][DropGunX],Loot[i][DropGunY],Loot[i][DropGunZ]))
     	{
@@ -90,7 +90,7 @@ stock GetLootW_ID(playerid)
 
 stock GetLootID(playerid)
 {
-	for(new i=0; i<MAX_LOOTING; i++)
+	for(new i=0; i<=LootHigh; i++)
  	{
   		if(IsPlayerInRangeOfPoint(playerid,1.1, Loot[i][xLoot],Loot[i][yLoot],Loot[i][zLoot]))
     	{
@@ -102,7 +102,7 @@ stock GetLootID(playerid)
 
 stock GetLootIDFunction(playerid)
 {
-	for(new i=0; i<MAX_LOOTING; i++)
+	for(new i=0; i<=LootHigh; i++)
  	{
   		if(IsPlayerInRangeOfPoint(playerid,1.1,Loot[i][xLootdrop],Loot[i][yLootdrop],Loot[i][zLootdrop]))
     	{
@@ -114,7 +114,7 @@ stock GetLootIDFunction(playerid)
 
 stock GetLootIDZombie(playerid)
 {
-	for(new i=0; i<MAX_LOOTING; i++)
+	for(new i=0; i<=LootHigh; i++)
  	{
   		if(IsPlayerInRangeOfPoint(playerid,1.9,Loot[i][xLootdropZ],Loot[i][yLootdropZ],Loot[i][zLootdropZ]))
     	{
@@ -126,7 +126,7 @@ stock GetLootIDZombie(playerid)
 
 stock GetLootIDPlayer(playerid)
 {
-	for(new i=0; i<MAX_LOOTING; i++)
+	for(new i=0; i<=LootHigh; i++)
  	{
   		if(IsPlayerInRangeOfPoint(playerid,3.7, Loot[i][zLootDeadBodyX],Loot[i][zLootDeadBodyY],Loot[i][zLootDeadBodyZ]))
     	{
@@ -611,7 +611,7 @@ DayZSA_GetVehicleSpeed(vehicleid)
 {
     new Float: vVel[3];
 	GetVehicleVelocity(vehicleid, vVel[0], vVel[1], vVel[2]);
-	return floatround(floatsqroot((vVel[0]*vVel[1]+vVel[2]*vVel[2]))*100.0*1.6);
+	return floatround(floatsqroot(vVel[0]*vVel[0]+vVel[1]*vVel[1]+vVel[2]*vVel[2])*100.0*1.6);
 }
 
 stock IsPlayerNearSpawn(playerid)

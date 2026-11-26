@@ -159,6 +159,15 @@ public OnPlayerTakeDamage(playerid, issuerid, Float: amount, WEAPON:weaponid)
 
 public OnPlayerGiveDamage(playerid, damagedid, Float: amount, WEAPON:weaponid, bodypart)
 {
+	if(IsPlayerNPC(playerid) || damagedid == INVALID_PLAYER_ID || IsPlayerNPC(damagedid)) return 1;
+	if(!IsPlayerConnected(damagedid) || GodMode[damagedid] || pInfo[damagedid][pIsSpawned] != 1 || isPlayerInMenu[damagedid]) return 1;
+	if(22 <= _:weaponid <= 38 && !PlayerWeapons[playerid][_:weaponid]) return ReportSuspect(playerid, "damage with a weapon the server never gave"), 1;
+	{
+		new Float:vx, Float:vy, Float:vz;
+		GetPlayerPos(damagedid, vx, vy, vz);
+		if(GetPlayerDistanceFromPoint(playerid, vx, vy, vz) > GetWeaponMaxRange(_:weaponid) * 1.3) return ReportSuspect(playerid, "damage beyond the weapon range"), 1;
+	}
+
 	if(timerdamage1[playerid] != 0) KillTimer(timerdamage1[playerid]);
 
 	hit1[playerid]++;

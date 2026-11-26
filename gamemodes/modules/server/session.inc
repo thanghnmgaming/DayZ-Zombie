@@ -8,6 +8,7 @@ function MySQLConnect()
 	else
 	{
 		printf("[DayZ MySQL]: Connection to database failed! Check mysql.ini and start-database.bat");
+		SendRconCommand("exit");    // playing without a database would lose everything
 	}
 	return 1;
 }

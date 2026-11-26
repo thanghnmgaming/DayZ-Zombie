@@ -176,12 +176,13 @@ stock HandleItemDialog(playerid, dialogid, response, listitem, const inputtext[]
 		{
 			if(!response) return 1;
 			pInfo[playerid][pTentLink] = listitem;
-			ShowPlayerDialog(playerid, DIALOG_TENT_VIEW_S, DIALOG_STYLE_MSGBOX, ""COL_WHITE"Viewing Tent"COL_GREEN" (16 SLOTS)", "Please select an option!", "Add Item", "Take Item");
+			ShowPlayerDialog(playerid, DIALOG_TENT_VIEW_S, DIALOG_STYLE_LIST, ""COL_WHITE"Viewing Tent"COL_GREEN" (16 SLOTS)", "Add Item\nTake Item", "Select", "Close");
 		}
 		case DIALOG_TENT_VIEW_S:
 		{
 			if(!IsViewingTent(playerid, id)) return ContainerGone(playerid);
-			if(response) return ShowInventoryTent(playerid), 1;
+			if(!response) return 1;
+			if(listitem == 0) return ShowInventoryTent(playerid), 1;
 			if(!GetTentSlot(id, pInfo[playerid][pTentLink], item) || !IsItemName(item)) return 1;
 			if(!AddSlotToInventoryWorld(playerid, item, 1)) return 1;
 			SetTentSlot(id, pInfo[playerid][pTentLink], EMPTY_SLOT);
@@ -206,12 +207,13 @@ stock HandleItemDialog(playerid, dialogid, response, listitem, const inputtext[]
 		{
 			if(!response) return 1;
 			pInfo[playerid][pStorageLink] = listitem;
-			ShowPlayerDialog(playerid, DIALOG_VEHICLE_STORAGE_S, DIALOG_STYLE_MSGBOX, ""COL_WHITE"Vehicle Storage", "Please select an option!", "Add Item", "Take Item");
+			ShowPlayerDialog(playerid, DIALOG_VEHICLE_STORAGE_S, DIALOG_STYLE_LIST, ""COL_WHITE"Vehicle Storage", "Add Item\nTake Item", "Select", "Close");
 		}
 		case DIALOG_VEHICLE_STORAGE_S:
 		{
 			if(!IsViewingStorage(playerid, id)) return ContainerGone(playerid);
-			if(response) return ShowInventoryStorage(playerid), 1;
+			if(!response) return 1;
+			if(listitem == 0) return ShowInventoryStorage(playerid), 1;
 			if(pInfo[playerid][pStorageLink] >= vInfo[id][vehicleSlots]) return 1;
 			if(!GetStorageSlot(id, pInfo[playerid][pStorageLink], item) || !IsItemName(item)) return 1;
 			if(!AddSlotToInventoryWorld(playerid, item, 1)) return 1;
@@ -283,13 +285,14 @@ stock HandleItemDialog(playerid, dialogid, response, listitem, const inputtext[]
 			GetEntryItemName(inputtext, item);
 			if(!IsItemName(item) || !PlayerHasItem(playerid, item)) return 1;
 			format(pInfo[playerid][pItemLink], 64, "%s", item);
-			ShowPlayerDialog(playerid, DIALOG_INV_EDIT, DIALOG_STYLE_MSGBOX, ""COL_GREEN"GEAR", "Please select an option", "Use", "Drop");
+			ShowPlayerDialog(playerid, DIALOG_INV_EDIT, DIALOG_STYLE_LIST, ""COL_GREEN"GEAR", "Use\nDrop", "Select", "Close");
 		}
 		case DIALOG_INV_EDIT:
 		{
+			if(!response) return 1;
 			format(item, sizeof(item), "%s", pInfo[playerid][pItemLink]);
 			if(!IsItemName(item) || !PlayerHasItem(playerid, item)) return 1;
-			if(response)
+			if(listitem == 0)
 			{
 				OnPlayerUseItem(playerid, item);
 				GameTextForPlayer(playerid, "~n~~n~~n~~n~~n~~g~please wait......", 800, 5);

@@ -210,7 +210,7 @@ new
 #define J_LOGGING 1
 #define COLOR_RED 0xFF0000FF
 
-#define MAX_PLAYER_IP 15
+#define MAX_PLAYER_IP 16
 #define MAX_QUERY_LENGTH 400
 #define MAX_RESULT_LENGTH 74
 #define MAX_MESSAGE_LENGTH 128
@@ -376,7 +376,14 @@ new FPS2[MAX_PLAYERS] = 0;
 new bool:PlayerWeapons[MAX_PLAYERS][47],bool:Spawned[MAX_PLAYERS];
 new strwep[128];
 new strupdate[285];
-new lootCount;
+new lootCount;             // slot being filled
+new LootHigh, LootFreeCount, LootRecycle;
+new LootFree[20000], bool:LootUsed[20000];
+new CampObject[500][2];
+forward FreeLoot(id);
+new bool:PlayerDying[MAX_PLAYERS];
+forward ReportSuspect(playerid, const reason[]);
+forward Float:GetWeaponMaxRange(weaponid);
 new groupCount;
 new campCount;
 forward Float:GetDistanceBetweenPlayers(p1,p2);
@@ -457,7 +464,7 @@ new PlayerText:Indicator1[MAX_PLAYERS];
 new PlayerText:IndicatorBox1[MAX_PLAYERS];
 
 // **** FORWARDS ***** //
-forward Kick_Load(playerid);
+forward Kick_Load(playerid, serial);
 forward KickEx(playerid);
 forward WhenAccountCheck(playerid, serial);
 forward OnPlayerRegister(playerid, password[]);

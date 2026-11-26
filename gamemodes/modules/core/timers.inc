@@ -363,7 +363,7 @@ public UpdatePlayer()
 						        speed = floatsqroot((velocityX * velocityX) + (velocityY * velocityY) + (velocityZ * velocityZ) * 100);
 						        if (floatround(speed, floatround_round) >= 3)
 						        {
-								jBan(i, -1, "Fly Hack", 0);
+								ReportSuspect(i, "possible fly hack");
 						        }
 					    	}
 
@@ -374,7 +374,7 @@ public UpdatePlayer()
 						    	{
 						    	    if(GetPlayerWeapon(i) != 46)
 						    	    {
-										jBan(i, -1, "Fly Hack", 0);
+										ReportSuspect(i, "possible fly hack");
 									}
 								}
 							}
@@ -390,7 +390,7 @@ public UpdatePlayer()
 					              		GetVehicleVelocity(vehicleid, vehicleVelocity[0], vehicleVelocity[1], vehicleVelocity[2]);
 					                	if(vehicleVelocity[2] > -0.5)
 					                 	{
-											jBan(i, -1, "Veicle Speed Hack", 0);
+											ReportSuspect(i, "vehicle speed");
 										}
 									}
 								}

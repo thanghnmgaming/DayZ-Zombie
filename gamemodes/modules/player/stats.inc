@@ -122,8 +122,9 @@ stock KickPlayer(playerid, reason[])
 	return 1;
 }
 
-public Kick_Load(playerid)
+public Kick_Load(playerid, serial)
 {
+	if(serial != LoginSerial[playerid]) return 1;
     if(IsPlayerNPC(playerid)) return 1;
     if(!IsPlayerNPC(playerid))
     {
@@ -133,7 +134,7 @@ public Kick_Load(playerid)
 }
 public KickEx(playerid)
 {
-    SetTimerEx("Kick_Load", 1500, false, "d", playerid);
+    SetTimerEx("Kick_Load", 1500, false, "ii", playerid, LoginSerial[playerid]);
     return 1;
 }
 
@@ -145,6 +146,8 @@ stock ClearChat()
 
 stock ResetVars(playerid)
 {
+	PlayerDying[playerid] = false;
+	pInfo[playerid][pFlashlight] = 0;
 	GodMode[playerid] = false;
 	LastAlert[playerid] = 0;
 	CommandWindow[playerid] = 0;

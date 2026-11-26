@@ -269,10 +269,10 @@ stock UseSpecialItem(playerid, const ItemName[])
 		else
 		{
 			pInfo[playerid][pTemp] = 91.0;
+			RemoveSlotToInventory(playerid,"Heat Pack",1);
 			if(!IsPlayerInAnyVehicle(playerid))
 			{
 				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
-				RemoveSlotToInventory(playerid,"Heat Pack",1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
 		}
@@ -286,12 +286,12 @@ stock UseSpecialItem(playerid, const ItemName[])
 		else
 		{
 			pInfo[playerid][pTemp] = 95.0;
+			RemoveSlotToInventory(playerid,"Heat Pack Basic",1);
 			if(!IsPlayerInAnyVehicle(playerid))
 			{
 				ApplyAnimation(playerid, "BOMBER", "BOM_Plant",4.1,false,true,false,1000,1);
 				SetTimerEx("ResetAction", 1450, false, "ii", playerid, ACTION_ANIMATION);
 			}
-			RemoveSlotToInventory(playerid,"Heat Pack Basic",1);
 		}
 	}
 	return 1;

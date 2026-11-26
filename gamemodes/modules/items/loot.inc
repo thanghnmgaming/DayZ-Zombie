@@ -270,7 +270,7 @@ function DayZSA_CreateVehicleStorage()
 		}
 
         // BELOW = 4 SLOTS
-        if(vID == 453 || vID == 484 || vID == 511 || vID == 417 || vID == 445 || vID == 554 || vID == 542 || vID == 470 || vID == 422)
+        if(vID == 453 || vID == 484 || vID == 511 || vID == 417 || vID == 445 || vID == 554 || vID == 542 || vID == 470 || vID == 422 || vID == 431)
         {
             vInfo[i][vehicleSlots] = 4;
 		}
@@ -313,7 +313,7 @@ function DayZSA_CreateVehicleStorage()
 function DayZSA_CreateHospital(Float:pXX,Float:pYX,Float:pZX)
 {
 	new strt[128],slot1[64],slot2[64],slot3[64],slot4[64],slot5[64],slot6[64];
-	lootCount += 1;
+	AllocLoot();
 
 	format(slot1,sizeof(slot1),"1\tMedical Kit");
     Loot[lootCount][HosSlot1] = slot1;
@@ -343,7 +343,7 @@ function DayZSA_CreateHospital(Float:pXX,Float:pYX,Float:pZX)
 function DayZSA_CreateAirdrop(Float:pXX,Float:pYX,Float:pZX)
 {
 	new strt[128],slot1[64],slot2[64],slot3[64],slot4[64],slot5[64],slot6[64],slot7[064],slot8[64],slot9[64],slot10[64],slot11[64],slot12[64];
-	lootCount += 1;
+	AllocLoot();
 
 	format(slot1,sizeof(slot1),"1\tMedical Kit");
     Loot[lootCount][AirSlot1] = slot1;
@@ -380,7 +380,7 @@ function DayZSA_CreateAirdrop(Float:pXX,Float:pYX,Float:pZX)
 	//SetDynamicObjectMaterialText(Loot[lootCount][AirID], 0, "Military Crate", 100, "Ariel", 199, 1, 0x00000000, 0x00000000, 1);
 	
 	format(strt,sizeof(strt),""COL_GREEN"GEAR\n"COL_GREY"Press LEFT ALT to view airdrop crate");
-    CreateDynamic3DTextLabel(strt,-1,pXX+0.3,pYX+float(1),pZX-0.7,8.0,INVALID_PLAYER_ID,INVALID_VEHICLE_ID,1,-1,-1,-1, 8.0);
+    Loot[lootCount][TextID] = CreateDynamic3DTextLabel(strt,-1,pXX+0.3,pYX+float(1),pZX-0.7,8.0,INVALID_PLAYER_ID,INVALID_VEHICLE_ID,1,-1,-1,-1, 8.0);
 
     return 1;
 }
@@ -389,7 +389,13 @@ function DayZSA_CreateAirdrop(Float:pXX,Float:pYX,Float:pZX)
 function DayZSA_CreateCampFire(playerid)
 {
 	new strt[128];
-	campCount += 1;
+	campCount = campCount % (MAX_TENTS - 1) + 1;    // the oldest fire is replaced
+	if(CampObject[campCount][0])
+	{
+		DestroyDynamicObject(CampObject[campCount][0]);
+		DestroyDynamicObject(CampObject[campCount][1]);
+		DestroyDynamic3DTextLabel(CampFire[campCount][tentText]);
+	}
 
 	// 841 Wood
 	// 18688 Fire
@@ -406,8 +412,8 @@ function DayZSA_CreateCampFire(playerid)
 	CampFire[campCount][yTent] = py;
 	CampFire[campCount][zTent] = pz;
 
-	CreateDynamicObject(18688, px, py, pz-1.47, 0.0, 0.0, 0.0, -1, -1, -1, 1000.0);
-	CreateDynamicObject(19632, px, py, pz-0.7, 0.0, 0.0, 0.0, -1, -1, -1, 1000.0);
+	CampObject[campCount][0] = CreateDynamicObject(18688, px, py, pz-1.47, 0.0, 0.0, 0.0, -1, -1, -1, 1000.0);
+	CampObject[campCount][1] = CreateDynamicObject(19632, px, py, pz-0.7, 0.0, 0.0, 0.0, -1, -1, -1, 1000.0);
 	format(strt,sizeof(strt),""COL_GREEN"GEAR\n"COL_GREY"Press LEFT ALT to cook meat!");
 	CampFire[campCount][tentText] = CreateDynamic3DTextLabel(strt,-1,px,py,pz,8.0,INVALID_PLAYER_ID,INVALID_VEHICLE_ID,1,-1,-1,-1, 8.0);
 	SendClientMessage(playerid, -1, ""chat" You have sucessfully created a camp fire!");
@@ -419,11 +425,6 @@ function DayZSA_CreateCampFire(playerid)
 
 function DayZSA_CreateLootsDeadBody(playerid,Float:pXX,Float:pYX,Float:pZX)
 {
-	lootCount += 1;
-
-	Loot[lootCount][zLootDeadBodyX] = pXX;
-	Loot[lootCount][zLootDeadBodyY] = pYX;
-	Loot[lootCount][zLootDeadBodyZ] = pZX;
 
 	for(new i; i < sizeof(ItemCatalog); i++)
 	{
@@ -446,7 +447,7 @@ function DayZSA_CreateLootsDeadBody(playerid,Float:pXX,Float:pYX,Float:pZX)
 function DayZSA_CreateLootsFunction(const item[],Float:pXX,Float:pYX,Float:pZX)
 {
 	new strt[128];
-	lootCount += 1;
+	AllocLoot();
 	Loot[lootCount][xLootdrop] = pXX;
 	Loot[lootCount][yLootdrop] = pYX;
 	Loot[lootCount][zLootdrop] = pZX;
@@ -464,7 +465,7 @@ function DayZSA_CreateLootsFunction(const item[],Float:pXX,Float:pYX,Float:pZX)
 function DayZSA_DropWeapon(const item[], ammo, Float:pXX,Float:pYX,Float:pZX)
 {
 	new strt[128];
-	lootCount += 1;
+	AllocLoot();
 	Loot[lootCount][DropGunX] = pXX;
 	Loot[lootCount][DropGunY] = pYX;
 	Loot[lootCount][DropGunZ] = pZX;
@@ -505,7 +506,7 @@ function DayZSA_CreateGroup(playerid,groupname[],owner[])
 function DayZSA_CreateFarmLoots(Float:pXX,Float:pYX,Float:pZX)
 {
 	new strt[128];
-	lootCount += 1;
+	AllocLoot();
 	Loot[lootCount][xLoot] = pXX;
 	Loot[lootCount][yLoot] = pYX;
 	Loot[lootCount][zLoot] = pZX;
@@ -522,7 +523,7 @@ function DayZSA_CreateFarmLoots(Float:pXX,Float:pYX,Float:pZX)
 function DayZSA_CreateMarketLoots(Float:pXX,Float:pYX,Float:pZX)
 {
 	new strt[128];
-	lootCount += 1;
+	AllocLoot();
 	Loot[lootCount][xLoot] = pXX;
 	Loot[lootCount][yLoot] = pYX;
 	Loot[lootCount][zLoot] = pZX;
@@ -539,7 +540,7 @@ function DayZSA_CreateMarketLoots(Float:pXX,Float:pYX,Float:pZX)
 function DayZSA_CreateMilitaryLoots(Float:pXX,Float:pYX,Float:pZX)
 {
 	new strt[128];
-	lootCount += 1;
+	AllocLoot();
 	Loot[lootCount][xLoot] = pXX;
 	Loot[lootCount][yLoot] = pYX;
 	Loot[lootCount][zLoot] = pZX;
@@ -556,7 +557,7 @@ function DayZSA_CreateMilitaryLoots(Float:pXX,Float:pYX,Float:pZX)
 function DayZSA_CreateLoots(Float:pXX,Float:pYX,Float:pZX)
 {
 	new strt[128];
-	lootCount += 1;
+	AllocLoot();
 	Loot[lootCount][xLoot] = pXX;
 	Loot[lootCount][yLoot] = pYX;
 	Loot[lootCount][zLoot] = pZX;
@@ -591,7 +592,7 @@ function DayZSA_CreateLoots(Float:pXX,Float:pYX,Float:pZX)
 function DayZSA_CreateLootsZombie(item[],Float:pXX,Float:pYX,Float:pZX)
 {
 	new strt[128];
-	lootCount += 1;
+	AllocLoot();
 	Loot[lootCount][xLootdropZ] = pXX;
 	Loot[lootCount][yLootdropZ] = pYX;
 	Loot[lootCount][zLootdropZ] = pZX;
@@ -605,45 +606,59 @@ function DayZSA_CreateLootsZombie(item[],Float:pXX,Float:pYX,Float:pZX)
 
 function DayZSA_RespawnItems()
 {
-	SendClientMessageToAll(-1, ""chat""COL_RED"*** Server is backing up data this may cause lag for few seconds/minutes.");
-	for(new i = 0; i < 20000; i++)
-    {
-   		DestroyDynamicObject(Loot[i][LootID]);
-		DestroyDynamic3DTextLabel(Loot[i][TextID]);
-		DestroyDynamicObject(Loot[i][HospitalID]);
-		DestroyDynamicObject(Loot[i][AirID]);
-		Loot[i][xLoot] = 0.0;
-		Loot[i][yLoot] = 0.0;
-		Loot[i][zLoot] = 0.0;
-		Loot[i][DropGunX] = 0.0;
-		Loot[i][DropGunY] = 0.0;
-		Loot[i][DropGunZ] = 0.0;
-		Loot[i][xLootdrop] = 0.0;
-		Loot[i][yLootdrop] = 0.0;
-		Loot[i][zLootdrop] = 0.0;
-		Loot[i][xLootdropZ] = 0.0;
-		Loot[i][yLootdropZ] = 0.0;
-		Loot[i][zLootdropZ] = 0.0;
-		Loot[i][zLootDeadBodyX] = 0.0;
-		Loot[i][zLootDeadBodyY] = 0.0;
-		Loot[i][zLootDeadBodyZ] = 0.0;
-	    Loot[i][xHos] = 0.0;
-	    Loot[i][yHos] = 0.0;
-	    Loot[i][zHos] = 0.0;
-	    Loot[i][xAir] = 0.0;
-	    Loot[i][yAir] = 0.0;
-	    Loot[i][zAir] = 0.0;
-
-		lootCount = 0;
-	}
-
+	SendClientMessageToAll(-1, ""chat""COL_RED"*** The world loot is respawning.");
+	for(new i = 1; i <= LootHigh; i++) FreeLoot(i);
+	LootHigh = 0;
+	LootFreeCount = 0;
+	lootCount = 0;
 	DayZSA_CreateAllLoots();
-	foreach (new i : Player)
-	{
-		PlayerLabel[i] = CreateDynamic3DTextLabel("" , 0xADFF2FAA, 0.0, 0.0, 0.2, 15.0, i, INVALID_VEHICLE_ID, 1, -1, -1, -1, 100.0);
-	}
 	return 1;
 }
+
+// Picks the slot for a new piece of loot and makes it the current one (lootCount)
+stock AllocLoot()
+{
+	if(LootFreeCount > 0) lootCount = LootFree[--LootFreeCount];
+	else if(LootHigh < MAX_LOOTING - 1) lootCount = ++LootHigh;
+	else
+	{
+		// the table is full: recycle the next slot that is not a crate
+		do
+		{
+			if(++LootRecycle >= MAX_LOOTING) LootRecycle = 1;
+		}
+		while(Loot[LootRecycle][xHos] != 0.0 || Loot[LootRecycle][xAir] != 0.0);
+		FreeLoot(LootRecycle);
+		lootCount = LootFree[--LootFreeCount];
+	}
+	LootUsed[lootCount] = true;
+	return lootCount;
+}
+
+// Destroys everything a slot owns and returns it to the free list
+public FreeLoot(id)
+{
+	if(id <= 0 || id >= MAX_LOOTING || !LootUsed[id]) return 0;
+	if(Loot[id][LootID]) DestroyDynamicObject(Loot[id][LootID]);
+	if(Loot[id][HospitalID]) DestroyDynamicObject(Loot[id][HospitalID]);
+	if(Loot[id][AirID]) DestroyDynamicObject(Loot[id][AirID]);
+	if(Loot[id][TextID]) DestroyDynamic3DTextLabel(Loot[id][TextID]);
+	Loot[id][LootID] = 0;
+	Loot[id][HospitalID] = 0;
+	Loot[id][AirID] = 0;
+	Loot[id][TextID] = Text3D:0;
+	Loot[id][AntiDup] = 0;
+	Loot[id][xLoot] = 0.0, Loot[id][yLoot] = 0.0, Loot[id][zLoot] = 0.0;
+	Loot[id][DropGunX] = 0.0, Loot[id][DropGunY] = 0.0, Loot[id][DropGunZ] = 0.0;
+	Loot[id][xLootdrop] = 0.0, Loot[id][yLootdrop] = 0.0, Loot[id][zLootdrop] = 0.0;
+	Loot[id][xLootdropZ] = 0.0, Loot[id][yLootdropZ] = 0.0, Loot[id][zLootdropZ] = 0.0;
+	Loot[id][xHos] = 0.0, Loot[id][yHos] = 0.0, Loot[id][zHos] = 0.0;
+	Loot[id][xAir] = 0.0, Loot[id][yAir] = 0.0, Loot[id][zAir] = 0.0;
+	LootUsed[id] = false;
+	LootFree[LootFreeCount++] = id;
+	return 1;
+}
+
 
 CMD:lootres(playerid)
 {
@@ -663,46 +678,11 @@ CMD:tentres(playerid)
 	return 1;
 }
 
-function DayZSA_DestroyLoot(id)
-{
-	Loot[id][DropGunX] = 0.0;
-	Loot[id][DropGunY] = 0.0;
-	Loot[id][DropGunZ] = 0.0;
-	DestroyDynamicObject(Loot[id][LootID]);
-	DestroyDynamic3DTextLabel(Loot[id][TextID]);
-	Loot[id][xLoot] = 0.0;
-	Loot[id][yLoot] = 0.0;
-	Loot[id][zLoot] = 0.0;
-	Loot[id][xLootdrop] = 0.0;
-	Loot[id][yLootdrop] = 0.0;
-	Loot[id][zLootdrop] = 0.0;
-	Loot[id][xLootdropZ] = 0.0;
-	Loot[id][yLootdropZ] = 0.0;
-	Loot[id][zLootdropZ] = 0.0;
-	Loot[id][zLootDeadBodyX] = 0.0;
-	Loot[id][zLootDeadBodyY] = 0.0;
-	Loot[id][zLootDeadBodyZ] = 0.0;
-	return 1;
-}
+function DayZSA_DestroyLoot(id) return FreeLoot(id);
 
-function DayZSA_DestroyLootDroped(id)
-{
-	DestroyDynamicObject(Loot[id][LootID]);
-	DestroyDynamic3DTextLabel(Loot[id][TextID]);
-	Loot[id][xLootdrop] = 0.0;
-	Loot[id][yLootdrop] = 0.0;
-	Loot[id][zLootdrop] = 0.0;
-	return 1;
-}
+function DayZSA_DestroyLootDroped(id) return FreeLoot(id);
 
-function DayZSA_DestroyLootZombie(id)
-{
-	DestroyDynamic3DTextLabel(Loot[id][TextID]);
-	Loot[id][xLootdropZ] = 0.0;
-	Loot[id][yLootdropZ] = 0.0;
-	Loot[id][zLootdropZ] = 0.0;
-	return 1;
-}
+function DayZSA_DestroyLootZombie(id) return FreeLoot(id);
 
 
 stock BuildSlotList(const slots[][], count, dest[], size)

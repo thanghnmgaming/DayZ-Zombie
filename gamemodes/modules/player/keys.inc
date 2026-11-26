@@ -16,7 +16,8 @@ public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 		{
   			case 1,2,3,9,6,7,10,11,12,13,14,15,16,17,18,19,20,21,24,26,28,32,35,36,37,38,39,40,41,42,44,45:
 		  	{
-				jBan(playerid, -1, "Weapon Hack (NOT ALLOWED)", 0);
+				new WEAPON:held = GetPlayerWeapon(playerid);
+				if(!PlayerWeapons[playerid][_:held]) ReportSuspect(playerid, "weapon the server never gave"), RemovePlayerWeapon(playerid, held);
 		  	}
   		}
 	}
@@ -33,7 +34,7 @@ public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 			new weapon2 = GetPlayerWeapon(playerid);
 			if(weapon2 != 0 && !PlayerWeapons[playerid][weapon2] && weapon2 != 40 && weapon2 != 46)
 			{
-				jBan(playerid, -1, "Weapon Hack", 0);
+				ReportSuspect(playerid, "weapon the server never gave");
 			}
 		}
 	}
@@ -139,34 +140,34 @@ public OnPlayerKeyStateChange(playerid, KEY:newkeys, KEY:oldkeys)
 	}
 
 	if(PRESSED(KEY_WALK))
-{
-    if(IsPlayerInRangeOfPoint(playerid,2.1,CampFire[GetCampID(playerid)][xTent],CampFire[GetCampID(playerid)][yTent],CampFire[GetCampID(playerid)][zTent]))
-    {
-        if(PlayerHasItem(playerid, "Raw Meat"))
-        {
-            AddSlotToInventoryWorld(playerid, "Cooked Meat", 1);
-            RemoveSlotToInventory(playerid, "Raw Meat", 1);
-            SendClientMessage(playerid, -1, ""chat" Sucessfully cooked raw Meat! Check your inventory!");
-        }
-    }
-}
 	{
-    if(IsPlayerInRangeOfPoint(playerid,2.1,CampFire[GetCampID(playerid)][xTent],CampFire[GetCampID(playerid)][yTent],CampFire[GetCampID(playerid)][zTent]))
-    	{
-        if(PlayerHasItem(playerid, "Dirty Water Bottle"))
-       		 {
-            AddSlotToInventoryWorld(playerid, "Full Water Bottle", 1);
-            RemoveSlotToInventory(playerid, "Dirty Water Bottle", 1);
-            SendClientMessage(playerid, -1, ""chat" Sucessfully boiled Water! Check your inventory!");
-        }
-        else return SendClientMessage(playerid, -1, ""chat", You have nothing to boil!");
-    }
-}
+		new fire = GetCampID(playerid);
+		if(fire > 0)
+		{
+			// remove first, so the result fits into a full backpack
+			if(PlayerHasItem(playerid, "Raw Meat"))
+			{
+				RemoveSlotToInventory(playerid, "Raw Meat", 1);
+				AddSlotToInventoryWorld(playerid, "Cooked Meat", 1);
+				SendClientMessage(playerid, -1, ""chat" You cooked raw meat.");
+			}
+			if(PlayerHasItem(playerid, "Dirty Water Bottle"))
+			{
+				RemoveSlotToInventory(playerid, "Dirty Water Bottle", 1);
+				AddSlotToInventoryWorld(playerid, "Full Water Bottle", 1);
+				SendClientMessage(playerid, -1, ""chat" You boiled the water.");
+			}
+		}
+	}
 
 	if(PRESSED(KEY_NO))
 	{
 	    if(IsPlayerInRangeOfPoint(playerid,3.5,Tent[GetTentID(playerid)][xTent],Tent[GetTentID(playerid)][yTent],Tent[GetTentID(playerid)][zTent]))
 	    {
+			new tent = GetTentID(playerid), owner[MAX_PLAYER_NAME];
+			if(tent <= 0) return 1;
+			GetPlayerName(playerid, owner, sizeof(owner));
+			if(strcmp(owner, TentOwner[tent]) && pInfo[playerid][pAdminLevel] < 5) return SendClientMessage(playerid, -1, "*"COL_RED" This is not your tent.");
 			if(PlayerHasItem(playerid,"Toolbox"))
 			{
 				new Float:fPos[3];
@@ -387,7 +388,7 @@ public OnPlayerUpdate(playerid)
 				    {
 						if(GetPlayerWeapon(playerid) != 46)
 						{
-							jBan(playerid, -1, "Fly Hack", 0);
+							ReportSuspect(playerid, "possible fly hack");
 						}
 					}
 				}
@@ -500,7 +501,7 @@ public OnPlayerUpdate(playerid)
 	        GetVehicleVelocity(GetPlayerVehicleID(playerid), X2, Y2, Z2);
 	        if(X2 > 3.0 || Y2 > 3.0 || Z2 > 3.0 || X2 < -3.0 || Y2 < -3.0 || Z2 < -3.0)
 	        {
-				jBan(playerid, -1, "Vehicle Warp Hack (Spin)", 0);
+				ReportSuspect(playerid, "abnormal vehicle velocity");
 	        }
 	    }
 

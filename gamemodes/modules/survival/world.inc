@@ -86,13 +86,7 @@ public Airdrop()
 
 	// remove the previous event crate (its slot may have been reused after a loot respawn)
 	if(EventCrate && Loot[EventCrate][xAir] == EventCrateX && EventCrateX != 0.0)
-	{
-		DestroyDynamicObject(Loot[EventCrate][AirID]);
-		DestroyDynamic3DTextLabel(Loot[EventCrate][TextID]);
-		Loot[EventCrate][xAir] = 0.0;
-		Loot[EventCrate][yAir] = 0.0;
-		Loot[EventCrate][zAir] = 0.0;
-	}
+		FreeLoot(EventCrate);
 	if(EventCrateIcon) DestroyDynamicMapIcon(EventCrateIcon);
 
 	new site = random(sizeof(AirdropSites)), msg[144];
@@ -161,6 +155,8 @@ stock StartSurvivalSystems()
 	LoadStructures();
 	SetTimer("GodModeTick", 250, true);
 	CreateAuditTable();
+	mysql_tquery(handle, "ALTER TABLE `samp_ban` MODIFY `user_banned_ip` varchar(45) NOT NULL");
+	mysql_tquery(handle, "ALTER TABLE `users` ADD UNIQUE INDEX IF NOT EXISTS `uq_username` (`Username`)");
 	SetTimer("MovementCheck", 1000, true);
 	SetTimer("ZoneTick", 3000, true);
 	SetTimer("InfectionTick", INFECTION_TICK_MS, true);

@@ -1,7 +1,11 @@
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
-    if(strfind(inputtext, "%") != -1) return SendClientMessage(playerid, -1, "*"COL_RED" Go crash another server douche!"),KickEx(playerid);
-    if(HandleItemDialog(playerid, dialogid, response, listitem, inputtext)) return 1;
+    if(dialogid != DIALOG_LOGIN && dialogid != DIALOG_REGISTER && strfind(inputtext, "%") != -1) return SendClientMessage(playerid, -1, "*"COL_RED" Go crash another server douche!"),KickEx(playerid);
+    if(HandleItemDialog(playerid, dialogid, response, listitem, inputtext))
+    {
+    	SaveInventory(playerid);    // the container is already saved; keep both sides in step
+    	return 1;
+    }
     if(HandleSurvivalDialog(playerid, dialogid, response, listitem)) return 1;
     switch(dialogid)
     {

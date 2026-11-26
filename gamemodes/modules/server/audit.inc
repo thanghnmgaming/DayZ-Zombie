@@ -36,7 +36,7 @@ stock WriteAudit(playerid, const action[], const detail[])
 }
 
 // Records a suspicious event and tells the admins, at most once per interval for each player
-stock ReportSuspect(playerid, const reason[])
+public ReportSuspect(playerid, const reason[])
 {
 	new tick = GetTickCount();
 	if(LastAlert[playerid] && tick - LastAlert[playerid] < ALERT_INTERVAL_MS) return 0;
@@ -99,7 +99,7 @@ public OnAuditLoaded(playerid, serial)
 
 // ---- checks -----------------------------------------------------------------
 
-stock Float:GetWeaponMaxRange(weaponid)
+public Float:GetWeaponMaxRange(weaponid)
 {
 	switch(weaponid)
 	{

@@ -121,6 +121,7 @@ CMD:giveallitems(playerid,params[])
 	{
 		new string[64], amount;
 	    if(sscanf(params, "is[64]", amount,string)) return SendClientMessage(playerid,-1,""chat" /giveallitem [amount] [item name] (MAKE SURE IT'S NOT INVALID!)");
+	    if(FindItem(string) == -1 || !(1 <= amount <= 99)) return SendClientMessage(playerid,-1,""chat" Unknown item or amount (1-99)");
 
 		foreach (new i : Player)
 		{
@@ -142,6 +143,7 @@ CMD:makeadmin(playerid,params[])
 		if(sscanf(params, "ud", targetid, level)) return  SendClientMessage(playerid,-1,""chat" /makeadmin [playerid] [level]");
 		if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid,-1,""chat" Player is not online");
 		if(level < 0 || level > 6) return SendClientMessage(playerid,-1,""chat"  Admin levels are ONLY between 1-5");
+		if(level > pInfo[playerid][pAdminLevel] || (targetid != playerid && pInfo[targetid][pAdminLevel] >= pInfo[playerid][pAdminLevel])) return SendClientMessage(playerid,-1,""chat" You cannot give a level above yours or change an equal or higher admin.");
 
         pInfo[targetid][pAdminLevel] = level;
 
@@ -313,6 +315,7 @@ CMD:pm(playerid,params[])
 	new targetid,pmstring[257],string[128],str2[256];
 
  	if(sscanf(params,"us[257]", targetid, pmstring)) return SendClientMessage(playerid,-1,"*"COL_GREEN" /pm [playerid] [message]");
+ 	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid,-1,"*"COL_RED" That player is not online");
 	if(pInfo[playerid][pLogged] == 1)
 	{
 	    if(pInfo[playerid][IsPlayerMuted] == 0)

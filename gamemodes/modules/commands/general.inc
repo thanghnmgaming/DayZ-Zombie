@@ -1,5 +1,6 @@
 CMD:flashoff(playerid)
 {
+	pInfo[playerid][pFlashlight] = 0;
 	if(PlayerHasItem(playerid, "Flashlight"))
 	{
 		if(IsPlayerAttachedObjectSlotUsed(playerid,3)) RemovePlayerAttachedObject(playerid,3);
@@ -127,6 +128,7 @@ CMD:groupinfo(playerid,params[])
 {
 	new groupid;
 	if(sscanf(params, "i", groupid)) return SendClientMessage(playerid,-1,"*"COL_RED" /groupinfo [groupid]");
+	if(!(0 <= groupid < MAX_GROUPS)) return SendClientMessage(playerid,-1,"*"COL_RED" Unknown group");
 
 	new str[480];
 	format(str,sizeof(str),""COL_WHITE"Viewing group:"COL_GREEN" %s\n"COL_WHITE"Group ID: %i\nGroup Members: %i\nGroup Owner: %s",
@@ -167,6 +169,7 @@ CMD:invitegroup(playerid,params[])
 {
 	new targetid;
 	if(sscanf(params, "u", targetid)) return SendClientMessage(playerid,-1,"*"COL_RED" /invitegroup [playerid]");
+	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid,-1,"*"COL_RED" That player is not online");
 
 	if(pInfo[targetid][IsPlayerInGroup] == 0)
 	{
@@ -226,6 +229,7 @@ CMD:version(playerid,params[])
 {
 	new targetid;
 	if(sscanf(params, "u", targetid)) return SendClientMessage(playerid,-1,"*"COL_RED" /version [playerid]");
+	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid,-1,"*"COL_RED" That player is not online");
 
  	new string[128];
     GetPlayerVersion(targetid, string, sizeof(string));
@@ -238,6 +242,7 @@ CMD:kickgroup(playerid,params[])
 {
 	new targetid;
 	if(sscanf(params, "u", targetid)) return SendClientMessage(playerid,-1,"*"COL_RED" /kickgroup [playerid]");
+	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid,-1,"*"COL_RED" That player is not online");
 
 	if(pInfo[playerid][IsPlayerInGroup] == 1)
 	{
@@ -267,6 +272,7 @@ CMD:groupfind(playerid,params[])
 {
 	new targetid;
 	if(sscanf(params, "u", targetid)) return SendClientMessage(playerid,-1,"*"COL_RED" /groupfind [playerid]");
+	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid,-1,"*"COL_RED" That player is not online");
 
 	if(pInfo[playerid][IsPlayerInGroup] == 1)
 	{
@@ -708,6 +714,7 @@ CMD:respond(playerid,params[])
     {
 		new sendanswer[256],targetid;
 		if(sscanf(params, "us[256]",targetid, sendanswer)) return SendClientMessage(playerid,-1,"*"COL_LGREEN" /respond [playerid] [question]");
+		if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid,-1,"*"COL_RED" That player is not online");
 
 		new str[256],str2[256],str3[128];
 		format(str,sizeof(str),"*"COL_YELLOW" Helper %s(%i) has responded to your question!",PlayerName(playerid), playerid);

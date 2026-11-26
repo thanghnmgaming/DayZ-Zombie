@@ -79,7 +79,7 @@ public OnRegisterHashed(playerid, serial)
 	new query[256], hash[BCRYPT_HASH_LENGTH], ip[16];
 	bcrypt_get_hash(hash);
 	GetPlayerIp(playerid, ip, sizeof(ip));
-	mysql_format(handle, query, sizeof(query), "INSERT INTO `users` (Username,Password,IP) VALUES ('%e','%e','%e')", PlayerName(playerid), hash, ip);
+	mysql_format(handle, query, sizeof(query), "INSERT IGNORE INTO `users` (Username,Password,IP) VALUES ('%e','%e','%e')", PlayerName(playerid), hash, ip);
 	mysql_tquery(handle, query);
 	gRegistred[playerid] = 1;
 	pInfo[playerid][pFirstSpawn] = 1;
@@ -264,6 +264,8 @@ public WhenPlayerLogin(playerid, serial)
 
 public OnPlayerDisconnect(playerid, reason)
 {
+	// quitting while dying counts as the death
+	if(!IsPlayerNPC(playerid) && PlayerDying[playerid] && pInfo[playerid][pLogged] == 1) OnPlayerDeath(playerid, INVALID_PLAYER_ID, WEAPON:255);
 	LoginSerial[playerid]++;
 
 	if(!IsPlayerNPC(playerid))
